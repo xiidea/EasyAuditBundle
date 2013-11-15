@@ -1,0 +1,3 @@
+xiidea_easy_audit_homepage:
+    pattern:  /easy-audit/{page}
+    defaults: { _controller: XiideaEasyAuditBundle:Default:index, page:1 }
