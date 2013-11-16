@@ -11,15 +11,23 @@ Install
 
 ### 1. Add EasyAuditBundle in your composer.json
 
-Add this bundle to your `vendor/` dir:
+Add EasyAuditBundle in your composer.json:
 
-```json
+```js
 {
     "require": {
         "xiidea/easy-audit": "1.0.*@dev"
     }
 }
 ```
+
+Now tell composer to download the bundle by running the command:
+
+``` bash
+$ php composer.phar update xiidea/easy-audit
+```
+
+Composer will install the bundle to your project's `vendor/xiidea` directory.
 
 ### 2. Enable the Bundle
 
