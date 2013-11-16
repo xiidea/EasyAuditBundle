@@ -72,7 +72,7 @@ class DefaultEventResolver implements EventResolverInterface
             return 'Anonymous';
         }
 
-        return $user->getFullName();
+        return $user->getUsername();
     }
 
 }

@@ -15,7 +15,7 @@ xiidea_easy_audit:
            #security.interactive_login : custom.event_resolver
 
 #Custom Event Resolver Service
-#service:
+#services:
 #    custom.event_resolver:
 #         class: Xiidea\EasyAuditBundle\Resolver\CustomEventResolver
 #         arguments: [@service_container]
