@@ -12,8 +12,7 @@
 namespace Xiidea\EasyAuditBundle\Logger;
 
 use Doctrine\ORM\EntityManager;
-use Xiidea\EasyAuditBundle\Event\LogEventInterface;
-use Xiidea\EasyAuditBundle\Repository\AuditLogRepository;
+use Xiidea\EasyAuditBundle\Entity\AuditLog;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Logger implements LoggerInterface
@@ -28,24 +27,10 @@ class Logger implements LoggerInterface
         $this->container = $container;
     }
 
-    public function log(LogEventInterface $event)
+    public function log(AuditLog $event)
     {
-        $auditLog = $this->getAuditLogRepository()->create(array(
-            'type'=> $event->getType(),
-            'user'=> $event->getUser(),
-            'description'=> $event->getDescription()
-        ));
-
-        $this->getEntityManager()->persist($auditLog);
-        $this->getEntityManager()->flush($auditLog);
-    }
-
-    /**
-     * @return AuditLogRepository
-     */
-    protected function getAuditLogRepository()
-    {
-        return $this->getEntityManager()->getRepository('XiideaEasyAuditBundle:AuditLog');
+        $this->getEntityManager()->persist($event);
+        $this->getEntityManager()->flush($event);
     }
 
     /**

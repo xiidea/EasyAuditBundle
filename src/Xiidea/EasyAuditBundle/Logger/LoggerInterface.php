@@ -11,9 +11,9 @@
 
 namespace Xiidea\EasyAuditBundle\Logger;
 
-use Xiidea\EasyAuditBundle\Event\LogEventInterface;
+use Xiidea\EasyAuditBundle\Entity\AuditLog;
 
 interface LoggerInterface
 {
-    public function log(LogEventInterface $event);
+    public function log(AuditLog $event);
 } 

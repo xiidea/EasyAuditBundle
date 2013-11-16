@@ -33,16 +33,16 @@ class EventResolverFactory
 
     protected function getEventLogObject($eventInfo)
     {
-        $logEventClass = $this->getParameter('log_event_class');
+        $auditLogClass = $this->getParameter('entity_class');
 
         if (is_array($eventInfo)) {
 
-            $eventObject = new $logEventClass();
+            $eventObject = new $auditLogClass();
             $fromArray = $eventObject->fromArray($eventInfo);
 
             return $fromArray;
 
-        } elseif ($eventInfo instanceof $logEventClass) {
+        } elseif ($eventInfo instanceof $auditLogClass) {
             return $eventInfo;
         }
 

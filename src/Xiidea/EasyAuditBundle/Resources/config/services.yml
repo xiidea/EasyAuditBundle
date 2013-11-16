@@ -1,5 +1,3 @@
-parameters:
-    xiidea_easy_audit.audit_log.entity.class: Xiidea\EasyAuditBundle\Entity\AuditLog
 
 services:
 
@@ -7,7 +5,7 @@ services:
       class: Doctrine\Common\Persistence\ObjectRepository
       factory_service: doctrine # this is an instance of Registry
       factory_method: getRepository
-      arguments: [ %xiidea_easy_audit.audit_log.entity.class% ]
+      arguments: [ %xiidea.easy_audit.entity_class% ]
 
   xiidea.easy_audit.logger.service:
           class: Xiidea\EasyAuditBundle\Logger\Logger

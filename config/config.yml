@@ -1,17 +1,17 @@
 # Xiidea Easy Audit Configuration Sample
 
 xiidea_easy_audit:
-    #resolver: xiidea.easy_audit.default_event_resolver           #Optional
-    #logger: xiidea.easy_audit.logger.service                     #Optional
-    #log_event_class : Xiidea\EasyAuditBundle\Event\LogEvent      #Optional
+    #resolver: xiidea.easy_audit.default_event_resolver               #Optional
+    #logger: xiidea.easy_audit.logger.service                         #Optional
+    #entity_class :                                                   #Required
 
     #List all events you want to track  required
-    events :                                                      #Required
+    events :                                                          #Required
         - security.interactive_login
        #- //More event
 
     #List all custom resolver for event
-    custom_resolvers :                                            #Optional
+    custom_resolvers :                                                #Optional
            #security.interactive_login : custom.event_resolver
 
 #Custom Event Resolver Service

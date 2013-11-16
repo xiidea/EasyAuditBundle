@@ -7,7 +7,9 @@ Install
 -------
 1. Add EasyAuditBundle in your composer.json
 2. Enable the Bundle
-3. Configure config.yml
+3. Create audit_log entity class
+4. Configure config.yml
+5. Update Database Schema
 
 ### 1. Add EasyAuditBundle in your composer.json
 
@@ -44,7 +46,12 @@ public function registerBundles()
 }
 ```
 
-### 3. Configure config.yml
+### 3. Create audit_log entity class
+
+The XiideaEasyAuditBundle supports Doctrine ORM by default. However, you must provide a concrete AuditLog class. Follow the [instructions](audit-log-entity-orm.md) to set up the class:
+
+
+### 4. Configure config.yml
 
 You can find sample config data in `config/config.yml` file
 
@@ -62,6 +69,13 @@ xiidea_easy_audit:
     #List all custom resolver for event
     #custom_resolvers :                                        #Optional
           #docudex.document.created : custom.event_resolver
+```
+
+### 5. Update Database Schema
+
+As all setup done, now you need to update your database schema. To do so,run the following command from your project directory
+``` bash
+$ php app/console doctrine:schema:update --force
 ```
 
 ### Cookbook
