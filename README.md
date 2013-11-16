@@ -60,7 +60,7 @@ You can find sample config data in `config/config.yml` file
 xiidea_easy_audit:
     #resolver: xiidea.easy_audit.default_event_resolver        #Optional
     #logger: xiidea.easy_audit.logger.service                  #Optional
-    #log_event_class : Xiidea\EasyAuditBundle\Event\LogEvent   #Optional
+    entity_class :                                             #Required
 
     #List all events you want to track  required
     events :                                                   #Required
