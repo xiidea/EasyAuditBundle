@@ -18,69 +18,23 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 class EventsSubscriber implements EventSubscriberInterface
 {
-    use ServiceGetterMethods;
-
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    private $container;
-    private static $events = array();
-
     public function __construct(ContainerInterface $container, $events = array())
     {
-        $this->container = $container;
-
-        self::$events = $events;
-
-    }
-
-    public function onKernelResponse(GetResponseEvent $event)
-    {
-        if (empty(self::$events)) {
-            return;
-        }
-
-        $event->getDispatcher()->addSubscriber(new EventsSubscriberFactory(
-            $this->container,
-            $this->getEventsForLazySubscribing()
+        $container->get('event_dispatcher')->addSubscriber(new EventsSubscriberFactory(
+            $container,
+            $events
         ));
+
     }
 
-    public function filterLogEvents($event)
-    {
-        if (in_array($event->getName(), self::$events)) {
-            $eventInfo = $this->getResolver()->getEventInfo($event);
-            $this->getLogger()->log($eventInfo);
-        }
-    }
+    public function onKernelRequest(){
 
-    /**
-     * Return Events List Excluding Events handled by this class
-     *
-     * @return array
-     */
-    protected function getEventsForLazySubscribing()
-    {
-        $events = array();
-        $subscribedEvents = self::getSubscribedEvents();
-
-        foreach (self::$events as $event) {
-            if (isset($subscribedEvents[$event])) {
-                continue;
-            }
-
-            $events[] = $event;
-        }
-
-        return $events;
     }
 
     public static function getSubscribedEvents()
     {
         return array(
-            'kernel.request'                   => array('onKernelResponse', 0),
-            'security.interactive_login'       => 'filterLogEvents',
-            'fos_user.security.implicit_login' => 'filterLogEvents'
+            'kernel.request' => 'onKernelRequest'
         );
     }
 }
