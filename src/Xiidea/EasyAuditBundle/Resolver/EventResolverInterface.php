@@ -9,9 +9,9 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Xiidea\EasyAuditBundle\Event;
+namespace Xiidea\EasyAuditBundle\Resolver;
 
 interface EventResolverInterface
 {
-    public function getEventInfo($event);
+    public function getEventLogInfo($event = null);
 }

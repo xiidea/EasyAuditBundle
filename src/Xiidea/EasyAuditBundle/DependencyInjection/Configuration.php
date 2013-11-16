@@ -31,9 +31,11 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->scalarNode('resolver')->defaultValue('xiidea.easy_audit.event.resolver.service')->end()
+                ->scalarNode('resolver')->defaultValue('xiidea.easy_audit.default_event_resolver')->end()
                 ->scalarNode('logger')->defaultValue('xiidea.easy_audit.logger.service')->end()
+                ->scalarNode('log_event_class')->defaultValue('Xiidea\EasyAuditBundle\Event\LogEvent')->end()
                 ->variableNode('events')->defaultValue(array())->end()
+                ->variableNode('custom_resolvers')->defaultValue(array())->end()
             ->end()
         ;
 

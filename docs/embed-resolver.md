@@ -1,0 +1,1 @@
+Embed Resolver with event

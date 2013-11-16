@@ -9,11 +9,12 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Xiidea\EasyAuditBundle\Event;
+namespace Xiidea\EasyAuditBundle\Resolver;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Xiidea\EasyAuditBundle\Event\LogEvent;
 
-class EventResolverFactory implements EventResolverInterface
+class DefaultEventResolver implements EventResolverInterface
 {
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
@@ -30,7 +31,7 @@ class EventResolverFactory implements EventResolverInterface
      *
      * @return LogEventInterface
      */
-    public function getEventInfo($event)
+    public function getEventLogInfo($event = null)
     {
         $logEvent = new LogEvent();
         $logEvent->setDescription($event->getname());

@@ -17,4 +17,5 @@ interface LogEventInterface
     public function getEventTime();
     public function getDescription();
     public function getUser();
+    public function fromArray();
 }

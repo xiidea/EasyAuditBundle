@@ -19,5 +19,7 @@ trait  EntityHydrationMethod
             $method = sprintf('set%s', ucwords($property));
             $this->$method($value);
         }
+
+        return $this;
     }
 }

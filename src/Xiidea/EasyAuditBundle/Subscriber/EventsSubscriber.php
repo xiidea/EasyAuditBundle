@@ -11,7 +11,7 @@
 
 namespace Xiidea\EasyAuditBundle\Subscriber;
 
-use Xiidea\EasyAuditBundle\Traits\ServiceGetterMethods;
+use Xiidea\EasyAuditBundle\Traits\ServiceContainerGetterMethods;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;

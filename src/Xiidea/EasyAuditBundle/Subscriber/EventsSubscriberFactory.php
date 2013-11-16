@@ -11,22 +11,20 @@
 
 namespace Xiidea\EasyAuditBundle\Subscriber;
 
-use Xiidea\EasyAuditBundle\Traits\ServiceGetterMethods;
+use Xiidea\EasyAuditBundle\Event\EventResolverInterface;
+use Xiidea\EasyAuditBundle\Resolver\EventResolverFactory;
+use Xiidea\EasyAuditBundle\Traits\ServiceContainerGetterMethods;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class EventsSubscriberFactory implements EventSubscriberInterface
 {
-    use ServiceGetterMethods;
+    use ServiceContainerGetterMethods;
 
     /**
      * @var array
      */
     static private $events = array();
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    private $container;
 
     public function __construct(ContainerInterface $container,array $events = array())
     {
@@ -36,8 +34,29 @@ class EventsSubscriberFactory implements EventSubscriberInterface
 
     public function resolveEventHandler($event)
     {
-      $eventInfo = $this->getResolver()->getEventInfo($event);
-      $this->getLogger()->log($eventInfo);
+        $eventResolverFactory = new EventResolverFactory($this->container);
+        $eventInfo = $eventResolverFactory->getEventLog($event);
+        $this->getLogger()->log($eventInfo);
+    }
+
+    protected function getEventLogObject($event)
+    {
+        $logEventClass = $this->getParameter('log_event_class');
+        $eventLog = $this->getEventLogInfo($event);
+    }
+
+    protected function eventWithResolver($event)
+    {
+        return ($event instanceof EventResolverInterface) || method_exists($event,'getEventLogInfo');
+    }
+
+    protected function getEventLogInfo($event)
+    {
+        if ($this->eventWithResolver($event)) {
+            return $event->getEventLogInfo();
+        }
+
+        return $this->getCommonResolver()->getEventLogInfo($event);
     }
 
     public static function getSubscribedEvents()
