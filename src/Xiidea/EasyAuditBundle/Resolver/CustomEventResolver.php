@@ -24,7 +24,6 @@ class CustomEventResolver implements EventResolverInterface
         return array(
             'description'=>'Custom description',
             'type'=>$event->getname(),
-            'user'=>'Anonymous',
         );
     }
 }

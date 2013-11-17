@@ -15,15 +15,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class DefaultEventResolver implements EventResolverInterface
 {
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    private $container;
-
-    public function __construct(ContainerInterface $container){
-
-        $this->container = $container;
-    }
 
     /**
      * @param $event
@@ -35,42 +26,6 @@ class DefaultEventResolver implements EventResolverInterface
         return array(
             'description'=>$event->getname(),
             'type'=>$event->getname(),
-            'user'=>$this->getUsername(),
         );
     }
-
-    /**
-     * Get a user from the Security Context
-     *
-     * @return mixed
-     * @throws \LogicException If SecurityBundle is not available
-     */
-    public function getUser()
-    {
-        if (!$this->container->has('security.context')) {
-            throw new \LogicException('The SecurityBundle is not registered in your application.');
-        }
-
-        if (null === $token = $this->container->get('security.context')->getToken()) {
-            return null;
-        }
-
-        if (!is_object($user = $token->getUser())) {
-            return null;
-        }
-
-        return $user;
-    }
-
-    public function getUsername()
-    {
-        $user = $this->getUser();
-
-        if($user == null){
-            return 'Anonymous';
-        }
-
-        return $user->getUsername();
-    }
-
 }

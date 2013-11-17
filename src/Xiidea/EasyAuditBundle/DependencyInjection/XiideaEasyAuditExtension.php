@@ -28,5 +28,9 @@ class XiideaEasyAuditExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+
+        if (!empty($config['doctrine_entities'])) {
+            $loader->load('doctrine_services.yml');
+        }
     }
 }

@@ -29,7 +29,25 @@ class EventsSubscriberFactory implements EventSubscriberInterface
     public function __construct(ContainerInterface $container,array $events = array())
     {
         $this->container = $container;
+        $this->addDoctrineEvents($events);
+
         self::$events = array_fill_keys($events, 'resolveEventHandler');
+    }
+
+    private function addDoctrineEvents(&$events = array())
+    {
+        $doctrine_entities = $this->getParameter('doctrine_entities');
+
+        if (empty($doctrine_entities)) {
+            return;
+        }
+
+        $reflectionClass = new \ReflectionClass('Xiidea\EasyAuditBundle\Events\DoctrineEvents');
+        $constants = $reflectionClass->getConstants();
+
+        foreach ($constants as $constant) {
+            array_push($events, $constant);
+        }
     }
 
     public function resolveEventHandler($event)

@@ -20,3 +20,9 @@ services:
           arguments: [@service_container, %xiidea.easy_audit.events% ]
           tags:
               - { name: kernel.event_subscriber }
+
+  xiidea.easy_audit.prepersist_listener:
+          class: Xiidea\EasyAuditBundle\Listener\DoctrineListener
+          arguments: [@service_container, %xiidea.easy_audit.entity_class% ]
+          tags:
+              - { name: doctrine.event_listener, event: prePersist  }

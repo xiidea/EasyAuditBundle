@@ -11,7 +11,6 @@
 
 namespace Xiidea\EasyAuditBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Xiidea\EasyAuditBundle\Traits\EntityHydrationMethod;
 
 abstract class AuditLog
@@ -42,11 +41,6 @@ abstract class AuditLog
     protected $eventTime;
 
     protected $user;
-
-    public function __construct()
-    {
-         $this->setEventTime('now');
-    }
 
     public function setUser($user)
     {
@@ -99,10 +93,10 @@ abstract class AuditLog
     }
 
     /**
-     * @param mix $eventTime
+     * @param \DateTime $eventTime
      */
-    public function setEventTime($eventTime)
+    public function setEventTime(\DateTime $eventTime)
     {
-        $this->eventTime = new \DateTime($eventTime);
+        $this->eventTime = $eventTime;
     }
 }

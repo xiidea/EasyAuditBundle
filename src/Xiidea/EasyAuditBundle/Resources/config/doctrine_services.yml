@@ -1,0 +1,7 @@
+
+services:
+  xiidea.easy_audit.doctrine_subscriber:
+          class: Xiidea\EasyAuditBundle\Subscriber\DoctrineSubscriber
+          arguments: [@service_container, %xiidea.easy_audit.doctrine_entities% ]
+          tags:
+              - { name: doctrine.event_subscriber }
