@@ -27,8 +27,7 @@ class MyEvent extends Event implements EventResolverInterface
     {
         return array(
             'description'=>'Embeded Event description',
-            'type'=>$this->getname(),
-            'user'=>'User Name',
+            'type'=>$this->getname()
         );
     }
 

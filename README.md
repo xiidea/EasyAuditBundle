@@ -60,7 +60,7 @@ You can find sample config data in `config/config.yml` file
 xiidea_easy_audit:
     #resolver: xiidea.easy_audit.default_event_resolver        #Optional
     #logger: xiidea.easy_audit.logger.service                  #Optional
-    entity_class :                                             #Required
+    entity_class : MyProject\MyBundle\Entity\AuditLog          #Required
 
     #List all events you want to track  required
     events :                                                   #Required
@@ -86,3 +86,4 @@ Look the cookbook for another interesting things.
 - [Override Resolver](docs/override-resolver.md)
 - [Override Logger](docs/override-logger.md)
 - [Custom Resolver](docs/custom-resolver.md)
+- [Doctrine Entity Event](docs/doctrine-entity-events.md)

@@ -14,49 +14,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface
 class CustomEventResolver implements EventResolverInterface
 {
 
-    private $container;
-
-    public function __construct(ContainerInterface $container) {
-
-        $this->container = $container;
-    }
-
     public function getEventLogInfo($event = null)
     {
         return array(
             'description'=>'Custom description',
-            'type'=>$event->getname(),
-            'user'=>$this->getUsername(),
+            'type'=>$event->getname()
         );
     }
 
-    public function getUser()
-    {
-        if (!$this->container->has('security.context')) {
-            throw new \LogicException('The SecurityBundle is not registered in your application.');
-        }
-
-        if (null === $token = $this->container->get('security.context')->getToken()) {
-            return null;
-        }
-
-        if (!is_object($user = $token->getUser())) {
-            return null;
-        }
-
-        return $user;
-    }
-
-    public function getUsername()
-    {
-        $user = $this->getUser();
-
-        if($user == null){
-            return 'Anonymous';
-        }
-
-        return $user->getUsername();
-    }
 }
 
 ```
@@ -67,7 +32,6 @@ class CustomEventResolver implements EventResolverInterface
 services:
     custom.event_resolver.service:
          class: Xiidea\EasyAuditBundle\Resolver\CustomEventResolver
-         arguments: [@service_container]
 
 ```
 
