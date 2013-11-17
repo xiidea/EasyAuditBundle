@@ -39,8 +39,7 @@ class UserEventResolver implements EventResolverInterface
 
         return array(
             'description'=>$eventDetails['description'],
-            'type'=>$eventDetails['type'],
-            'user'=>$this->getUsername(),
+            'type'=>$eventDetails['type']
         );
     }
 
