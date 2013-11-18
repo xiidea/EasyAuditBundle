@@ -44,12 +44,14 @@ class DoctrineListener
     {
         $userProperty = $this->container->getParameter('xiidea.easy_audit.user_property');
 
+        $user = $this->getUser();
+
         if (empty($userProperty)) {
-            $entity->setUser($this->getUser());
-        } elseif (is_callable($entity, "get{$userProperty}")) {
+            $entity->setUser($user);
+        } elseif (is_callable($user, "get{$userProperty}")) {
             $propertyGetter = "get{$userProperty}";
-            $entity->setUser($entity->$propertyGetter());
-        } elseif($this->isDebug()) {
+            $entity->setUser($user->$propertyGetter());
+        } elseif ($this->isDebug()) {
             throw new \Exception("get{$userProperty}() not found in user object");
         }
     }
