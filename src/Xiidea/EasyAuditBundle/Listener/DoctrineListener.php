@@ -48,7 +48,7 @@ class DoctrineListener
 
         if (empty($userProperty)) {
             $entity->setUser($user);
-        } elseif (is_callable($user, "get{$userProperty}")) {
+        } elseif (is_callable(array($user, "get{$userProperty}"))) {
             $propertyGetter = "get{$userProperty}";
             $entity->setUser($user->$propertyGetter());
         } elseif ($this->isDebug()) {
