@@ -15,6 +15,10 @@ services:
           class: Xiidea\EasyAuditBundle\Resolver\DefaultEventResolver
           arguments: [@service_container]
 
+  default_entity_event_resolver:
+          class: Xiidea\EasyAuditBundle\Resolver\EntityEventResolver
+          arguments: [@service_container]
+
   xiidea.easy_audit.event_subscriber:
           class: Xiidea\EasyAuditBundle\Subscriber\EventsSubscriber
           arguments: [@service_container, %xiidea.easy_audit.events% ]

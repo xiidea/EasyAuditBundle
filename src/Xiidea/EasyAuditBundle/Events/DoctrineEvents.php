@@ -17,6 +17,7 @@ class DoctrineEvents
 
     const ENTITY_UPDATED = 'easy_audit.doctrine.entity.updated';
     const ENTITY_CREATED = 'easy_audit.doctrine.entity.created';
+    const ENTITY_DELETED = 'easy_audit.doctrine.entity.deleted';
 
     public static function getShortEventType($eventName)
     {

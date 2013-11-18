@@ -1,26 +1,27 @@
 # Xiidea Easy Audit Configuration Sample
 
 xiidea_easy_audit:
-    #resolver: xiidea.easy_audit.default_event_resolver               #Optional
-    #logger: xiidea.easy_audit.logger.service                         #Optional
-    #entity_class : MyProject\Bundle\MyBundle\Entity\AuditLog         #Required
+    #resolver: xiidea.easy_audit.default_event_resolver                           #Optional
+    #logger: xiidea.easy_audit.logger.service                                     #Optional
+    #entity_class : MyProject\Bundle\MyBundle\Entity\AuditLog                     #Required
+    #entity_event_resolver : default_entity_event_resolver                        #Required
 
     #user property to use as actor of an event
     #valid value will be any valid property of your user class ~
-    user_property : ~ # or username                                  #Required
+    user_property : ~ # or username                                               #Required
 
     #List of doctrine entity:event you wish to track
-    #doctrine_entities :                                              #Optional
+    #doctrine_entities :                                                          #Optional
     #     MyProject\Bundle\MyBundle\Entity\MyEntity : [created, updated, deleted]
     #     MyProject\Bundle\MyBundle\Entity\MyEntity2 : ~
 
     #List all events you want to track  required
-    events :                                                          #Required
+    events :                                                                      #Required
         - security.interactive_login
        #- //More event
 
     #List all custom resolver for event
-    custom_resolvers :                                                #Optional
+    custom_resolvers :                                                            #Optional
            #security.interactive_login : custom.event_resolver
 
 #Custom Event Resolver Service

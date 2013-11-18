@@ -40,6 +40,14 @@ trait ServiceContainerGetterMethods
         return $this->container->get($serviceName);
     }
 
+    /**
+     * @return \Xiidea\EasyAuditBundle\Resolver\EventResolverInterface
+     */
+    public function getEntityEventResolver()
+    {
+        return $this->container->get($this->container->getParameter('xiidea.easy_audit.entity_event_resolver'));
+    }
+
     public function getParameter($parameter)
     {
         return $this->container->getParameter('xiidea.easy_audit.'.$parameter);
@@ -51,5 +59,11 @@ trait ServiceContainerGetterMethods
     public function getKernel()
     {
         return $this->container->get('kernel');
+    }
+
+    public function getDoctrineEventsList()
+    {
+        $reflectionClass = new \ReflectionClass('Xiidea\EasyAuditBundle\Events\DoctrineEvents');
+        return  $reflectionClass->getConstants();
     }
 } 

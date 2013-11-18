@@ -42,10 +42,7 @@ class EventsSubscriberFactory implements EventSubscriberInterface
             return;
         }
 
-        $reflectionClass = new \ReflectionClass('Xiidea\EasyAuditBundle\Events\DoctrineEvents');
-        $constants = $reflectionClass->getConstants();
-
-        foreach ($constants as $constant) {
+        foreach ($this->getDoctrineEventsList() as $constant) {
             array_push($events, $constant);
         }
     }

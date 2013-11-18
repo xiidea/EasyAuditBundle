@@ -69,7 +69,9 @@ class EventResolverFactory
     {
         $customResolvers = $this->getParameter('custom_resolvers');
 
-        if (isset($customResolvers[$eventName])) {
+        if ($this->isEntityEvent($eventName)) {
+            return $this->getEntityEventResolver();
+        } elseif (isset($customResolvers[$eventName])) {
 
             $resolver = $this->getService($customResolvers[$eventName]);
 
@@ -83,6 +85,11 @@ class EventResolverFactory
         }
 
         return $this->getCommonResolver();
+    }
+
+    protected function isEntityEvent($eventName)
+    {
+        return in_array($eventName, $this->getDoctrineEventsList());
     }
 
     protected function getEventLogInfo($event)
