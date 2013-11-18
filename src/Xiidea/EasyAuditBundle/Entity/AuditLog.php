@@ -11,11 +11,8 @@
 
 namespace Xiidea\EasyAuditBundle\Entity;
 
-use Xiidea\EasyAuditBundle\Traits\EntityHydrationMethod;
-
-abstract class AuditLog
+abstract class AuditLog extends BaseAuditLog
 {
-    use EntityHydrationMethod;
 
     /**
      * @var integer
@@ -34,23 +31,6 @@ abstract class AuditLog
      */
     protected $description;
 
-    /**
-     * Time Of Event
-     * @var \DateTime
-     */
-    protected $eventTime;
-
-    protected $user;
-
-    public function setUser($user)
-    {
-        $this->user = $user;
-    }
-
-    public function getUser()
-    {
-        return $this->user;
-    }
 
     /**
      * @return string
@@ -85,18 +65,20 @@ abstract class AuditLog
     }
 
     /**
-     * @return \DateTime
+     * @return int
      */
-    public function getEventTime()
+    public function getId()
     {
-        return $this->eventTime;
+        return $this->id;
     }
 
     /**
-     * @param \DateTime $eventTime
+     * @param int $id
      */
-    public function setEventTime(\DateTime $eventTime)
+    public function setId($id)
     {
-        $this->eventTime = $eventTime;
+        $this->id = $id;
     }
+
+
 }

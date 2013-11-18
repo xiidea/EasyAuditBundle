@@ -62,6 +62,16 @@ xiidea_easy_audit:
     #logger: xiidea.easy_audit.logger.service                  #Optional
     entity_class : MyProject\MyBundle\Entity\AuditLog          #Required
 
+    #user property to use as actor of an event
+    #valid value will be any valid property of your user class
+    user_property : ~ # or username                            #Required
+
+    #List of doctrine entity:event you wish to track
+    # valid events are = [created, updated, deleted]
+    #doctrine_entities :                                              #Optional
+    #     MyProject\Bundle\MyBundle\Entity\MyEntity : [created, updated, deleted]
+    #     MyProject\Bundle\MyBundle\Entity\MyEntity2 : ~
+
     #List all events you want to track  required
     events :                                                   #Required
         - security.interactive_login
