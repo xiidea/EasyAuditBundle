@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the EasyAudit package.
+ * This file is part of the XiideaEasyAuditBundle package.
  *
  * (c) Xiidea <http://www.xiidea.net>
  *
