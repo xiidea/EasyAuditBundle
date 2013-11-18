@@ -77,6 +77,13 @@ class UserEventResolver implements EventResolverInterface
                     $event->getUser()->getUsername()
                 );
                 break;
+            case 'security.authentication.failure':
+                /** @var $event AuthenticationFailureEvent */
+                $eventDetails['type'] = "Authentication Failed";
+                $translator = $this->container->get('translator');
+                $eventDetails['description'] = $translator->trans($event->getAuthenticationException()->getMessage());
+                $eventDetails['description'] .= " Username: ".$event->getAuthenticationToken()->getUser();
+                break;
         }
 
         return $eventDetails;
