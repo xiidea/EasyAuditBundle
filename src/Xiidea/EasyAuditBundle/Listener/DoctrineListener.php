@@ -48,9 +48,11 @@ class DoctrineListener
 
         if (empty($userProperty)) {
             $entity->setUser($user);
-        } elseif (is_callable(array($user, "get{$userProperty}"))) {
+        } elseif ($user && is_callable(array($user, "get{$userProperty}"))) {
             $propertyGetter = "get{$userProperty}";
             $entity->setUser($user->$propertyGetter());
+        } elseif ($user === NULL) {
+            $entity->setUser($this->getUsername());
         } elseif ($this->isDebug()) {
             throw new \Exception("get{$userProperty}() not found in user object");
         }
