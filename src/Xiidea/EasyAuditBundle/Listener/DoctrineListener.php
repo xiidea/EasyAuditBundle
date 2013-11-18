@@ -18,11 +18,11 @@ class DoctrineListener
     /**
      * @var array
      */
-    private $entity_class;
+    protected $entity_class;
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
-    private $container;
+    protected $container;
 
     public function __construct(ContainerInterface $container, $entity_class)
     {
@@ -40,7 +40,7 @@ class DoctrineListener
         }
     }
 
-    private function setUser($entity)
+    protected function setUser($entity)
     {
         $userProperty = $this->container->getParameter('xiidea.easy_audit.user_property');
 
@@ -58,7 +58,7 @@ class DoctrineListener
         }
     }
 
-    private function isDebug()
+    protected function isDebug()
     {
         return $this->container->get('kernel')->isDebug();
     }

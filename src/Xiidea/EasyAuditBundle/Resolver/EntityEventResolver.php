@@ -18,15 +18,21 @@ use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 /** Custom Event Resolver Example Class */
 class EntityEventResolver implements EventResolverInterface
 {
+    protected $candidateProperties = array('name', 'title');
+
+    protected $propertiesFound = array();
 
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
-    private $container;
+    protected $container;
 
-    private $eventShortName;
+    protected $eventShortName;
 
-    private $eventName;
+    /** @var  $event DoctrineEntityEvent */
+    protected $event;
+
+    protected $entity;
 
     public function __construct(ContainerInterface $container)
     {
@@ -40,12 +46,13 @@ class EntityEventResolver implements EventResolverInterface
      */
     public function getEventLogInfo($event = NULL)
     {
-        $this->eventName = $event->getName();
-        $entity = $event->getLifecycleEventArgs()->getEntity();
+        $this->event = $event;
+        $entity = $this->getEntity();
         $reflectionClass = $this->getReflectionClassFromObject($entity);
 
-        $eventType = $this->getEventType($reflectionClass);
-        $eventDescription = $this->getDescription($reflectionClass, $entity);
+        $typeName = $reflectionClass->getShortName();
+        $eventType = $this->getEventType($typeName);
+        $eventDescription = $this->getDescription($reflectionClass, $entity, $typeName);
 
         return array(
             'description'=> $eventDescription,
@@ -54,12 +61,36 @@ class EntityEventResolver implements EventResolverInterface
 
     }
 
-    private function getEventType(\ReflectionClass $reflectionClass)
+    /**
+     * @return mixed
+     */
+    protected function getEntity()
     {
-        return $reflectionClass->getShortName() . " " . $this->getEventShortName();
+        if(!$this->entity){
+            $this->entity = $this->event->getLifecycleEventArgs()->getEntity();
+        }
+
+        return $this->entity;
     }
 
-    private function getDescription(\ReflectionClass $reflectionClass, $entity)
+    protected function getProperty($name)
+    {
+        if(!isset($this->propertiesFound[$name])){
+            return null;
+        }
+
+        $entity = $this->getEntity();
+        $propertyGetter = 'get'.$this->propertiesFound[$name];
+
+        return $entity->$propertyGetter();
+    }
+
+    protected function getEventType($typeName)
+    {
+        return $typeName . " " . $this->getEventShortName();
+    }
+
+    protected function getDescription(\ReflectionClass $reflectionClass, $entity, $typeName)
     {
         $property = $this->getBestCandidatePropertyForIdentify($reflectionClass);
 
@@ -72,11 +103,11 @@ class EntityEventResolver implements EventResolverInterface
         }
 
         return sprintf($descriptionTemplate,
-            $reflectionClass->getShortName(),
+            $typeName,
             $this->getEventShortName());
     }
 
-    private function getEventShortName(){
+    protected function getEventShortName(){
 
         if(!$this->eventShortName){
             $this->eventShortName = DoctrineEvents::getShortEventType($this->getName());
@@ -85,14 +116,11 @@ class EntityEventResolver implements EventResolverInterface
         return $this->eventShortName;
     }
 
-    private function getBestCandidatePropertyForIdentify(\ReflectionClass  $reflectionClass)
+    protected function getBestCandidatePropertyForIdentify(\ReflectionClass  $reflectionClass)
     {
         $properties = $reflectionClass->getProperties(\ReflectionProperty::IS_PROTECTED);
 
-        $hasNameProperty = false;
-        $hasTitleProperty = false;
         $hasIdProperty = false;
-
         $idPropertyName = null;
 
         foreach($properties as $property)
@@ -100,44 +128,43 @@ class EntityEventResolver implements EventResolverInterface
             $propertyName = strtolower($property->name);
             $hasIdProperty = $hasIdProperty || $this->isId($propertyName, $reflectionClass);
 
-            if($hasIdProperty){
+            if(!$idPropertyName && $hasIdProperty){
                 $idPropertyName = $property->name;
+                $this->propertiesFound['id'] = $idPropertyName;
             }
 
-            $hasNameProperty = $hasNameProperty || $this->isPropertyName($propertyName, 'name');
+            foreach($this->candidateProperties as $candidate){
+                $hasNameProperty = $this->isPropertyName($propertyName, $candidate);
 
-            if($hasNameProperty){
-                return $property->name;
-            }
+                if($hasNameProperty){
+                    $this->propertiesFound[$candidate] = $property->name;
 
-            $hasTitleProperty = $hasTitleProperty || $this->isPropertyName($propertyName, 'title');
-
-            if($hasTitleProperty){
-                return $property->name;
+                    return $property->name;
+                }
             }
         }
 
         return $idPropertyName;
     }
 
-    private function isPropertyName($property, $name)
+    protected function isPropertyName($property, $name)
     {
         return $property == $name;
     }
 
-    private function isId($property, \ReflectionClass  $reflectionClass)
+    protected function isId($property, \ReflectionClass  $reflectionClass)
     {
         $entityIdStr = strtolower($reflectionClass->getShortName()) . "id";
 
         return $property == 'id' || $property == $entityIdStr;
     }
 
-    private function getName()
+    protected function getName()
     {
-        return $this->eventName;
+        return $this->event->getName();
     }
 
-    private function getReflectionClassFromObject($object)
+    protected function getReflectionClassFromObject($object)
     {
         $class = get_class($object);
 

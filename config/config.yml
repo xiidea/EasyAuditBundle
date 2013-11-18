@@ -5,6 +5,7 @@ xiidea_easy_audit:
     #logger: xiidea.easy_audit.logger.service                                     #Optional
     #entity_class : MyProject\Bundle\MyBundle\Entity\AuditLog                     #Required
     #entity_event_resolver : default_entity_event_resolver                        #Required
+    #pre_persist_listener : Xiidea\EasyAuditBundle\Listener\DoctrineListener      #Optional
 
     #user property to use as actor of an event
     #valid value will be any valid property of your user class ~
