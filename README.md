@@ -64,7 +64,7 @@ xiidea_easy_audit:
 
     #user property to use as actor of an event
     #valid value will be any valid property of your user class
-    user_property : ~ # or username                            #Required
+    user_property : ~ # or username                            #Optional
 
     #List of doctrine entity:event you wish to track
     # valid events are = [created, updated, deleted]

@@ -1,7 +1,7 @@
 {
     "name": "xiidea/easy-audit",
     "type": "symfony-bundle",
-    "description": "This package Log Selective Events of Symfony2 project",
+    "description": "A Symfony2 Bundle To Log Selective Events. It is easy to configure and easy to customize for your need",
     "keywords": ["Event Log", "Audit Log"],
     "license": "MIT",
     "homepage": "https://github.com/xiidea/easy-audit",
