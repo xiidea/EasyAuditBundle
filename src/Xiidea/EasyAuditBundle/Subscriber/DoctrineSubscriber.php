@@ -13,6 +13,7 @@ namespace Xiidea\EasyAuditBundle\Subscriber;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Xiidea\EasyAuditBundle\Doctrine\AuditAwareEntityInterface;
 use Xiidea\EasyAuditBundle\Events\DoctrineEntityEvent;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 
@@ -75,6 +76,11 @@ class DoctrineSubscriber implements EventSubscriber
     private function isConfiguredToTrack($entity, $eventName = '')
     {
         $class = get_class($entity);
+        $eventType = DoctrineEvents::getShortEventType($eventName);
+
+        if($this->isAuditAwareEvent($entity, $eventType)){
+            return true;
+        }
 
         //Not configured
         if (!isset($this->entities[$class])) {
@@ -86,9 +92,22 @@ class DoctrineSubscriber implements EventSubscriber
             return TRUE;
         }
 
-        $eventType = DoctrineEvents::getShortEventType($eventName);
-
         //Check if Allowed for $eventType event
         return (is_array($this->entities[$class]) && in_array($eventType, $this->entities[$class]));
+    }
+
+    private function isAuditAwareEvent($entity, $eventType)
+    {
+        if(!($entity instanceof AuditAwareEntityInterface)){
+            return false;
+        }
+
+        if(!is_callable(array($entity, 'getSubscribedEvents'))){
+            return true;
+        }
+
+        $events = $entity->getSubscribedEvents();
+
+        return empty($events) || in_array($eventType, $events);
     }
 }
