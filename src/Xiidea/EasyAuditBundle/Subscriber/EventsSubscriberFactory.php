@@ -11,7 +11,7 @@
 
 namespace Xiidea\EasyAuditBundle\Subscriber;
 
-use Xiidea\EasyAuditBundle\Event\EventResolverInterface;
+use Xiidea\EasyAuditBundle\Resolver\EventResolverInterface;
 use Xiidea\EasyAuditBundle\Resolver\EventResolverFactory;
 use Xiidea\EasyAuditBundle\Traits\ServiceContainerGetterMethods;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -52,12 +52,6 @@ class EventsSubscriberFactory implements EventSubscriberInterface
         $eventResolverFactory = new EventResolverFactory($this->container);
         $eventInfo = $eventResolverFactory->getEventLog($event);
         $this->getLogger()->log($eventInfo);
-    }
-
-    protected function getEventLogObject($event)
-    {
-        $logEventClass = $this->getParameter('log_event_class');
-        $eventLog = $this->getEventLogInfo($event);
     }
 
     protected function eventWithResolver($event)

@@ -78,8 +78,8 @@ class DoctrineSubscriber implements EventSubscriber
         $class = get_class($entity);
         $eventType = DoctrineEvents::getShortEventType($eventName);
 
-        if($this->isAuditAwareEvent($entity, $eventType)){
-            return true;
+        if(null !== $track = $this->isAnnotatedEvent($entity, $eventType)){
+            return $track;
         }
 
         //Not configured
@@ -96,18 +96,39 @@ class DoctrineSubscriber implements EventSubscriber
         return (is_array($this->entities[$class]) && in_array($eventType, $this->entities[$class]));
     }
 
-    private function isAuditAwareEvent($entity, $eventType)
+    protected function isAnnotatedEvent($entity, $eventType)
     {
-        if(!($entity instanceof AuditAwareEntityInterface)){
-            return false;
+        $metaData = $this->hasAnnotation($entity);
+
+        if (!$metaData) {
+            return null;
         }
 
-        if(!is_callable(array($entity, 'getSubscribedEvents'))){
-            return true;
-        }
+        return empty($metaData->events) || in_array($eventType, $metaData->events);
+    }
 
-        $events = $entity->getSubscribedEvents();
+    protected function hasAnnotation($entity)
+    {
+        $reflection = $this->getReflectionClassFromObject($entity);
 
-        return empty($events) || in_array($eventType, $events);
+        return $this
+            ->getAnnotationReader()
+            ->getClassAnnotation($reflection, 'Xiidea\EasyAuditBundle\Annotation\ORMSubscribedEvents');
+
+    }
+
+    /**
+     * @return \Doctrine\Common\Annotations\FileCacheReader
+     */
+    protected function getAnnotationReader()
+    {
+        return $this->container->get('annotation_reader');
+    }
+
+    protected function getReflectionClassFromObject($object)
+    {
+        $class = get_class($object);
+
+        return new \ReflectionClass($class);
     }
 }

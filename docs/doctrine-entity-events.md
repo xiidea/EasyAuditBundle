@@ -16,40 +16,47 @@ xiidea_easy_audit:
           MyProject\Bundle\MyBundle\Entity\MyEntity3 : ~
 ```
 
-### 2. By implementing an interface
+### 2. By Annotation
 
-There is another way to tell XiideaEasyAuditBundle to track event of an entity. you need to implementing Xiidea\EasyAuditBundle\Doctrine\AuditAwareEntityInterface interface for the entity you wish to track.
-alternately you could just extend Xiidea\EasyAuditBundle\Doctrine\AuditAwareEntityBase to track all event for your entity
+You can use annotation to tell XiideaEasyAuditBundle to track events of an entity.
 
-to track created and updated event for MyEntity we can do:
+@ORMSubscribedEvent
+~~~~~~~~~~~~~~~~~~~
+This annotation lets you define which event you like to track for a doctrine entity:
+
+```php
+//track only updated and created event
+/**
+ * @ORMSubscribedEvent(events = "updated, created")
+ * or
+ * @ORMSubscribedEvent("updated, created")
+ */
+
+//track all(updated, created, deleted) events
+/**
+ * @ORMSubscribedEvent(events = "updated, created, deleted")
+ * or
+ * @ORMSubscribedEvent("updated, created, deleted")
+ * or even short form
+ * @ORMSubscribedEvent()
+ */
+```
+
+An entity example to track updated and created events
 
 ```php
 <?php
 // src/MyProject/MyBundle/Entity/MyEntity.php
 
-use Xiidea\EasyAuditBundle\Doctrine\AuditAwareEntityInterface;
+use Xiidea\EasyAuditBundle\Annotation\ORMSubscribedEvent;
 
-class MyEntity implements AuditAwareEntityInterface
+/**
+ * @ORM\Entity
+ * @ORMSubscribedEvent(events = "updated, created")
+ */
+class MyEntity
 {
     ...
 
-    public function getSubscribedEvents()
-    {
-        return ['created', 'updated'];
-    }
-}
-```
-
-or to track all supported events('created', 'updated', 'deleted') for MyEntity2 we can do :
-
-```php
-<?php
-// src/MyProject/MyBundle/Entity/MyEntity2.php
-
-use Xiidea\EasyAuditBundle\Doctrine\AuditAwareEntityBase;
-
-class MyEntity2 extends AuditAwareEntityBase
-{
-    ....
 }
 ```
