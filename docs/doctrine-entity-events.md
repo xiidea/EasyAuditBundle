@@ -20,9 +20,7 @@ xiidea_easy_audit:
 
 You can use annotation to tell XiideaEasyAuditBundle to track events of an entity.
 
-@ORMSubscribedEvents
-~~~~~~~~~~~~~~~~~~~
-This annotation lets you define which event you like to track for a doctrine entity:
+@ORMSubscribedEvents: This annotation lets you define which event you like to track for a doctrine entity:
 
 ```php
 //track only updated and created event
