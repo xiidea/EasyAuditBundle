@@ -20,25 +20,25 @@ xiidea_easy_audit:
 
 You can use annotation to tell XiideaEasyAuditBundle to track events of an entity.
 
-@ORMSubscribedEvent
+@ORMSubscribedEvents
 ~~~~~~~~~~~~~~~~~~~
 This annotation lets you define which event you like to track for a doctrine entity:
 
 ```php
 //track only updated and created event
 /**
- * @ORMSubscribedEvent(events = "updated, created")
+ * @ORMSubscribedEvents(events = "updated, created")
  * or
- * @ORMSubscribedEvent("updated, created")
+ * @ORMSubscribedEvents("updated, created")
  */
 
 //track all(updated, created, deleted) events
 /**
- * @ORMSubscribedEvent(events = "updated, created, deleted")
+ * @ORMSubscribedEvents(events = "updated, created, deleted")
  * or
- * @ORMSubscribedEvent("updated, created, deleted")
+ * @ORMSubscribedEvents("updated, created, deleted")
  * or even short form
- * @ORMSubscribedEvent()
+ * @ORMSubscribedEvents()
  */
 ```
 
@@ -48,11 +48,11 @@ An entity example to track updated and created events
 <?php
 // src/MyProject/MyBundle/Entity/MyEntity.php
 
-use Xiidea\EasyAuditBundle\Annotation\ORMSubscribedEvent;
+use Xiidea\EasyAuditBundle\Annotation\ORMSubscribedEvents;
 
 /**
  * @ORM\Entity
- * @ORMSubscribedEvent(events = "updated, created")
+ * @ORMSubscribedEvents(events = "updated, created")
  */
 class MyEntity
 {
