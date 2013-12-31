@@ -11,7 +11,7 @@
 namespace Xiidea\EasyAuditBundle\Subscriber;
 
 use Doctrine\Common\EventSubscriber;
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Xiidea\EasyAuditBundle\Events\DoctrineEntityEvent;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
@@ -39,7 +39,7 @@ class DoctrineSubscriber extends ContainerAware implements EventSubscriber
 
     public function postPersist(LifecycleEventArgs $args)
     {
-        if (!$this->isConfiguredToTrack($args->getObject(), 'postPersist')) {
+        if (!$this->isConfiguredToTrack($args->getEntity(), 'postPersist')) {
             return;
         }
 
@@ -58,7 +58,7 @@ class DoctrineSubscriber extends ContainerAware implements EventSubscriber
 
     private function handleEvent($eventName, LifecycleEventArgs $args)
     {
-        if (!$this->isConfiguredToTrack($args->getObject(), $eventName)) {
+        if (!$this->isConfiguredToTrack($args->getEntity(), $eventName)) {
             return;
         }
 
