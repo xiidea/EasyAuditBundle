@@ -11,15 +11,13 @@
 
 namespace Xiidea\EasyAuditBundle\Resolver;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 class DefaultEventResolver implements EventResolverInterface
 {
 
     /**
      * @param $event
      *
-     * @return LogEventInterface
+     * @return array
      */
     public function getEventLogInfo($event = null)
     {

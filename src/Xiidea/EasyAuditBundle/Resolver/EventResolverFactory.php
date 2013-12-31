@@ -11,18 +11,12 @@
 
 namespace Xiidea\EasyAuditBundle\Resolver;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAware;
 use Xiidea\EasyAuditBundle\Traits\ServiceContainerGetterMethods;
 
-class EventResolverFactory
+class EventResolverFactory extends ContainerAware
 {
     use ServiceContainerGetterMethods;
-
-    public function __construct(ContainerInterface $container)
-    {
-
-        $this->container = $container;
-    }
 
     public function getEventLog($event)
     {

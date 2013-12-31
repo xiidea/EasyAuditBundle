@@ -11,21 +11,16 @@
 
 namespace Xiidea\EasyAuditBundle\Resolver;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAware;
 use Xiidea\EasyAuditBundle\Events\DoctrineEntityEvent;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 
 /** Custom Event Resolver Example Class */
-class EntityEventResolver implements EventResolverInterface
+class EntityEventResolver extends ContainerAware implements EventResolverInterface
 {
     protected $candidateProperties = array('name', 'title');
 
     protected $propertiesFound = array();
-
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    protected $container;
 
     protected $eventShortName;
 
@@ -33,11 +28,6 @@ class EntityEventResolver implements EventResolverInterface
     protected $event;
 
     protected $entity;
-
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
 
     /**
      * @param $event DoctrineEntityEvent

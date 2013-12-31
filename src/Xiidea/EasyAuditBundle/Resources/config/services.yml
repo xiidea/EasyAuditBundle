@@ -13,11 +13,17 @@ services:
 
   xiidea.easy_audit.default_event_resolver:
           class: Xiidea\EasyAuditBundle\Resolver\DefaultEventResolver
-          arguments: [@service_container]
 
   default_entity_event_resolver:
           class: Xiidea\EasyAuditBundle\Resolver\EntityEventResolver
-          arguments: [@service_container]
+          calls:
+              - [ setContainer,[ @service_container ] ]
+
+  xiidea.easy_audit.event_resolver_factory:
+          class: Xiidea\EasyAuditBundle\Resolver\EventResolverFactory
+          public: false
+          calls:
+              - [ setContainer,[ @service_container ] ]
 
   xiidea.easy_audit.event_subscriber:
           class: Xiidea\EasyAuditBundle\Subscriber\EventsSubscriber

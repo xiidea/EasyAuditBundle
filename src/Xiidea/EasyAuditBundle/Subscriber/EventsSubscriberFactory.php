@@ -49,7 +49,8 @@ class EventsSubscriberFactory implements EventSubscriberInterface
 
     public function resolveEventHandler($event)
     {
-        $eventResolverFactory = new EventResolverFactory($this->container);
+        $eventResolverFactory = new EventResolverFactory();
+        $eventResolverFactory->setContainer($this->container);
         $eventInfo = $eventResolverFactory->getEventLog($event);
         $this->getLogger()->log($eventInfo);
     }

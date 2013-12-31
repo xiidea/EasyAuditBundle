@@ -11,10 +11,8 @@
 
 namespace Xiidea\EasyAuditBundle\Subscriber;
 
-use Xiidea\EasyAuditBundle\Traits\ServiceContainerGetterMethods;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 class EventsSubscriber implements EventSubscriberInterface
 {
@@ -26,8 +24,6 @@ class EventsSubscriber implements EventSubscriberInterface
         ));
 
     }
-
-
 
     public function onKernelRequest(){
 

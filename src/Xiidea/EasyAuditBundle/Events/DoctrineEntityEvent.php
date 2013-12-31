@@ -13,7 +13,6 @@ namespace Xiidea\EasyAuditBundle\Events;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\Event;
-use Xiidea\EasyAuditBundle\Resolver\EventResolverInterface;
 
 class DoctrineEntityEvent extends Event
 {

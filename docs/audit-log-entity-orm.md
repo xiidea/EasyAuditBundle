@@ -13,7 +13,7 @@ For example:
 namespace MyProject\MyBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Xiidea\EasyAuditBundle\Entity\AuditLog as BaseAuditLog;
+use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
 
 /**
  * @ORM\Entity
