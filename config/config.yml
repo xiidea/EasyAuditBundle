@@ -2,7 +2,6 @@
 
 xiidea_easy_audit:
     #resolver: xiidea.easy_audit.default_event_resolver                           #Optional
-    #logger: xiidea.easy_audit.logger.service                                     #Optional
     #entity_class : MyProject\Bundle\MyBundle\Entity\AuditLog                     #Required
     #entity_event_resolver : default_entity_event_resolver                        #Optional
     #pre_persist_listener : Xiidea\EasyAuditBundle\Listener\DoctrineListener      #Optional

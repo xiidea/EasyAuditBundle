@@ -6,8 +6,9 @@ You could easily customize CustomEventResolver with a version adapted to your ne
 
 ``` php
 <?php
+src/MyProject/MyBundle/Resolver/CustomEventResolver.php
 
-namespace Xiidea\EasyAuditBundle\Resolver;
+namespace MyProject\MyBundle\Resolver;
 
 use Symfony\Component\DependencyInjection\ContainerInterface
 
@@ -31,7 +32,7 @@ class CustomEventResolver implements EventResolverInterface
 ``` yaml
 services:
     custom.event_resolver.service:
-         class: Xiidea\EasyAuditBundle\Resolver\CustomEventResolver
+         class:  MyProject\MyBundle\Resolver\CustomEventResolver
 
 ```
 

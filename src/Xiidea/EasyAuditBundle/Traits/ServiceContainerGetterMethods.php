@@ -15,29 +15,25 @@ trait ServiceContainerGetterMethods
 {
 
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @return \Symfony\Component\DependencyInjection\ContainerInterface
      */
-    protected $container;
+    protected function getContainer()
+    {
+        return $this->container;
+    }
 
     /**
      * @return \Xiidea\EasyAuditBundle\Resolver\EventResolverInterface
      */
     public function getCommonResolver()
     {
-        return $this->container->get($this->container->getParameter('xiidea.easy_audit.resolver'));
+        return $this->getContainer()->get($this->getContainer()->getParameter('xiidea.easy_audit.resolver'));
     }
 
-    /**
-     * @return \Xiidea\EasyAuditBundle\Logger\LoggerInterface
-     */
-    public function getLogger()
-    {
-        return $this->container->get($this->container->getParameter('xiidea.easy_audit.logger'));
-    }
 
     public function getService($serviceName)
     {
-        return $this->container->get($serviceName);
+        return $this->getContainer()->get($serviceName);
     }
 
     /**
@@ -45,12 +41,12 @@ trait ServiceContainerGetterMethods
      */
     public function getEntityEventResolver()
     {
-        return $this->container->get($this->container->getParameter('xiidea.easy_audit.entity_event_resolver'));
+        return $this->getContainer()->get($this->getContainer()->getParameter('xiidea.easy_audit.entity_event_resolver'));
     }
 
     public function getParameter($parameter)
     {
-        return $this->container->getParameter('xiidea.easy_audit.'.$parameter);
+        return $this->getContainer()->getParameter('xiidea.easy_audit.'.$parameter);
     }
 
     /**
@@ -58,7 +54,7 @@ trait ServiceContainerGetterMethods
      */
     public function getKernel()
     {
-        return $this->container->get('kernel');
+        return $this->getContainer()->get('kernel');
     }
 
     public function getDoctrineEventsList()

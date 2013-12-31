@@ -9,7 +9,13 @@ services:
 
   xiidea.easy_audit.logger.service:
           class: Xiidea\EasyAuditBundle\Logger\Logger
-          arguments: [@service_container]
+          arguments: [@doctrine]
+          tags:
+             - { name: easy_audit.logger }
+
+  xiidea.easy_audit.logger_factory:
+          class: Xiidea\EasyAuditBundle\Logger\LoggerFactory
+          public: false
 
   xiidea.easy_audit.default_event_resolver:
           class: Xiidea\EasyAuditBundle\Resolver\DefaultEventResolver
@@ -25,11 +31,11 @@ services:
           calls:
               - [ setContainer,[ @service_container ] ]
 
-  xiidea.easy_audit.event_subscriber:
-          class: Xiidea\EasyAuditBundle\Subscriber\EventsSubscriber
-          arguments: [@service_container, %xiidea.easy_audit.events% ]
-          tags:
-              - { name: kernel.event_subscriber }
+  xiidea.easy_audit.event_listener:
+          class: Xiidea\EasyAuditBundle\Listener\LogEventsListener
+          arguments: [@xiidea.easy_audit.logger_factory]
+          calls:
+              - [ setContainer,[ @service_container ] ]
 
   xiidea.easy_audit.prepersist_listener:
           class: %xiidea.easy_audit.pre_persist_listener%

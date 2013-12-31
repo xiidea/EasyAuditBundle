@@ -94,6 +94,6 @@ Look the cookbook for another interesting things.
 
 - [Embed Resolver with event](docs/embed-resolver.md)
 - [Override Resolver](docs/override-resolver.md)
-- [Override Logger](docs/override-logger.md)
+- [Custom Logger](docs/custom-logger.md)
 - [Custom Resolver](docs/custom-resolver.md)
 - [Doctrine Entity Event](docs/doctrine-entity-events.md)
