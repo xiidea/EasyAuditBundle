@@ -59,7 +59,6 @@ You can find sample config data in `config/config.yml` file
 # app/config/config.yml
 xiidea_easy_audit:
     #resolver: xiidea.easy_audit.default_event_resolver        #Optional
-    #logger: xiidea.easy_audit.logger.service                  #Optional
     entity_class : MyProject\MyBundle\Entity\AuditLog          #Required
 
     #user property to use as actor of an event
