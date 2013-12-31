@@ -11,6 +11,8 @@
 
 namespace Xiidea\EasyAuditBundle\Resolver;
 
+use Symfony\Component\EventDispatcher\Event;
+
 /** Custom Event Resolver Example Class */
 class CustomEventResolver implements EventResolverInterface
 {
@@ -19,7 +21,7 @@ class CustomEventResolver implements EventResolverInterface
      *
      * @return array
      */
-    public function getEventLogInfo($event = null)
+    public function getEventLogInfo(Event $event = null)
     {
         return array(
             'description'=>'Custom description',

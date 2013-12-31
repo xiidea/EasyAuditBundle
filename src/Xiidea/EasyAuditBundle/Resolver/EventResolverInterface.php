@@ -11,7 +11,9 @@
 
 namespace Xiidea\EasyAuditBundle\Resolver;
 
+use Symfony\Component\EventDispatcher\Event;
+
 interface EventResolverInterface
 {
-    public function getEventLogInfo($event = null);
+    public function getEventLogInfo(Event $event = null);
 }

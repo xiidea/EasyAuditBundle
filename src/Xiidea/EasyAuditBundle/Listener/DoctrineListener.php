@@ -11,23 +11,19 @@
 namespace Xiidea\EasyAuditBundle\Listener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class DoctrineListener
+class DoctrineListener extends ContainerAware
 {
     /**
      * @var array
      */
     protected $entity_class;
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    protected $container;
 
-    public function __construct(ContainerInterface $container, $entity_class)
+    public function __construct($entity_class)
     {
         $this->entity_class = $entity_class;
-        $this->container = $container;
     }
 
     public function prePersist(LifecycleEventArgs $args)

@@ -11,25 +11,20 @@
 namespace Xiidea\EasyAuditBundle\Subscriber;
 
 use Doctrine\Common\EventSubscriber;
-use Doctrine\ORM\Event\LifecycleEventArgs;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use Symfony\Component\DependencyInjection\ContainerAware;
 use Xiidea\EasyAuditBundle\Events\DoctrineEntityEvent;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 
-class DoctrineSubscriber implements EventSubscriber
+class DoctrineSubscriber extends ContainerAware implements EventSubscriber
 {
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    private $container;
     /**
      * @var array
      */
     private $entities;
 
-    public function __construct(ContainerInterface $container, $entities = array())
+    public function __construct($entities = array())
     {
-        $this->container = $container;
         $this->entities = $entities;
     }
 
@@ -44,7 +39,7 @@ class DoctrineSubscriber implements EventSubscriber
 
     public function postPersist(LifecycleEventArgs $args)
     {
-        if (!$this->isConfiguredToTrack($args->getEntity(), 'postPersist')) {
+        if (!$this->isConfiguredToTrack($args->getObject(), 'postPersist')) {
             return;
         }
 
@@ -63,12 +58,15 @@ class DoctrineSubscriber implements EventSubscriber
 
     private function handleEvent($eventName, LifecycleEventArgs $args)
     {
-        if (!$this->isConfiguredToTrack($args->getEntity(), $eventName)) {
+        if (!$this->isConfiguredToTrack($args->getObject(), $eventName)) {
             return;
         }
 
+        $doctrineEntityEvent = new DoctrineEntityEvent($args);
+        $doctrineEntityEvent->setContainer($this->container);
+
         $this->container->get('event_dispatcher')->dispatch($eventName,
-            new DoctrineEntityEvent($this->container, $args)
+            $doctrineEntityEvent
         );
     }
 

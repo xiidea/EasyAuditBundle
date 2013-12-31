@@ -13,12 +13,13 @@ namespace Xiidea\EasyAuditBundle\Resolver;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Xiidea\EasyAuditBundle\Traits\ServiceContainerGetterMethods;
+use Symfony\Component\EventDispatcher\Event;
 
 class EventResolverFactory extends ContainerAware
 {
     use ServiceContainerGetterMethods;
 
-    public function getEventLog($event)
+    public function getEventLog(Event $event)
     {
         $eventLog = $this->getEventLogInfo($event);
 
@@ -46,12 +47,6 @@ class EventResolverFactory extends ContainerAware
 
         return NULL;
     }
-
-    protected function eventWithResolver($event)
-    {
-        return ($event instanceof EventResolverInterface) || method_exists($event, 'getEventLogInfo');
-    }
-
 
     /**
      * @param $eventName
@@ -86,9 +81,9 @@ class EventResolverFactory extends ContainerAware
         return in_array($eventName, $this->getDoctrineEventsList());
     }
 
-    protected function getEventLogInfo($event)
+    protected function getEventLogInfo(Event $event)
     {
-        if ($this->eventWithResolver($event)) {
+        if ($event instanceof EventResolverInterface) {
             return $event->getEventLogInfo();
         }
 

@@ -13,27 +13,19 @@ namespace Xiidea\EasyAuditBundle\Resolver;
 
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\UserEvent;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\DependencyInjection\ContainerAware;
 
 /** Custom Event Resolver Example Class */
-class UserEventResolver implements EventResolverInterface
+class UserEventResolver extends ContainerAware implements EventResolverInterface
 {
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    private $container;
-
-    public function __construct(ContainerInterface $container){
-
-        $this->container = $container;
-    }
 
     /**
      * @param $event
      *
      * @return array
      */
-    public function getEventLogInfo($event = null)
+    public function getEventLogInfo(Event $event = null)
     {
         $eventDetails = $this->getEventLogDetails($event);
 
@@ -43,7 +35,7 @@ class UserEventResolver implements EventResolverInterface
         );
     }
 
-    private function getEventLogDetails($event)
+    private function getEventLogDetails(Event $event)
     {
         $name = $event->getName();
 

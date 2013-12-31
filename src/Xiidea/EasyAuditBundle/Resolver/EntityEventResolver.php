@@ -14,6 +14,7 @@ namespace Xiidea\EasyAuditBundle\Resolver;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Xiidea\EasyAuditBundle\Events\DoctrineEntityEvent;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
+use Symfony\Component\EventDispatcher\Event;
 
 /** Custom Event Resolver Example Class */
 class EntityEventResolver extends ContainerAware implements EventResolverInterface
@@ -30,11 +31,13 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
     protected $entity;
 
     /**
-     * @param $event DoctrineEntityEvent
+     * @param \Symfony\Component\EventDispatcher\Event $event
+     *
+     * @internal param $Event
      *
      * @return array
      */
-    public function getEventLogInfo($event = NULL)
+    public function getEventLogInfo(Event $event = NULL)
     {
         $this->event = $event;
         $entity = $this->getEntity();

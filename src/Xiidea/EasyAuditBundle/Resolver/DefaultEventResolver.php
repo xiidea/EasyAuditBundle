@@ -11,6 +11,8 @@
 
 namespace Xiidea\EasyAuditBundle\Resolver;
 
+use Symfony\Component\EventDispatcher\Event;
+
 class DefaultEventResolver implements EventResolverInterface
 {
 
@@ -19,7 +21,7 @@ class DefaultEventResolver implements EventResolverInterface
      *
      * @return array
      */
-    public function getEventLogInfo($event = null)
+    public function getEventLogInfo(Event $event = null)
     {
         return array(
             'description'=>$event->getname(),
