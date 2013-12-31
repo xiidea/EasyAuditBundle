@@ -11,17 +11,10 @@
 namespace Xiidea\EasyAuditBundle\Events;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\Event;
 
-class DoctrineEntityEvent extends Event implements ContainerAwareInterface
+class DoctrineEntityEvent extends Event
 {
-
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    protected $container;
 
     /**
      * @var \Doctrine\ORM\Event\LifecycleEventArgs
@@ -39,20 +32,5 @@ class DoctrineEntityEvent extends Event implements ContainerAwareInterface
     public function getLifecycleEventArgs()
     {
         return $this->lifecycleEventArgs;
-    }
-
-    /**
-     * Sets the Container.
-     *
-     * @param ContainerInterface|null $container A ContainerInterface instance or null
-     *
-     * @return $this
-     * @api
-     */
-    public function setContainer(ContainerInterface $container = NULL)
-    {
-        $this->container = $container;
-
-        return $this;
     }
 }

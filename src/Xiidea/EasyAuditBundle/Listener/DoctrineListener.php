@@ -12,7 +12,6 @@ namespace Xiidea\EasyAuditBundle\Listener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\DependencyInjection\ContainerAware;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class DoctrineListener extends ContainerAware
 {

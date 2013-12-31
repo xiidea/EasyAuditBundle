@@ -62,11 +62,8 @@ class DoctrineSubscriber extends ContainerAware implements EventSubscriber
             return;
         }
 
-        $doctrineEntityEvent = new DoctrineEntityEvent($args);
-        $doctrineEntityEvent->setContainer($this->container);
-
         $this->container->get('event_dispatcher')->dispatch($eventName,
-            $doctrineEntityEvent
+            new DoctrineEntityEvent($args)
         );
     }
 
