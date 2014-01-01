@@ -21,11 +21,13 @@ xiidea_easy_audit:
        #- //More event
 
     #List all custom resolver for event
-    custom_resolvers :                                                            #Optional
-           #security.interactive_login : custom.event_resolver
+    #custom_resolvers :
+    #       security.interactive_login : user.event_resolver
+    #       security.authentication.failure : user.event_resolver
 
 #Custom Event Resolver Service
 #services:
-#    custom.event_resolver:
-#         class: Xiidea\EasyAuditBundle\Resolver\CustomEventResolver
-#         arguments: [@service_container]
+    #user.event_resolver:
+         #class: Xiidea\EasyAuditBundle\Resolver\UserEventResolver
+         #calls:
+         #   - [ setContainer,[ @service_container ] ]
