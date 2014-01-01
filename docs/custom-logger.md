@@ -24,7 +24,7 @@ class CustomLogger implements LoggerInterface
 
 ```
 
-### 2. Define your resolver as service
+### 2. Define your Logger as service
 
 ``` yaml
 services:
