@@ -35,7 +35,7 @@ class UserEventResolver extends ContainerAware implements EventResolverInterface
         );
     }
 
-    private function getEventLogDetails(Event $event)
+    protected function getEventLogDetails(Event $event)
     {
         $name = $event->getName();
 
@@ -45,7 +45,7 @@ class UserEventResolver extends ContainerAware implements EventResolverInterface
         );
 
         switch($name){
-            case 'fos_user.change_password.edit.success':
+            case 'fos_user.change_password.edit.completed':
                 /** @var $event FilterUserResponseEvent */
                 $eventDetails['type'] = "Password Changed";
                 $eventDetails['description'] = sprintf(
