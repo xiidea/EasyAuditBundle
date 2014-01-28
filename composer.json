@@ -1,6 +1,6 @@
 {
     "name": "xiidea/easy-audit",
-    "type": "symfony-bundle",
+    "type": "symfony2-bundle",
     "description": "A Symfony2 Bundle To Log Selective Events. It is easy to configure and easy to customize for your need",
     "keywords": ["Event Log", "Audit Log"],
     "license": "MIT",
@@ -21,9 +21,10 @@
     },
     "autoload": {
         "psr-0": {
-            "Xiidea\\EasyAuditBundle": "src"
+            "Xiidea\\EasyAuditBundle": ""
         }
     },
+    "target-dir": "Xiidea/EasyAuditBundle",
     "extra": {
         "branch-alias": {
             "dev-master": "1.2.x-dev"

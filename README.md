@@ -53,7 +53,7 @@ The XiideaEasyAuditBundle supports Doctrine ORM by default. However, you must pr
 
 ### 4. Configure config.yml
 
-You can find sample config data in `config/config.yml` file
+You can find sample config data in `Resources/config/config-sample.yml` file
 
 ``` yaml
 # app/config/config.yml
@@ -100,8 +100,8 @@ $ php app/console doctrine:schema:update --force
 
 Look the cookbook for another interesting things.
 
-- [Embed Resolver with event](docs/embed-resolver.md)
-- [Override Resolver](docs/override-resolver.md)
-- [Custom Logger](docs/custom-logger.md)
-- [Custom Resolver](docs/custom-resolver.md)
-- [Doctrine Entity Event](docs/doctrine-entity-events.md)
+- [Embed Resolver with event](Resources/doc/embed-resolver.md)
+- [Override Resolver](Resources/doc/override-resolver.md)
+- [Custom Logger](Resources/doc/custom-logger.md)
+- [Custom Resolver](Resources/doc/custom-resolver.md)
+- [Doctrine Entity Event](Resources/doc/doctrine-entity-events.md)
