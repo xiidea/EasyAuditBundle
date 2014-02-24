@@ -1,5 +1,6 @@
 Easy Audit
 ==========
+[![knpbundles.com](http://knpbundles.com/xiidea/easy-audit/badge)](http://knpbundles.com/xiidea/easy-audit)
 
 A Symfony2 Bundle To Log Selective Events. It is easy to configure and easy to customize for your need.
 
