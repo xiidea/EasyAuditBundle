@@ -101,8 +101,8 @@ $ php app/console doctrine:schema:update --force
 
 Look the cookbook for another interesting things.
 
-- [Embed Resolver with event](Resources/doc/embed-resolver.md)
-- [Override Resolver](Resources/doc/override-resolver.md)
-- [Custom Logger](Resources/doc/custom-logger.md)
-- [Custom Resolver](Resources/doc/custom-resolver.md)
-- [Doctrine Entity Event](Resources/doc/doctrine-entity-events.md)
+- [Embed Resolver with event](https://github.com/xiidea/easy-audit/blob/master/Resources/doc/embed-resolver.md)
+- [Override Resolver](https://github.com/xiidea/easy-audit/blob/master/Resources/doc/override-resolver.md)
+- [Custom Logger](https://github.com/xiidea/easy-audit/blob/master/Resources/doc/custom-logger.md)
+- [Custom Resolver](https://github.com/xiidea/easy-audit/blob/master/Resources/doc/custom-resolver.md)
+- [Doctrine Entity Event](https://github.com/xiidea/easy-audit/blob/master/Resources/doc/doctrine-entity-events.md)
