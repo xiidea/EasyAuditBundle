@@ -17,6 +17,10 @@ class LoggerFactory
 
     public function executeLoggers($eventInfo)
     {
+        if(empty($eventInfo)) {
+            return;
+        }
+
         foreach (self::$loggers as $logger) {
             if ($logger instanceof LoggerInterface) {
                 $logger->log($eventInfo);

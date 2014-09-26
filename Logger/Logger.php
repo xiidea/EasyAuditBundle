@@ -28,8 +28,12 @@ class Logger implements LoggerInterface
         $this->doctrine = $doctrine;
     }
 
-    public function log(AuditLog $event)
+    public function log(AuditLog $event = null)
     {
+        if(empty($event)) {
+            return;
+        }
+
         $this->getEntityManager()->persist($event);
         $this->getEntityManager()->flush($event);
     }
