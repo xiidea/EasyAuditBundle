@@ -41,6 +41,13 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
     {
         $this->event = $event;
         $entity = $this->getEntity();
+
+        $changesMetaData = $this->getChangeSets($entity);
+
+        if($this->isUpdateEvent() && $changesMetaData == null) {
+            return null;
+        }
+
         $reflectionClass = $this->getReflectionClassFromObject($entity);
 
         $typeName = $reflectionClass->getShortName();
@@ -52,6 +59,17 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
             'type'=> $eventType,
         );
 
+    }
+
+    protected function getChangeSets($entity)
+    {
+        if($this->isUpdateEvent()) {
+            return $this->getUnitOfWork()->getEntityChangeSet($entity);
+        }
+    }
+
+    protected function isUpdateEvent() {
+        return $this->getEventShortName() == 'updated';
     }
 
     /**
@@ -162,5 +180,13 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
         $class = get_class($object);
 
         return new \ReflectionClass($class);
+    }
+
+    /**
+     * @return \Doctrine\ORM\UnitOfWork
+     */
+    protected function getUnitOfWork()
+    {
+        return $this->container->get('doctrine')->getManager()->getUnitOfWork();
     }
 }

@@ -39,6 +39,8 @@ class EventResolverFactory extends ContainerAware
 
         } elseif ($eventInfo instanceof $auditLogClass) {
             return $eventInfo;
+        } elseif (empty($eventInfo)) {
+            return NULL;
         }
 
         if ($this->getKernel()->isDebug()) {
