@@ -12,6 +12,7 @@
 namespace Xiidea\EasyAuditBundle\Resolver;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
 use Xiidea\EasyAuditBundle\Traits\ServiceContainerGetterMethods;
 use Symfony\Component\EventDispatcher\Event;
 
@@ -21,11 +22,19 @@ class EventResolverFactory extends ContainerAware
 
     public function getEventLog(Event $event)
     {
-        $eventLog = $this->getEventLogInfo($event);
+        $eventLog = $this->getEventLogObject($this->getEventLogInfo($event));
 
-        return $this->getEventLogObject($eventLog);
+        $eventLog->setTypeId($event->getName());
+
+        return $eventLog;
     }
 
+    /**
+     * @param $eventInfo
+     *
+     * @return null|BaseAuditLog
+     * @throws \Exception
+     */
     protected function getEventLogObject($eventInfo)
     {
         $auditLogClass = $this->getParameter('entity_class');

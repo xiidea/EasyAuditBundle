@@ -29,6 +29,14 @@ class AuditLog extends BaseAuditLog
     protected $id;
 
     /**
+     * Type Of Event(Internal Type ID)
+     *
+     * @var string
+     * @ORM\Column(name="type_id", type="string", length=200, nullable=false)
+     */
+    protected $typeId;
+
+    /**
      * Type Of Event
      *
      * @var string

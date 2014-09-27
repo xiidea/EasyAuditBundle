@@ -20,12 +20,18 @@ abstract class BaseAuditLog
     /**
      * @var string
      */
-    protected $type;
+    protected $typeId;
+
     /**
-     *
+     * @var string
+     */
+    protected $type;
+
+    /**
      * @var string
      */
     protected $description;
+
     /**
      * @var \DateTime
      */
@@ -88,5 +94,25 @@ abstract class BaseAuditLog
     public function setDescription($description)
     {
         $this->description = $description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTypeId()
+    {
+        return $this->typeId;
+    }
+
+    /**
+     * @param string $typeId
+     *
+     * @return $this
+     */
+    public function setTypeId($typeId)
+    {
+        $this->typeId = $typeId;
+
+        return $this;
     }
 }
