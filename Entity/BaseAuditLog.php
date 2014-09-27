@@ -38,6 +38,11 @@ abstract class BaseAuditLog
     protected $eventTime;
     protected $user;
 
+    /**
+     * @var String
+     */
+    protected $ip;
+
     public function getUser()
     {
         return $this->user;
@@ -112,6 +117,26 @@ abstract class BaseAuditLog
     public function setTypeId($typeId)
     {
         $this->typeId = $typeId;
+
+        return $this;
+    }
+
+    /**
+     * @return String
+     */
+    public function getIp()
+    {
+        return $this->ip;
+    }
+
+    /**
+     * @param String $ip
+     *
+     * @return $this
+     */
+    public function setIp($ip)
+    {
+        $this->ip = $ip;
 
         return $this;
     }
