@@ -76,18 +76,15 @@ class DoctrineSubscriber extends ContainerAware implements EventSubscriber
             return $track;
         }
 
-        //Not configured
-        if (!isset($this->entities[$class])) {
+        if (!$this->isConfigured($class)) {
             return FALSE;
         }
 
-        //Allowed to track all event
-        if (empty($this->entities[$class])) {
+        if ($this->shouldTrackAllEventType($class)) {
             return TRUE;
         }
 
-        //Check if Allowed for $eventType event
-        return (is_array($this->entities[$class]) && in_array($eventType, $this->entities[$class]));
+        return $this->shouldTrackEventType($eventType, $class);
     }
 
     protected function isAnnotatedEvent($entity, $eventType)
@@ -124,5 +121,33 @@ class DoctrineSubscriber extends ContainerAware implements EventSubscriber
         $class = get_class($object);
 
         return new \ReflectionClass($class);
+    }
+
+    /**
+     * @param $eventType
+     * @param $class
+     * @return bool
+     */
+    private function shouldTrackEventType($eventType, $class)
+    {
+        return (is_array($this->entities[$class]) && in_array($eventType, $this->entities[$class]));
+    }
+
+    /**
+     * @param $class
+     * @return bool
+     */
+    private function shouldTrackAllEventType($class)
+    {
+        return empty($this->entities[$class]);
+    }
+
+    /**
+     * @param $class
+     * @return bool
+     */
+    protected function isConfigured($class)
+    {
+        return isset($this->entities[$class]);
     }
 }
