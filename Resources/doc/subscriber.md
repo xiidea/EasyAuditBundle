@@ -43,7 +43,7 @@ services:
 
 ```
 
-If you want you can optionally define define the resolver for the subscribed events like:
+If you want you can optionally define the resolver for the subscribed events like:
  
 ``` yaml
 services:
