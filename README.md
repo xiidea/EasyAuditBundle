@@ -102,6 +102,7 @@ $ php app/console doctrine:schema:update --force
 Look the cookbook for another interesting things.
 
 - [Embed Resolver with event](https://github.com/xiidea/easy-audit/blob/master/Resources/doc/embed-resolver.md)
+- [Define events with subscriber](https://github.com/xiidea/easy-audit/blob/master/Resources/doc/subscriber.md)
 - [Override Resolver](https://github.com/xiidea/easy-audit/blob/master/Resources/doc/override-resolver.md)
 - [Custom Logger](https://github.com/xiidea/easy-audit/blob/master/Resources/doc/custom-logger.md)
 - [Custom Resolver](https://github.com/xiidea/easy-audit/blob/master/Resources/doc/custom-resolver.md)

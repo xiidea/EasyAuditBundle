@@ -11,7 +11,6 @@
 
 namespace Xiidea\EasyAuditBundle\Annotation;
 
-
 /**
  * Annotation for ORM Subscribed Event.
  *

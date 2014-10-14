@@ -36,6 +36,7 @@ abstract class BaseAuditLog
      * @var \DateTime
      */
     protected $eventTime;
+
     protected $user;
 
     /**

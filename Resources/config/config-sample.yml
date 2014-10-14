@@ -18,12 +18,9 @@ xiidea_easy_audit:
     #List all events you want to track  required
     events :                                                                      #Required
         - security.interactive_login
+        - security.authentication.failure : user.event_resolver
        #- //More event
 
-    #List all custom resolver for event
-    #custom_resolvers :
-    #       security.interactive_login : user.event_resolver
-    #       security.authentication.failure : user.event_resolver
 
 #Custom Event Resolver Service
 #services:
