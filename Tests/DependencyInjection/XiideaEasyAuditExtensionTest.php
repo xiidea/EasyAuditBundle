@@ -1,0 +1,177 @@
+<?php
+
+namespace Xiidea\EasyAuditBundle\Tests\DependencyInjection;
+
+
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Yaml\Parser;
+use Xiidea\EasyAuditBundle\DependencyInjection\XiideaEasyAuditExtension;
+
+class XiideaEasyAuditExtensionTest extends \PHPUnit_Framework_TestCase {
+
+    /** @var ContainerBuilder */
+    protected $container;
+
+    protected function setUp()
+    {
+        $this->container = new ContainerBuilder();
+    }
+
+    public function testDefault()
+    {
+        $loader = new XiideaEasyAuditExtension();
+        $loader->load(array($this->getRequiredConfig()), $this->container);
+
+        $this->assertHasDefinition('xiidea.easy_audit.audit_log_repository');
+        $this->assertHasDefinition('xiidea.easy_audit.logger.service');
+        $this->assertHasDefinition('xiidea.easy_audit.logger_factory');
+        $this->assertHasDefinition('xiidea.easy_audit.default_event_resolver');
+        $this->assertHasDefinition('xiidea.easy_audit.default_entity_event_resolver');
+        $this->assertHasDefinition('xiidea.easy_audit.event_resolver_factory');
+        $this->assertHasDefinition('xiidea.easy_audit.event_listener');
+        $this->assertHasDefinition('xiidea.easy_audit.prepersist_listener');
+        $this->assertHasDefinition('xiidea.easy_audit.doctrine_subscriber');
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     */
+    public function testEasyAuditLoadThrowsExceptionUnlessEntityClassSet()
+    {
+        $loader = new XiideaEasyAuditExtension();
+        $config = $this->getRequiredConfig();
+        unset($config['entity_class']);
+
+        $loader->load(array($config), new ContainerBuilder());
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     */
+    public function testEasyAuditLoadThrowsExceptionUnlessUserPropertySet()
+    {
+        $loader = new XiideaEasyAuditExtension();
+        $config = $this->getRequiredConfig();
+        unset($config['user_property']);
+
+        $loader->load(array($config), new ContainerBuilder());
+    }
+
+    public function testDoctrineEventSubscriberLoadedWithTrueParameter()
+    {
+        $loader = new XiideaEasyAuditExtension();
+        $config = $this->getRequiredConfig();
+        $config['doctrine_entities'] = true;
+
+        $loader->load(array($config), $this->container);
+        $this->assertHasDefinition('xiidea.easy_audit.doctrine_subscriber');
+    }
+
+    public function testDisableDoctrineEvents()
+    {
+        $loader = new XiideaEasyAuditExtension();
+        $config = $this->getRequiredConfig();
+        $config['doctrine_entities'] = false;
+
+        $loader->load(array($config), $this->container);
+        $this->assertNotHasDefinition('xiidea.easy_audit.doctrine_subscriber');
+    }
+
+    public function testOverwriteResolver()
+    {
+        $loader = new XiideaEasyAuditExtension();
+        $config = $this->getRequiredConfig();
+        $config['resolver'] = 'foo.default_event_resolver';
+
+        $loader->load(array($config), $this->container);
+
+        $this->assertNotHasDefinition('xiidea.easy_audit.default_event_resolver');
+
+        $this->assertEquals('foo.default_event_resolver', $this->container->getParameter('xiidea.easy_audit.resolver'));
+    }
+
+    public function testOverwriteEntityClass()
+    {
+        $loader = new XiideaEasyAuditExtension();
+        $config = $this->getRequiredConfig();
+        $config['entity_class'] = 'foo.entity';
+
+        $loader->load(array($config), $this->container);
+
+        $this->assertEquals('foo.entity', $this->container->getParameter('xiidea.easy_audit.entity_class'));
+    }
+
+
+    /**
+     * getRequiredConfig
+     *
+     * @return array
+     */
+    protected function getRequiredConfig()
+    {
+        $yaml = <<<EOF
+entity_class : MyProject\Bundle\MyBundle\Entity\AuditLog                     #Required
+user_property : ~ # or username                                              #Required
+EOF;
+        return $this->getArrayFromYaml($yaml);
+    }
+
+    /**
+     * getFullConfig
+     *
+     * @return array
+     */
+    protected function getFullConfig()
+    {
+        $yaml = <<<EOF
+resolver: xiidea.easy_audit.default_event_resolver                           #Optional
+entity_class : MyProject\Bundle\MyBundle\Entity\AuditLog                     #Required
+entity_event_resolver : xiidea.easy_audit.default_entity_event_resolver      #Optional
+pre_persist_listener : Xiidea\EasyAuditBundle\Listener\DoctrineListener      #Optional
+
+#user property to use as actor of an event
+#valid value will be any valid property of your user class ~
+user_property : ~ # or username                                               #Required
+
+#List of doctrine entity:event you wish to track
+doctrine_entities :                                                          #Optional
+     MyProject\Bundle\MyBundle\Entity\MyEntity : [created, updated, deleted]
+     MyProject\Bundle\MyBundle\Entity\MyEntity2 : ~
+
+#List all events you want to track  (Optional from v1.2.1 you can now use subscriber to define it)
+events :                                                                      #Optional
+    - security.interactive_login
+    - security.authentication.failure : user.event_resolver
+EOF;
+        return $this->getArrayFromYaml($yaml);
+    }
+
+    /**
+     * @param string $id
+     */
+    private function assertHasDefinition($id)
+    {
+        $this->assertTrue(($this->container->hasDefinition($id) ?: $this->container->hasAlias($id)));
+    }
+
+    /**
+     * @param string $id
+     */
+    private function assertNotHasDefinition($id)
+    {
+        $this->assertFalse(($this->container->hasDefinition($id) ?: $this->container->hasAlias($id)));
+    }
+
+    /**
+     * @param $yaml
+     * @return mixed
+     */
+    protected function getArrayFromYaml($yaml)
+    {
+        $parser = new Parser();
+
+        return $parser->parse($yaml);
+    }
+
+}
+ 

@@ -63,7 +63,7 @@ class SubscriberPass implements CompilerPassInterface
     {
         $doctrine_entities = $container->getParameter('xiidea.easy_audit.doctrine_entities');
 
-        if (empty($doctrine_entities)) {
+        if ($doctrine_entities === false) {
             return;
         }
 

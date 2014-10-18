@@ -35,10 +35,20 @@ class XiideaEasyAuditExtension extends Extension
             $container->setParameter('xiidea.easy_audit.' . $key, $value);
         }
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
 
-        if (!empty($config['doctrine_entities'])) {
+        if($config['resolver'] == 'xiidea.easy_audit.default_event_resolver') {
+            $loader->load('default/event-resolver.yml');
+        }
+
+        if($config['entity_event_resolver'] == 'xiidea.easy_audit.default_entity_event_resolver') {
+            $loader->load('default/entity-event-resolver.yml');
+        }
+
+
+
+        if ($config['doctrine_entities'] !== false) {
             $loader->load('doctrine_services.yml');
         }
     }

@@ -66,14 +66,14 @@ xiidea_easy_audit:
     #valid value will be any valid property of your user class
     user_property : ~ # or username                            #Optional
 
-    #List of doctrine entity:event you wish to track
+    #List of doctrine entity:event you wish to track or set to false to disable logs for doctrine events
     # valid events are = [created, updated, deleted]
     #doctrine_entities :                                              #Optional
     #     MyProject\Bundle\MyBundle\Entity\MyEntity : [created, updated, deleted]
     #     MyProject\Bundle\MyBundle\Entity\MyEntity2 : ~
 
-    #List all events you want to track  required
-    events :                                                   #Required
+    #List all events you want to track  (Optional from v1.2.1 you can now use subscriber to define it)
+    events :                                                   #Optional
         - security.interactive_login
 
     #List all custom resolver for event
