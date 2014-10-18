@@ -1,6 +1,10 @@
 Easy Audit
 ==========
 [![knpbundles.com](http://knpbundles.com/xiidea/easy-audit/badge)](http://knpbundles.com/xiidea/easy-audit)
+[![Build Status](https://travis-ci.org/xiidea/easy-audit.png?branch=master)](https://travis-ci.org/xiidea/easy-audit)
+[![Latest Stable Version](https://poser.pugx.org/xiidea/easy-audit/v/stable.png)](https://packagist.org/packages/xiidea/easy-audit)
+[![Total Downloads](https://poser.pugx.org/xiidea/easy-audit/downloads.png)](https://packagist.org/packages/xiidea/easy-audit)
+
 
 A Symfony2 Bundle To Log Selective Events. It is easy to configure and easy to customize for your need.
 
