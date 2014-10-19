@@ -16,4 +16,4 @@ use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
 interface LoggerInterface
 {
     public function log(BaseAuditLog $event);
-} 
+}

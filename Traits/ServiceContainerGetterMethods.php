@@ -62,4 +62,4 @@ trait ServiceContainerGetterMethods
         $reflectionClass = new \ReflectionClass('Xiidea\EasyAuditBundle\Events\DoctrineEvents');
         return  $reflectionClass->getConstants();
     }
-} 
+}

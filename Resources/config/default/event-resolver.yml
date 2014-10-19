@@ -2,4 +2,3 @@
 services:
   xiidea.easy_audit.default_event_resolver:
           class: Xiidea\EasyAuditBundle\Resolver\DefaultEventResolver
-

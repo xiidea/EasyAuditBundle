@@ -119,5 +119,4 @@ class EventResolverFactory extends ContainerAware
             return "";
         }
     }
-
 }

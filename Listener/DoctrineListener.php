@@ -85,7 +85,7 @@ class DoctrineListener extends ContainerAware
     {
         $user = $this->getUser();
 
-        if($user == null){
+        if($user === null){
             return 'Anonymous';
         }
 

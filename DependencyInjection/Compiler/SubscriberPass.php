@@ -86,11 +86,11 @@ class SubscriberPass implements CompilerPassInterface
     {
         $taggedSubscribers = $container->findTaggedServiceIds('easy_audit.event_subscriber');
 
-
         if (!empty($taggedSubscribers)) {
 
             foreach ($taggedSubscribers as $id => $attributes) {
-                $this->appendEventsFromSubscriber($container, $events, $id, @$attributes[0]['resolver']);
+                $resolver = isset($attributes[0]) && isset($attributes[0]['resolver']) ? $attributes[0]['resolver'] : null;
+                $this->appendEventsFromSubscriber($container, $events, $id, $resolver);
             }
         }
     }
