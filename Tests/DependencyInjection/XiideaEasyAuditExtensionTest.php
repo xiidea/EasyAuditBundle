@@ -90,7 +90,7 @@ class XiideaEasyAuditExtensionTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('foo.default_event_resolver', $this->container->getParameter('xiidea.easy_audit.resolver'));
     }
 
-    public function testOverwriteEntityClass()
+    public function testDefineEntityClass()
     {
         $loader = new XiideaEasyAuditExtension();
         $config = $this->getRequiredConfig();
@@ -101,6 +101,29 @@ class XiideaEasyAuditExtensionTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('foo.entity', $this->container->getParameter('xiidea.easy_audit.entity_class'));
     }
 
+    public function testOverwriteEntityEventResolver()
+    {
+        $loader = new XiideaEasyAuditExtension();
+        $config = $this->getRequiredConfig();
+        $config['entity_event_resolver'] = 'foo.resolver';
+
+        $loader->load(array($config), $this->container);
+
+        $this->assertNotHasDefinition('xiidea.easy_audit.default_entity_event_resolver');
+
+        $this->assertEquals('foo.resolver', $this->container->getParameter('xiidea.easy_audit.entity_event_resolver'));
+    }
+
+    public function testOverwritePrePersistListener()
+    {
+        $loader = new XiideaEasyAuditExtension();
+        $config = $this->getRequiredConfig();
+        $config['pre_persist_listener'] = 'foo.listener';
+
+        $loader->load(array($config), $this->container);
+
+        $this->assertEquals('foo.listener', $this->container->getParameter('xiidea.easy_audit.pre_persist_listener'));
+    }
 
     /**
      * getRequiredConfig
