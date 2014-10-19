@@ -24,7 +24,7 @@ class EventResolverFactory extends ContainerAware
     {
         $eventLog = $this->getEventLogObject($this->getEventLogInfo($event));
 
-	    if($eventLog == null) {
+	    if($eventLog === null) {
 		    return null;
 	    }
 

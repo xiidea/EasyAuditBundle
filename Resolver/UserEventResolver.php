@@ -108,7 +108,7 @@ class UserEventResolver extends ContainerAware implements EventResolverInterface
     {
         $user = $this->getUser();
 
-        if($user == null){
+        if($user === null){
             return 'Anonymous';
         }
 

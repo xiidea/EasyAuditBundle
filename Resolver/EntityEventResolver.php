@@ -44,7 +44,7 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
 
         $changesMetaData = $this->getChangeSets($entity);
 
-        if($this->isUpdateEvent() && $changesMetaData == null) {
+        if($this->isUpdateEvent() && $changesMetaData === null) {
             return null;
         }
 
