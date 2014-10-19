@@ -23,9 +23,9 @@ class MyAuditLogEventSubscriber implements EasyAuditEventSubscriberInterface
                    "event_for_other_resolver_1",
                    "event_for_other_resolver_2"
                ),
-               "more_resolver_1",
-               "more_resolver_2",
-               "more_resolver_3"
+               "event_for_default_resolver_1",
+               "event_for_default_resolver_2",
+               "event_for_default_resolver_3"
            );
        }
 
