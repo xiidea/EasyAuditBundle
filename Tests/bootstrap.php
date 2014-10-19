@@ -1,12 +1,12 @@
 <?php
 
 /*
- * This file is part of the FOSUserBundle package.
+ * This file is part of the XiideaEasyAuditBundle package.
  *
- * (c) FriendsOfSymfony <http://friendsofsymfony.github.com/>
+ * (c) Xiidea <http://www.xiidea.net>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
 
 if (!class_exists('PHPUnit_Framework_TestCase') ||

@@ -1,7 +1,15 @@
 <?php
 
-namespace Xiidea\EasyAuditBundle\Tests\DependencyInjection;
+/*
+ * This file is part of the XiideaEasyAuditBundle package.
+ *
+ * (c) Xiidea <http://www.xiidea.net>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
 
+namespace Xiidea\EasyAuditBundle\Tests\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Yaml\Parser;
@@ -123,6 +131,19 @@ class XiideaEasyAuditExtensionTest extends \PHPUnit_Framework_TestCase {
         $loader->load(array($config), $this->container);
 
         $this->assertEquals('foo.listener', $this->container->getParameter('xiidea.easy_audit.pre_persist_listener'));
+    }
+
+    public function testFullConfiguration()
+    {
+        $loader = new XiideaEasyAuditExtension();
+        $config = $this->getFullConfig();
+
+        $loader->load(array($config), $this->container);
+
+        $this->assertNotFalse($this->container->getParameter('xiidea.easy_audit.doctrine_entities'));
+        $this->assertNotFalse($this->container->getParameter('xiidea.easy_audit.events'));
+        $this->assertCount(2, $this->container->getParameter('xiidea.easy_audit.doctrine_entities'));
+        $this->assertCount(2, $this->container->getParameter('xiidea.easy_audit.events'));
     }
 
     /**

@@ -13,6 +13,7 @@ namespace Xiidea\EasyAuditBundle;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Xiidea\EasyAuditBundle\DependencyInjection\Compiler\LoggerFactoryPass;
 use Xiidea\EasyAuditBundle\DependencyInjection\Compiler\SubscriberPass;
 
 class XiideaEasyAuditBundle extends Bundle
@@ -20,6 +21,8 @@ class XiideaEasyAuditBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
+
+        $container->addCompilerPass(new LoggerFactoryPass());
         $container->addCompilerPass(new SubscriberPass());
     }
 }
