@@ -11,7 +11,6 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\Reference;
 use Xiidea\EasyAuditBundle\DependencyInjection\Compiler\SubscriberPass;
 
 class SubscriberPassTest extends \PHPUnit_Framework_TestCase {
