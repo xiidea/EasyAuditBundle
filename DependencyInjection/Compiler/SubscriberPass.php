@@ -112,7 +112,7 @@ class SubscriberPass implements CompilerPassInterface
      * @param $resolver
      * @param $item
      */
-    protected function appendEventArray(&$events, $resolver, $item)
+    private function appendEventArray(&$events, $resolver, $item)
     {
         if ($this->isEventWithResolver($resolver)) {
             $this->appendEventWithResolver($events, $item, $resolver);
@@ -126,7 +126,7 @@ class SubscriberPass implements CompilerPassInterface
      * @param $resolver
      * @return bool
      */
-    protected function isEventWithResolver($resolver)
+    private function isEventWithResolver($resolver)
     {
         return is_string($resolver);
     }
@@ -137,7 +137,7 @@ class SubscriberPass implements CompilerPassInterface
      * @param $key
      * @internal param $event
      */
-    protected function appendEventWithResolver(&$events, $items, $key)
+    private function appendEventWithResolver(&$events, $items, $key)
     {
         $items = (array) $items;
 
@@ -150,8 +150,12 @@ class SubscriberPass implements CompilerPassInterface
      * @param $events
      * @param ContainerBuilder $container
      */
-    protected function registerEventsToListener($events, ContainerBuilder $container)
+    private function registerEventsToListener($events, ContainerBuilder $container)
     {
+        if(empty($events)) {
+            return;
+        }
+
         $definition = $container->getDefinition('xiidea.easy_audit.event_listener');
         $customResolvers = $container->getParameter('xiidea.easy_audit.custom_resolvers');
 
@@ -166,7 +170,7 @@ class SubscriberPass implements CompilerPassInterface
      * @param $events
      * @return array
      */
-    protected function getListenableEventList($events)
+    private function getListenableEventList($events)
     {
         $eventList = array();
 

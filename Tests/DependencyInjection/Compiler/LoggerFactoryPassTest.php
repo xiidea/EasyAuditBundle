@@ -42,8 +42,8 @@ class LoggerFactoryPassTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo('xiidea.easy_audit.logger_factory'))
             ->will($this->returnValue($definitionMock));
 
-        $subscriberPass = new LoggerFactoryPass();
-        $subscriberPass->process($containerBuilderMock);
+        $loggerFactoryPass = new LoggerFactoryPass();
+        $loggerFactoryPass->process($containerBuilderMock);
     }
 
     /**
