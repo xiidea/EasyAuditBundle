@@ -120,6 +120,135 @@ class SubscriberPassTest extends \PHPUnit_Framework_TestCase {
             ->will($this->returnValue($definitionMock));
 
 
+        $containerBuilder
+            ->expects($this->at(7))
+            ->method('getParameter')
+            ->with($this->equalTo('xiidea.easy_audit.custom_resolvers'))
+            ->will($this->returnValue(array()));
+        $containerBuilder
+            ->expects($this->at(8))
+            ->method('setParameter')
+            ->with($this->equalTo('xiidea.easy_audit.custom_resolvers'), array (
+                'event1' => 'custom_resolver1',
+                'custom_event1' => 'custom_resolver2',
+                'custom_event2' => 'custom_resolver2',
+                'common_event' => 'aresolver',
+            ));
+
+        $this->processSubscriberPass($containerBuilder);
+    }
+
+    public function testSubscribedEventsWithEnabledDoctrineEvents()
+    {
+        $containerBuilder = $this->getContainerBuilderMock();
+
+        $subscribers = array(
+            'easy.subscriber1' =>
+                array(
+                    array(
+                        'resolver' => 'aresolver'
+                    )
+                ),
+            'easy.subscriber2' =>
+                array(
+                    array()
+                )
+        );
+
+        $listenableEventsList =array (
+            array (
+                'event' => 'easy_audit.doctrine.entity.updated',
+                'method' => 'resolveEventHandler',
+            ),
+            array (
+                'event' => 'easy_audit.doctrine.entity.created',
+                'method' => 'resolveEventHandler',
+            ),
+            array (
+                'event' => 'easy_audit.doctrine.entity.deleted',
+                'method' => 'resolveEventHandler',
+            ),
+            array (
+                'event' => 'event1',
+                'method' => 'resolveEventHandler',
+            ),
+            array (
+                'event' => 'custom_event1',
+                'method' => 'resolveEventHandler',
+            ),
+            array (
+                'event' => 'custom_event2',
+                'method' => 'resolveEventHandler',
+            ),
+            array (
+                'event' => 'common_event',
+                'method' => 'resolveEventHandler',
+            ),
+            array (
+                'event' => 'common_event1',
+                'method' => 'resolveEventHandler',
+            ),
+            array (
+                'event' => 'common_event2',
+                'method' => 'resolveEventHandler',
+            )
+        );
+
+        $definitionMock = $this->getDefinitionMock();
+
+        $definitionMock
+            ->expects($this->at(0))
+            ->method('setTags')
+            ->with($this->equalTo(array('kernel.event_listener' => $listenableEventsList)));
+
+        $containerBuilder
+            ->expects($this->at(1))
+            ->method('getParameter')
+            ->with($this->equalTo('xiidea.easy_audit.events'))
+            ->will($this->returnValue(array()));
+        $containerBuilder
+            ->expects($this->at(2))
+            ->method('getParameter')
+            ->with($this->equalTo('xiidea.easy_audit.doctrine_entities'))
+            ->will($this->returnValue(true));
+        $containerBuilder
+            ->expects($this->at(3))
+            ->method('findTaggedServiceIds')
+            ->with($this->equalTo('easy_audit.event_subscriber'))
+            ->will($this->returnValue($subscribers));
+
+        $containerBuilder
+            ->expects($this->at(4))
+            ->method('get')
+            ->with($this->equalTo('easy.subscriber1'))
+            ->will($this->returnValue(new EasySubscriberOne()));
+        $containerBuilder
+            ->expects($this->at(5))
+            ->method('get')
+            ->with($this->equalTo('easy.subscriber2'))
+            ->will($this->returnValue(new EasySubscriberTwo()));
+
+        $containerBuilder
+            ->expects($this->at(6))
+            ->method('getDefinition')
+            ->with($this->equalTo('xiidea.easy_audit.event_listener'))
+            ->will($this->returnValue($definitionMock));
+
+        $containerBuilder
+            ->expects($this->at(7))
+            ->method('getParameter')
+            ->with($this->equalTo('xiidea.easy_audit.custom_resolvers'))
+            ->will($this->returnValue(array()));
+
+        $containerBuilder
+            ->expects($this->at(8))
+            ->method('setParameter')
+            ->with($this->equalTo('xiidea.easy_audit.custom_resolvers'), array (
+                'event1' => 'custom_resolver1',
+                'custom_event1' => 'custom_resolver2',
+                'custom_event2' => 'custom_resolver2',
+                'common_event' => 'aresolver',
+            ));
 
         $this->processSubscriberPass($containerBuilder);
     }
@@ -154,8 +283,9 @@ class SubscriberPassTest extends \PHPUnit_Framework_TestCase {
 
     /**
      * @param $containerBuilder
+     * @param array $subscribedEvents
      */
-    protected function containerExpectsForEnabledDoctrineEvents($containerBuilder)
+    protected function containerExpectsForEnabledDoctrineEvents($containerBuilder, $subscribedEvents = array())
     {
         $definitionMock = $this->getDefinitionMock();
 
@@ -193,7 +323,7 @@ class SubscriberPassTest extends \PHPUnit_Framework_TestCase {
             ->expects($this->at(3))
             ->method('findTaggedServiceIds')
             ->with($this->equalTo('easy_audit.event_subscriber'))
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue($subscribedEvents));
         $containerBuilder
             ->expects($this->at(4))
             ->method('getDefinition')
