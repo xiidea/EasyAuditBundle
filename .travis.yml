@@ -7,10 +7,6 @@ php:
   - hhvm
 
 env:
- - SYMFONY_VERSION=2.1.*
- - SYMFONY_VERSION=2.2.*
- - SYMFONY_VERSION=2.3.*
- - SYMFONY_VERSION=2.4.*
  - SYMFONY_VERSION=2.5.*
 
 cache:
@@ -19,6 +15,6 @@ cache:
 
 before_script:
   - composer selfupdate
-  - composer require --prefer-source --no-interaction --dev symfony/symfony:${SYMFONY_VERSION}
+  - composer require --prefer-source --no-interaction --dev symfony/framework-bundle:${SYMFONY_VERSION}
 
 script: vendor/bin/phpunit
