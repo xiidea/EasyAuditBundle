@@ -3,6 +3,7 @@ Easy Audit
 [![knpbundles.com](http://knpbundles.com/xiidea/easy-audit/badge-short)](http://knpbundles.com/xiidea/easy-audit)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/b8802bf0-af10-4343-a6c4-846d6b481978/mini.png)](https://insight.sensiolabs.com/projects/b8802bf0-af10-4343-a6c4-846d6b481978)
 [![Build Status](https://travis-ci.org/xiidea/easy-audit.png?branch=master)](https://travis-ci.org/xiidea/easy-audit)
+[![HHVM Status](http://hhvm.h4cc.de/badge/xiidea/easy-audit.svg)](http://hhvm.h4cc.de/package/xiidea/easy-audit)
 [![Latest Stable Version](https://poser.pugx.org/xiidea/easy-audit/v/stable.png)](https://packagist.org/packages/xiidea/easy-audit)
 [![Total Downloads](https://poser.pugx.org/xiidea/easy-audit/downloads.png)](https://packagist.org/packages/xiidea/easy-audit)
 
