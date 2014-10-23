@@ -13,6 +13,7 @@
             <directory>./</directory>
             <exclude>
                 <directory>./Resources</directory>
+                <directory>./Controller</directory>
                 <directory>./Tests</directory>
                 <directory>./vendor</directory>
             </exclude>
