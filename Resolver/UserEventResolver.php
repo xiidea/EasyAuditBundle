@@ -16,7 +16,7 @@ use FOS\UserBundle\Event\UserEvent;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
-/** Custom Event Resolver Example Class */
+/** Custom Event Resolver Example For FosUserBundle  */
 class UserEventResolver extends ContainerAware implements EventResolverInterface
 {
 

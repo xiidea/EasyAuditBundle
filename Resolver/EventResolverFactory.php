@@ -14,6 +14,7 @@ namespace Xiidea\EasyAuditBundle\Resolver;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
 use Xiidea\EasyAuditBundle\Exception\InvalidServiceException;
+use Xiidea\EasyAuditBundle\Exception\UnrecognizedEventInfoException;
 use Xiidea\EasyAuditBundle\Traits\ServiceContainerGetterMethods;
 use Symfony\Component\EventDispatcher\Event;
 
@@ -39,7 +40,7 @@ class EventResolverFactory extends ContainerAware
      * @param $eventInfo
      *
      * @return null|BaseAuditLog
-     * @throws \Exception
+     * @throws UnrecognizedEventInfoException
      */
     protected function getEventLogObject($eventInfo)
     {
@@ -59,7 +60,7 @@ class EventResolverFactory extends ContainerAware
         }
 
         if ($this->getKernel()->isDebug()) {
-            throw new \Exception('Unrecognized Event info');
+            throw new UnrecognizedEventInfoException();
         }
 
         return NULL;
@@ -85,6 +86,8 @@ class EventResolverFactory extends ContainerAware
                 if ($this->getKernel()->isDebug()) {
                     throw new InvalidServiceException('Resolver Service must implement' . __NAMESPACE__ . "EventResolverInterface");
                 }
+
+                return null;
             }
 
             return $resolver;
@@ -105,6 +108,10 @@ class EventResolverFactory extends ContainerAware
         }
 
         $eventResolver = $this->getResolver($event->getName());
+
+        if(null == $eventResolver) {
+            return null;
+        }
 
         return $eventResolver->getEventLogInfo($event);
     }
