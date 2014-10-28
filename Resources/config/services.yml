@@ -16,6 +16,8 @@ services:
   xiidea.easy_audit.logger_factory:
           class: Xiidea\EasyAuditBundle\Logger\LoggerFactory
           public: false
+          calls:
+              - [ setContainer,[ @service_container ] ]
 
   xiidea.easy_audit.event_resolver_factory:
           class: Xiidea\EasyAuditBundle\Resolver\EventResolverFactory

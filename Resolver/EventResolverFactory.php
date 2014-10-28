@@ -13,6 +13,7 @@ namespace Xiidea\EasyAuditBundle\Resolver;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
+use Xiidea\EasyAuditBundle\Exception\InvalidServiceException;
 use Xiidea\EasyAuditBundle\Traits\ServiceContainerGetterMethods;
 use Symfony\Component\EventDispatcher\Event;
 
@@ -82,7 +83,7 @@ class EventResolverFactory extends ContainerAware
 
             if (!$resolver instanceof EventResolverInterface) {
                 if ($this->getKernel()->isDebug()) {
-                    throw new \Exception('Resolver Service must implement' . __NAMESPACE__ . "EventResolverInterface");
+                    throw new InvalidServiceException('Resolver Service must implement' . __NAMESPACE__ . "EventResolverInterface");
                 }
             }
 

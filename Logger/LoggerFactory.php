@@ -11,8 +11,14 @@
 
 namespace Xiidea\EasyAuditBundle\Logger;
 
-class LoggerFactory
+use Symfony\Component\DependencyInjection\ContainerAware;
+use Xiidea\EasyAuditBundle\Exception\InvalidServiceException;
+use Xiidea\EasyAuditBundle\Traits\ServiceContainerGetterMethods;
+
+class LoggerFactory  extends ContainerAware
 {
+    use ServiceContainerGetterMethods;
+
     static private $loggers = array();
 
     public function executeLoggers($eventInfo)
@@ -30,6 +36,10 @@ class LoggerFactory
 
     public function addLogger($loggerName, $logger)
     {
-        self::$loggers[$loggerName] = $logger;
+        if ($logger instanceof LoggerInterface) {
+            self::$loggers[$loggerName] = $logger;
+        } elseif($this->getKernel()->isDebug()) {
+            throw new InvalidServiceException('Logger Service must implement' . __NAMESPACE__ . "LoggerInterface");
+        }
     }
 }
