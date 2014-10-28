@@ -63,4 +63,20 @@ class AuditLog extends BaseAuditLog
      * @ORM\Column(name="ip", type="string", length=20, nullable=true)
      */
     protected $ip;
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
 } 

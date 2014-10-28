@@ -52,29 +52,29 @@ class LoggerFactoryTest extends \PHPUnit_Framework_TestCase {
 
     public function testLoggerFactoryThrowsNoExceptionOnAddValidLogger()
     {
-        $loger1 = $this->getMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
+        $logger1 = $this->getMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
 
         $loggerFactory = new LoggerFactory();
-        $loggerFactory->addLogger("valid", $loger1);
+        $loggerFactory->addLogger("valid", $logger1);
     }
 
     public function testExecuteAllLoggers() {
-        $loger1 = $this->getMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
-        $loger2 = $this->getMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
+        $logger1 = $this->getMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
+        $logger2 = $this->getMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
 
         $eventInfo = new AuditLog();
 
-        $loger1->expects($this->once())
+        $logger1->expects($this->once())
             ->method('log')
             ->with($this->equalTo($eventInfo));
 
-        $loger2->expects($this->once())
+        $logger2->expects($this->once())
             ->method('log')
             ->with($this->equalTo($eventInfo));
 
         $loggerFactory = new LoggerFactory();
-        $loggerFactory->addLogger("logger1",$loger1);
-        $loggerFactory->addLogger("logger2",$loger2);
+        $loggerFactory->addLogger("logger1",$logger1);
+        $loggerFactory->addLogger("logger2",$logger2);
 
 
         $loggerFactory->executeLoggers($eventInfo);
@@ -102,13 +102,13 @@ class LoggerFactoryTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testDoesNotExecuteLogForEmptyEventInfo() {
-        $loger1 = $this->getMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
+        $logger1 = $this->getMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
 
-        $loger1->expects($this->never())
+        $logger1->expects($this->never())
             ->method('log');
 
         $loggerFactory = new LoggerFactory();
-        $loggerFactory->addLogger("logger1",$loger1);
+        $loggerFactory->addLogger("logger1",$logger1);
 
         $loggerFactory->executeLoggers(null);
     }

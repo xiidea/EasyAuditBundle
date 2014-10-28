@@ -41,6 +41,11 @@ class LoggerTest extends \PHPUnit_Framework_TestCase {
         $this->logger =  new Logger($registry);
     }
 
+    public function testIsAnInstanceOfLoggerInterface()
+    {
+        $this->assertInstanceOf('Xiidea\EasyAuditBundle\Logger\LoggerInterface', $this->logger);
+    }
+
     public function testLogCallsPersistWithDoctrineForAuditLogObject()
     {
 

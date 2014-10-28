@@ -52,7 +52,7 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
 
         $typeName = $reflectionClass->getShortName();
         $eventType = $this->getEventType($typeName);
-        $eventDescription = $this->getDescription($reflectionClass, $entity, $typeName);
+        $eventDescription = $this->getDescription($reflectionClass, $typeName);
 
         return array(
             'description'=> $eventDescription,
@@ -86,10 +86,6 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
 
     protected function getProperty($name)
     {
-        if(!isset($this->propertiesFound[$name])){
-            return null;
-        }
-
         $entity = $this->getEntity();
         $propertyGetter = 'get'.$this->propertiesFound[$name];
 
@@ -101,16 +97,14 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
         return $typeName . " " . $this->getEventShortName();
     }
 
-    protected function getDescription(\ReflectionClass $reflectionClass, $entity, $typeName)
+    protected function getDescription(\ReflectionClass $reflectionClass, $typeName)
     {
         $property = $this->getBestCandidatePropertyForIdentify($reflectionClass);
 
-        $descriptionTemplate = '%s has been %s ';
+        $descriptionTemplate = '%s has been %s';
 
-        if($property){
-            $propertyGetter = 'get'. $property;
-
-            $descriptionTemplate .= sprintf(' with %s = "%s" ', $property,  $entity->$propertyGetter());
+        if($property) {
+            $descriptionTemplate .= sprintf(' with %s = "%s"', $property,  $this->getProperty($property));
         }
 
         return sprintf($descriptionTemplate,
@@ -129,7 +123,7 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
 
     protected function getBestCandidatePropertyForIdentify(\ReflectionClass  $reflectionClass)
     {
-        $properties = $reflectionClass->getProperties(\ReflectionProperty::IS_PROTECTED);
+        $properties = $reflectionClass->getProperties(\ReflectionProperty::IS_PROTECTED | \ReflectionProperty::IS_PRIVATE);
 
         $hasIdProperty = false;
         $idPropertyName = null;

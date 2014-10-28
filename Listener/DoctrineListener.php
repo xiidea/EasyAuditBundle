@@ -18,18 +18,18 @@ class DoctrineListener extends ContainerAware
     /**
      * @var array
      */
-    protected $entity_class;
+    protected $entityClass;
 
-    public function __construct($entity_class)
+    public function __construct($entityClass)
     {
-        $this->entity_class = $entity_class;
+        $this->entityClass = $entityClass;
     }
 
     public function prePersist(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
 
-        if ($entity instanceof $this->entity_class) {
+        if ($entity instanceof $this->entityClass) {
             $entity->setEventTime(new \DateTime());
             $this->setUser($entity);
         }

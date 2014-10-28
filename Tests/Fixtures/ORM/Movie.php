@@ -16,34 +16,33 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class UserEntity
+class Movie
 {
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string")
      */
-    private $username;
+    protected $name;
 
-    public function __construct($id = 1, $username = "admin")
-    {
+    public function __construct($id = 1, $name = "car") {
         $this->id = $id;
-        $this->username = $username;
+        $this->name = $name;
     }
 
-    public function getUsername()
+    public function getName()
     {
-        return $this->username;
+        return $this->name;
     }
 
-    public function setUsername($username)
+    public function setName($name)
     {
-        $this->username = $username;
+        $this->name = $name;
     }
 
     /**
