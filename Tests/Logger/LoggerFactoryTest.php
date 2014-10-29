@@ -48,14 +48,16 @@ class LoggerFactoryTest extends \PHPUnit_Framework_TestCase {
     {
         $this->initiateContainerWithDebugMode(false);
         $this->loggerFactory->addLogger("invalid", new AuditLog());
+        $this->assertAttributeEquals(array(), 'loggers', $this->loggerFactory);
     }
 
     public function testLoggerFactoryThrowsNoExceptionOnAddValidLogger()
     {
         $logger1 = $this->getMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
 
-        $loggerFactory = new LoggerFactory();
-        $loggerFactory->addLogger("valid", $logger1);
+        $this->loggerFactory->addLogger("valid", $logger1);
+
+        $this->assertAttributeEquals(array('valid'=>$logger1), 'loggers', $this->loggerFactory);
     }
 
     public function testExecuteAllLoggers() {
