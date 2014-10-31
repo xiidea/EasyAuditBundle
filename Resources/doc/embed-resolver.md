@@ -6,7 +6,7 @@ Sometime it is easy if you could embed your resolver with your event itself. Eas
 ``` php
 <?php
 
-use Symfony\Component\DependencyInjection\ContainerInterface
+use Xiidea\EasyAuditBundle\Resolver\EventResolverInterface;
 
 class MyEvent extends Event implements EventResolverInterface
 {
@@ -27,7 +27,7 @@ class MyEvent extends Event implements EventResolverInterface
     {
         return array(
             'description'=>'Embeded Event description',
-            'type'=>$this->getname()
+            'type'=>$this->getName()
         );
     }
 
