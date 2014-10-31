@@ -37,8 +37,6 @@ checks:
         single_namespace_per_use: true
         simplify_boolean_return: true
         side_effects_or_types: true
-        return_doc_comments: true
-        return_doc_comment_if_not_inferrable: true
         require_scope_for_properties: true
         require_scope_for_methods: true
         require_php_tag_first: true
@@ -49,3 +47,4 @@ checks:
         parameters_in_camelcaps: true
         argument_type_checks: true
         avoid_aliased_php_functions: true
+        no_eval: true

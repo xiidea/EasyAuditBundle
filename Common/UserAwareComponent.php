@@ -38,6 +38,9 @@ class UserAwareComponent extends ContainerAware
         return $user;
     }
 
+    /**
+     * @return string
+     */
     public function getUsername()
     {
         $user = $this->getUser();
