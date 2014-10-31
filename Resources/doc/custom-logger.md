@@ -11,7 +11,7 @@ src/MyProject/MyBundle/Resolver/CustomLogger.php
 
 namespace  MyProject\MyBundle\Logger;
 
-use Symfony\Component\DependencyInjection\ContainerInterface
+use Xiidea\EasyAuditBundle\Logger\LoggerInterface
 
 class CustomLogger implements LoggerInterface
 {

@@ -10,7 +10,7 @@ src/MyProject/MyBundle/Resolver/CustomEventResolver.php
 
 namespace MyProject\MyBundle\Resolver;
 
-use Symfony\Component\DependencyInjection\ContainerInterface
+use use Xiidea\EasyAuditBundle\Resolver\EventResolverInterface;
 
 class CustomEventResolver implements EventResolverInterface
 {

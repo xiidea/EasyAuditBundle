@@ -13,10 +13,10 @@ namespace Xiidea\EasyAuditBundle\Tests\Resolver;
 
 
 use Symfony\Component\EventDispatcher\Event;
-use Xiidea\EasyAuditBundle\Resolver\CustomEventResolver;
 use Xiidea\EasyAuditBundle\Resolver\DefaultEventResolver;
 use Xiidea\EasyAuditBundle\Resolver\EventResolverFactory;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\AuditObjectResolver;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\CustomEventResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\InvalidEventInfoResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\InvalidEventResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\NullResolver;
