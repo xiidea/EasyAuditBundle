@@ -26,9 +26,9 @@ class EventResolverFactory extends ContainerAware
     {
         $eventLog = $this->getEventLogObject($this->getEventLogInfo($event));
 
-	    if($eventLog === null) {
-		    return null;
-	    }
+        if ($eventLog === null) {
+            return null;
+        }
 
         $eventLog->setTypeId($event->getName());
         $eventLog->setIp($this->getClientIp());
@@ -107,9 +107,7 @@ class EventResolverFactory extends ContainerAware
             return $event->getEventLogInfo();
         }
 
-        $eventResolver = $this->getResolver($event->getName());
-
-        if(null == $eventResolver) {
+        if (null === $eventResolver = $this->getResolver($event->getName())) {
             return null;
         }
 

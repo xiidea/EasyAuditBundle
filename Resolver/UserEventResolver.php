@@ -14,10 +14,10 @@ namespace Xiidea\EasyAuditBundle\Resolver;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\UserEvent;
 use Symfony\Component\EventDispatcher\Event;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Xiidea\EasyAuditBundle\Common\UserAwareComponent;
 
 /** Custom Event Resolver Example For FosUserBundle  */
-class UserEventResolver extends ContainerAware implements EventResolverInterface
+class UserEventResolver extends UserAwareComponent implements EventResolverInterface
 {
 
     /**
@@ -27,11 +27,15 @@ class UserEventResolver extends ContainerAware implements EventResolverInterface
      */
     public function getEventLogInfo(Event $event = null)
     {
+        if (null === $event) {
+            return null;
+        }
+
         $eventDetails = $this->getEventLogDetails($event);
 
         return array(
-            'description'=>$eventDetails['description'],
-            'type'=>$eventDetails['type']
+            'description' => $eventDetails['description'],
+            'type' => $eventDetails['type']
         );
     }
 
@@ -41,10 +45,10 @@ class UserEventResolver extends ContainerAware implements EventResolverInterface
 
         $eventDetails = array(
             'type' => $name,
-            'description'=>$name
+            'description' => $name
         );
 
-        switch($name){
+        switch ($name) {
             case 'fos_user.change_password.edit.completed':
                 /** @var $event FilterUserResponseEvent */
                 $eventDetails['type'] = "Password Changed";
@@ -74,44 +78,10 @@ class UserEventResolver extends ContainerAware implements EventResolverInterface
                 $eventDetails['type'] = "Authentication Failed";
                 $translator = $this->container->get('translator');
                 $eventDetails['description'] = $translator->trans($event->getAuthenticationException()->getMessage());
-                $eventDetails['description'] .= " Username: ".$event->getAuthenticationToken()->getUser();
+                $eventDetails['description'] .= " Username: " . $event->getAuthenticationToken()->getUser();
                 break;
         }
 
         return $eventDetails;
-    }
-
-    /**
-     * Get a user from the Security Context
-     *
-     * @return mixed
-     * @throws \LogicException If SecurityBundle is not available
-     */
-    public function getUser()
-    {
-        if (!$this->container->has('security.context')) {
-            throw new \LogicException('The SecurityBundle is not registered in your application.');
-        }
-
-        if (null === $token = $this->container->get('security.context')->getToken()) {
-            return null;
-        }
-
-        if (!is_object($user = $token->getUser())) {
-            return null;
-        }
-
-        return $user;
-    }
-
-    public function getUsername()
-    {
-        $user = $this->getUser();
-
-        if($user === null){
-            return 'Anonymous';
-        }
-
-        return $user->getUsername();
     }
 }

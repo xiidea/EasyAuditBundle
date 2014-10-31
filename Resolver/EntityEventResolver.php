@@ -31,13 +31,13 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
     protected $entity;
 
     /**
-     * @param \Symfony\Component\EventDispatcher\Event $event
+     * @param DoctrineEntityEvent $event
      *
      * @internal param $Event
      *
      * @return array
      */
-    public function getEventLogInfo(Event $event = NULL)
+    public function getEventLogInfo(DoctrineEntityEvent $event = NULL)
     {
         $this->event = $event;
         $entity = $this->getEntity();
@@ -77,7 +77,7 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
      */
     protected function getEntity()
     {
-        if(!$this->entity){
+        if (!$this->entity) {
             $this->entity = $this->event->getLifecycleEventArgs()->getEntity();
         }
 

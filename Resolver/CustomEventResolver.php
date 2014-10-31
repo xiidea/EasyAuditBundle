@@ -23,6 +23,10 @@ class CustomEventResolver implements EventResolverInterface
      */
     public function getEventLogInfo(Event $event = null)
     {
+        if(null === $event) {
+            return null;
+        }
+
         return array(
             'description' => 'Custom description',
             'type' => $event->getname(),
