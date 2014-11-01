@@ -9,7 +9,7 @@ use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog;
 
 class NullResolver implements EventResolverInterface
 {
-    public function getEventLogInfo()
+    public function getEventLogInfo(Event $event)
     {
         return null;
     }

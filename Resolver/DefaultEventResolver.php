@@ -21,12 +21,8 @@ class DefaultEventResolver implements EventResolverInterface
      *
      * @return array
      */
-    public function getEventLogInfo(Event $event = null)
+    public function getEventLogInfo(Event $event)
     {
-        if(null === $event) {
-            return null;
-        }
-
         return array(
             'description'=>$event->getname(),
             'type'=>$event->getname(),

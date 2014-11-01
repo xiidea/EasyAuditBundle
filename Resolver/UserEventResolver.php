@@ -22,16 +22,12 @@ class UserEventResolver extends UserAwareComponent implements EventResolverInter
 {
 
     /**
-     * @param $event
+     * @param Event $event
      *
      * @return array
      */
-    public function getEventLogInfo(Event $event = null)
+    public function getEventLogInfo(Event $event)
     {
-        if (null === $event) {
-            return null;
-        }
-
         $eventDetails = $this->getEventLogDetails($event);
 
         return array(

@@ -9,7 +9,7 @@ use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog;
 
 class AuditObjectResolver implements EventResolverInterface
 {
-    public function getEventLogInfo(Event $event = null)
+    public function getEventLogInfo(Event $event)
     {
         $info = new AuditLog();
         $info->setDescription($event->getName());

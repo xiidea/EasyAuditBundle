@@ -67,7 +67,7 @@ class EventResolverFactory extends ContainerAware
     }
 
     /**
-     * @param $eventName
+     * @param string $eventName
      *
      * @throws \Exception
      * @return EventResolverInterface
@@ -103,7 +103,7 @@ class EventResolverFactory extends ContainerAware
 
     protected function getEventLogInfo(Event $event)
     {
-        if ($event instanceof EventResolverInterface) {
+        if ($event instanceof EmbeddedEventResolverInterface) {
             return $event->getEventLogInfo();
         }
 

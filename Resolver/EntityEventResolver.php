@@ -31,13 +31,13 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
     protected $entity;
 
     /**
-     * @param DoctrineEntityEvent $event
+     * @param Event|DoctrineEntityEvent $event
      *
      * @internal param $Event
      *
      * @return array
      */
-    public function getEventLogInfo(DoctrineEntityEvent $event = NULL)
+    public function getEventLogInfo(Event $event)
     {
         $this->event = $event;
         $entity = $this->getEntity();

@@ -116,6 +116,10 @@ class DoctrineSubscriber extends ContainerAware implements EventSubscriber
         return $this->container->get('annotation_reader');
     }
 
+    /**
+     * @param $object
+     * @return \ReflectionClass
+     */
     protected function getReflectionClassFromObject($object)
     {
         $class = get_class($object);
@@ -124,8 +128,8 @@ class DoctrineSubscriber extends ContainerAware implements EventSubscriber
     }
 
     /**
-     * @param $eventType
-     * @param $class
+     * @param string $eventType
+     * @param string $class
      * @return bool
      */
     private function shouldTrackEventType($eventType, $class)
@@ -134,7 +138,7 @@ class DoctrineSubscriber extends ContainerAware implements EventSubscriber
     }
 
     /**
-     * @param $class
+     * @param string $class
      * @return bool
      */
     private function shouldTrackAllEventType($class)
@@ -143,7 +147,7 @@ class DoctrineSubscriber extends ContainerAware implements EventSubscriber
     }
 
     /**
-     * @param $class
+     * @param string $class
      * @return bool
      */
     protected function isConfigured($class)
