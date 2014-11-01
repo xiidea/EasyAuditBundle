@@ -13,18 +13,10 @@ namespace Xiidea\EasyAuditBundle\Listener;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Xiidea\EasyAuditBundle\Common\UserAwareComponent;
 use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
+use Xiidea\EasyAuditBundle\Exception\UnrecognizedEntityException;
 
 class DoctrineListener extends UserAwareComponent
 {
-    /**
-     * @var array
-     */
-    protected $entityClass;
-
-    public function __construct($entityClass)
-    {
-        $this->entityClass = $entityClass;
-    }
 
     public function prePersist(LifecycleEventArgs $args)
     {
@@ -33,6 +25,8 @@ class DoctrineListener extends UserAwareComponent
         if ($entity instanceof BaseAuditLog) {
             $entity->setEventTime(new \DateTime());
             $this->setUser($entity);
+        } elseif ($this->isDebug()) {
+            throw new UnrecognizedEntityException();
         }
     }
 

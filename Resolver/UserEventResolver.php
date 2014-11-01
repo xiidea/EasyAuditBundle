@@ -88,6 +88,7 @@ class UserEventResolver extends UserAwareComponent implements EventResolverInter
             "Password of user '%s' Changed Successfully",
             $event->getUser()->getUsername()
         );
+        
         return $eventDetails;
     }
 
@@ -95,20 +96,16 @@ class UserEventResolver extends UserAwareComponent implements EventResolverInter
     {
         return $this->getEventDetailsArray(
             "User Logged in",
-            "User '%s' Logged in Successfully" . (""==$using ? "" : "using $using"),
+            "User '%s' Logged in Successfully" . ("" == $using ? "" : " using $using"),
             $getUsername
         );
     }
 
     private function handleAuthenticationFailureEvent(AuthenticationFailureEvent $event)
     {
-        $translator = $this->container->get('translator');
-        $template = $translator->trans($event->getAuthenticationException()->getMessage());
-        $template .= " Username: %s";
-
         return $this->getEventDetailsArray(
             "Authentication Failed",
-            $template,
+            'Bad credentials Username: %s',
             $event->getAuthenticationToken()->getUser()
         );
     }
