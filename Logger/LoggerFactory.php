@@ -42,4 +42,12 @@ class LoggerFactory  extends ContainerAware
             throw new InvalidServiceException('Logger Service must implement' . __NAMESPACE__ . "LoggerInterface");
         }
     }
+
+    /**
+     * @return \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    protected function getContainer()
+    {
+        return $this->container;
+    }
 }

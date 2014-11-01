@@ -15,12 +15,10 @@ trait ServiceContainerGetterMethods
 {
 
     /**
+     * @throws \Exception
      * @return \Symfony\Component\DependencyInjection\ContainerInterface
      */
-    protected function getContainer()
-    {
-        return $this->container;
-    }
+    protected abstract function getContainer();
 
     /**
      * @return \Xiidea\EasyAuditBundle\Resolver\EventResolverInterface

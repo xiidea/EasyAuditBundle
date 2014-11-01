@@ -125,4 +125,12 @@ class EventResolverFactory extends ContainerAware
             return "";
         }
     }
+
+    /**
+     * @return \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    protected function getContainer()
+    {
+        return $this->container;
+    }
 }

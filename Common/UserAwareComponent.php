@@ -16,6 +16,14 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 class UserAwareComponent extends ContainerAware
 {
     /**
+     * @return \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    protected function getContainer()
+    {
+        return $this->container;
+    }
+
+    /**
      * Get a user from the Security Context
      *
      * @return mixed
@@ -23,11 +31,11 @@ class UserAwareComponent extends ContainerAware
      */
     public function getUser()
     {
-        if (!$this->container->has('security.context')) {
+        if (!$this->getContainer()->has('security.context')) {
             throw new \LogicException('The SecurityBundle is not registered in your application.');
         }
 
-        if (null === $token = $this->container->get('security.context')->getToken()) {
+        if (null === $token = $this->getContainer()->get('security.context')->getToken()) {
             return null;
         }
 
