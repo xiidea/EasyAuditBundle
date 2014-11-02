@@ -15,6 +15,7 @@ namespace Xiidea\EasyAuditBundle\Tests\Resolver;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Xiidea\EasyAuditBundle\Events\DoctrineEntityEvent;
 use Xiidea\EasyAuditBundle\Resolver\EntityEventResolver;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\DummyEntity;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie;
@@ -59,6 +60,11 @@ class EntityEventResolverTest extends \PHPUnit_Framework_TestCase {
     public function testIsAnInstanceOfEventResolverInterface()
     {
         $this->assertInstanceOf('Xiidea\EasyAuditBundle\Resolver\EventResolverInterface', $this->eventResolver);
+    }
+
+    public function testIgnoreEventOtherThenDoctrineEntityEvent()
+    {
+        $this->assertNull($this->eventResolver->getEventLogInfo(new Basic()));
     }
 
     public function testIgnoreUnchangedUpdateEvent()
