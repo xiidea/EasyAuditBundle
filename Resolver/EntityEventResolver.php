@@ -39,13 +39,17 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
      */
     public function getEventLogInfo(Event $event)
     {
-        $this->setEvent($event);
+        if (!$event instanceof DoctrineEntityEvent) {
+            return null;
+        }
+
+        $this->event = $event;
 
         $entity = $this->getEntity();
 
         $changesMetaData = $this->getChangeSets($entity);
 
-        if($this->isUpdateEvent() && $changesMetaData === null) {
+        if ($this->isUpdateEvent() && $changesMetaData === null) {
             return null;
         }
 
@@ -56,25 +60,21 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
         $eventDescription = $this->getDescription($reflectionClass, $typeName);
 
         return array(
-            'description'=> $eventDescription,
-            'type'=> $eventType,
+            'description' => $eventDescription,
+            'type' => $eventType,
         );
 
     }
 
-    protected function setEvent(DoctrineEntityEvent $event)
-    {
-        $this->event = $event;
-    }
-
     protected function getChangeSets($entity)
     {
-        if($this->isUpdateEvent()) {
+        if ($this->isUpdateEvent()) {
             return $this->getUnitOfWork()->getEntityChangeSet($entity);
         }
     }
 
-    protected function isUpdateEvent() {
+    protected function isUpdateEvent()
+    {
         return $this->getEventShortName() == 'updated';
     }
 
@@ -93,7 +93,7 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
     protected function getProperty($name)
     {
         $entity = $this->getEntity();
-        $propertyGetter = 'get'.$this->propertiesFound[$name];
+        $propertyGetter = 'get' . $this->propertiesFound[$name];
 
         return $entity->$propertyGetter();
     }
@@ -109,45 +109,49 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
 
         $descriptionTemplate = '%s has been %s';
 
-        if($property) {
-            $descriptionTemplate .= sprintf(' with %s = "%s"', $property,  $this->getProperty($property));
+        if ($property) {
+            $descriptionTemplate .= sprintf(' with %s = "%s"', $property, $this->getProperty($property));
         }
 
-        return sprintf($descriptionTemplate,
+        return sprintf(
+            $descriptionTemplate,
             $typeName,
-            $this->getEventShortName());
+            $this->getEventShortName()
+        );
     }
 
-    protected function getEventShortName(){
+    protected function getEventShortName()
+    {
 
-        if(!$this->eventShortName){
+        if (!$this->eventShortName) {
             $this->eventShortName = DoctrineEvents::getShortEventType($this->getName());
         }
 
         return $this->eventShortName;
     }
 
-    protected function getBestCandidatePropertyForIdentify(\ReflectionClass  $reflectionClass)
+    protected function getBestCandidatePropertyForIdentify(\ReflectionClass $reflectionClass)
     {
-        $properties = $reflectionClass->getProperties(\ReflectionProperty::IS_PROTECTED | \ReflectionProperty::IS_PRIVATE);
+        $properties = $reflectionClass->getProperties(
+            \ReflectionProperty::IS_PROTECTED | \ReflectionProperty::IS_PRIVATE
+        );
 
         $hasIdProperty = false;
         $idPropertyName = null;
 
-        foreach($properties as $property)
-        {
+        foreach ($properties as $property) {
             $propertyName = strtolower($property->name);
             $hasIdProperty = $hasIdProperty || $this->isId($propertyName, $reflectionClass);
 
-            if(!$idPropertyName && $hasIdProperty){
+            if (!$idPropertyName && $hasIdProperty) {
                 $idPropertyName = $property->name;
                 $this->propertiesFound['id'] = $idPropertyName;
             }
 
-            foreach($this->candidateProperties as $candidate){
+            foreach ($this->candidateProperties as $candidate) {
                 $hasNameProperty = $this->isPropertyName($propertyName, $candidate);
 
-                if($hasNameProperty){
+                if ($hasNameProperty) {
                     $this->propertiesFound[$candidate] = $property->name;
 
                     return $property->name;
@@ -163,7 +167,7 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
         return $property == $name;
     }
 
-    protected function isId($property, \ReflectionClass  $reflectionClass)
+    protected function isId($property, \ReflectionClass $reflectionClass)
     {
         $entityIdStr = strtolower($reflectionClass->getShortName()) . "id";
 
