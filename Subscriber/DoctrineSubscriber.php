@@ -40,10 +40,6 @@ class DoctrineSubscriber extends ContainerAware implements EventSubscriber
 
     public function postPersist(LifecycleEventArgs $args)
     {
-        if (!$this->isConfiguredToTrack($args->getEntity(), 'postPersist')) {
-            return;
-        }
-
         $this->handleEvent(DoctrineEvents::ENTITY_CREATED, $args);
     }
 
@@ -73,7 +69,7 @@ class DoctrineSubscriber extends ContainerAware implements EventSubscriber
         $class = get_class($entity);
         $eventType = DoctrineEvents::getShortEventType($eventName);
 
-        if(null !== $track = $this->isAnnotatedEvent($entity, $eventType)){
+        if (null !== $track = $this->isAnnotatedEvent($entity, $eventType)) {
             return $track;
         }
 

@@ -12,7 +12,10 @@
 namespace Xiidea\EasyAuditBundle\Tests\Subscriber;
 
 
+use Doctrine\ORM\Event\LifecycleEventArgs;
+use Xiidea\EasyAuditBundle\Annotation\ORMSubscribedEvents;
 use Xiidea\EasyAuditBundle\Subscriber\DoctrineSubscriber;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie;
 
 class DoctrineSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,6 +49,124 @@ class DoctrineSubscriberTest extends \PHPUnit_Framework_TestCase
             'postUpdate',
             'preRemove',
         ),$subscriber->getSubscribedEvents());
+    }
+
+    public function testCreateEventForAnnotatedEntity()
+    {
+        $annotation = new ORMSubscribedEvents(array('events'=>'created'));
+
+        $this->initializeAnnotationReader($annotation);
+        $this->initializeDispatcher();
+
+        $subscriber = new DoctrineSubscriber(array());
+
+        $this->invokeCreatedEventCall($subscriber);
+
+    }
+
+    public function testCreateEventForEntityNotConfiguredToTrack()
+    {
+        $this->initializeAnnotationReader(null);
+        $subscriber = new DoctrineSubscriber(array());
+        $this->invokeCreatedEventCall($subscriber);
+    }
+
+    public function testCreateEventForEntityConfiguredToTrack()
+    {
+        $this->initializeAnnotationReader();
+        $this->initializeDispatcher();
+        $subscriber = new DoctrineSubscriber(array('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie'=>array('created')));
+
+        $this->invokeCreatedEventCall($subscriber);
+    }
+
+    public function testCreateEventForEntityConfiguredToTrackAllEvents()
+    {
+        $this->initializeAnnotationReader();
+        $this->initializeDispatcher();
+        $subscriber = new DoctrineSubscriber(array('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie'=>array()));
+
+        $this->invokeCreatedEventCall($subscriber);
+    }
+
+    public function testUpdateEventForEntityNotConfiguredToTrack()
+    {
+        $this->initializeAnnotationReader(null);
+        $subscriber = new DoctrineSubscriber(array());
+        $this->invokeUpdatedEventCall($subscriber);
+    }
+
+    public function testRemovedEventForEntityNotConfiguredToTrack()
+    {
+        $this->initializeAnnotationReader(null);
+        $subscriber = new DoctrineSubscriber(array());
+        $this->invokeDeletedEventCall($subscriber);
+    }
+
+    private function initializeAnnotationReader($metaData = null)
+    {
+        $annotationReader = $this->getMockBuilder('\Doctrine\Common\Annotations\FileCacheReader')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $annotationReader->expects($this->once())
+            ->method('getClassAnnotation')
+            ->willReturn($metaData);
+
+        $this->container->expects($this->at(0))
+            ->method('get')
+            ->with($this->equalTo('annotation_reader'))
+            ->willReturn($annotationReader);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getObjectManager()
+    {
+        return $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    private function initializeDispatcher()
+    {
+        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+
+        $this->container->expects($this->at(1))
+            ->method('get')
+            ->with($this->equalTo('event_dispatcher'))
+            ->willReturn($dispatcher);
+    }
+
+    /**
+     * @param $subscriber
+     */
+    private function invokeCreatedEventCall($subscriber)
+    {
+        $subscriber->setContainer($this->container);
+
+        $subscriber->postPersist(new LifecycleEventArgs(new Movie(), $this->getObjectManager()));
+    }
+
+    /**
+     * @param $subscriber
+     */
+    private function invokeUpdatedEventCall($subscriber)
+    {
+        $subscriber->setContainer($this->container);
+
+        $subscriber->postUpdate(new LifecycleEventArgs(new Movie(), $this->getObjectManager()));
+    }
+
+    /**
+     * @param $subscriber
+     */
+    private function invokeDeletedEventCall($subscriber)
+    {
+        $subscriber->setContainer($this->container);
+
+        $subscriber->preRemove(new LifecycleEventArgs(new Movie(), $this->getObjectManager()));
     }
 }
  
