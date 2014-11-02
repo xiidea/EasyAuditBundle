@@ -39,7 +39,8 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
      */
     public function getEventLogInfo(Event $event)
     {
-        $this->event = $event;
+        $this->setEvent($event);
+
         $entity = $this->getEntity();
 
         $changesMetaData = $this->getChangeSets($entity);
@@ -59,6 +60,11 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
             'type'=> $eventType,
         );
 
+    }
+
+    protected function setEvent(DoctrineEntityEvent $event)
+    {
+        $this->event = $event;
     }
 
     protected function getChangeSets($entity)
