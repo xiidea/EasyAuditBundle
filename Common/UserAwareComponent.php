@@ -67,11 +67,12 @@ class UserAwareComponent extends ContainerAware
     {
         try {
             $request = $this->container->get('request');
-            if($request && $request->getClientIp()){
-                return "Anonymous";
-            }
         } catch (\Exception $e) {
+            $request = false;
+        }
 
+        if ($request && $request->getClientIp()) {
+            return "Anonymous";
         }
 
         return "By Command";
