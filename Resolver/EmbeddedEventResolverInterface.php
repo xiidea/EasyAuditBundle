@@ -13,5 +13,5 @@ namespace Xiidea\EasyAuditBundle\Resolver;
 
 interface EmbeddedEventResolverInterface
 {
-    public function getEventLogInfo($eventName);
+    public function getEventLogInfo();
 }

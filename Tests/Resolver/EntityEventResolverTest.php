@@ -64,14 +64,16 @@ class EntityEventResolverTest extends \PHPUnit_Framework_TestCase {
 
     public function testIgnoreEventOtherThenDoctrineEntityEvent()
     {
-        $this->assertNull($this->eventResolver->getEventLogInfo(new Basic(), 'basic'));
+        $this->assertNull($this->eventResolver->getEventLogInfo(new Basic()));
     }
 
     public function testIgnoreUnchangedUpdateEvent()
     {
         $this->createEventObjectForEntity(new UserEntity());
 
-        $this->assertNull($this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.entity.updated'), "Ignoring unchanged update event");
+        $this->event->setName('easy_audit.doctrine.entity.updated');
+
+        $this->assertNull($this->eventResolver->getEventLogInfo($this->event), "Ignoring unchanged update event");
     }
 
     public function testHandleUpdateEventWithChangeSet()
@@ -83,7 +85,8 @@ class EntityEventResolverTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo($this->event->getLifecycleEventArgs()->getEntity()))
             ->willReturn($this->equalTo(array(array('something'))));
 
-        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.entity.updated');
+        $this->event->setName('easy_audit.doctrine.entity.updated');
+        $eventInfo = $this->eventResolver->getEventLogInfo($this->event);
 
         $this->assertNotNull($eventInfo);
         $this->assertEquals($this->getExpectedEventInfo('updated', 'UserEntity', "id", 1), $eventInfo);
@@ -92,7 +95,8 @@ class EntityEventResolverTest extends \PHPUnit_Framework_TestCase {
     public function testHandleCreatedEvent()
     {
         $this->createEventObjectForEntity(new UserEntity());
-        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.entity.created');
+        $this->event->setName('easy_audit.doctrine.entity.created');
+        $eventInfo = $this->eventResolver->getEventLogInfo($this->event);
 
         $this->assertNotNull($eventInfo);
         $this->assertEquals($this->getExpectedEventInfo('created', 'UserEntity', "id", 1), $eventInfo);
@@ -101,7 +105,8 @@ class EntityEventResolverTest extends \PHPUnit_Framework_TestCase {
     public function testHandleDeletedEvent()
     {
         $this->createEventObjectForEntity(new UserEntity());
-        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.entity.deleted');
+        $this->event->setName('easy_audit.doctrine.entity.deleted');
+        $eventInfo = $this->eventResolver->getEventLogInfo($this->event);
 
         $this->assertNotNull($eventInfo);
         $this->assertEquals($this->getExpectedEventInfo('deleted', 'UserEntity', "id", 1), $eventInfo);
@@ -110,7 +115,8 @@ class EntityEventResolverTest extends \PHPUnit_Framework_TestCase {
     public function testPropertyNameAutoDetect()
     {
         $this->createEventObjectForEntity(new Movie(1, 'Car2'));
-        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.entity.created');
+        $this->event->setName('easy_audit.doctrine.entity.created');
+        $eventInfo = $this->eventResolver->getEventLogInfo($this->event);
 
         $this->assertNotNull($eventInfo);
         $this->assertEquals($this->getExpectedEventInfo('created', 'Movie', "name", "Car2"), $eventInfo);
@@ -119,7 +125,8 @@ class EntityEventResolverTest extends \PHPUnit_Framework_TestCase {
     public function testPropertyNameAutoDetectFallback()
     {
         $this->createEventObjectForEntity(new DummyEntity());
-        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.entity.created');
+        $this->event->setName('easy_audit.doctrine.entity.created');
+        $eventInfo = $this->eventResolver->getEventLogInfo($this->event);
 
         $this->assertNotNull($eventInfo);
         $this->assertEquals($this->getExpectedEventInfo('created', 'DummyEntity'), $eventInfo);
@@ -128,7 +135,8 @@ class EntityEventResolverTest extends \PHPUnit_Framework_TestCase {
     public function testPropertyNameAutoDetectedButInaccessible()
     {
         $this->createEventObjectForEntity(new EntityWithoutGetMethod());
-        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.entity.created');
+        $this->event->setName('easy_audit.doctrine.entity.created');
+        $eventInfo = $this->eventResolver->getEventLogInfo($this->event);
 
         $this->assertNotNull($eventInfo);
         $template = "{INACCESSIBLE} property Please define a '%s' function in '%s' class";

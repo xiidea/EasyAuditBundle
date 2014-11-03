@@ -8,7 +8,7 @@ use Xiidea\EasyAuditBundle\Resolver\EventResolverInterface;
 
 class NullResolver implements EventResolverInterface
 {
-    public function getEventLogInfo(Event $event, $eventName)
+    public function getEventLogInfo(Event $event)
     {
         return null;
     }

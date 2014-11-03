@@ -19,15 +19,16 @@
     "require": {
         "php": ">=5.4.0",
         "psr/log": ">=1",
-        "symfony/framework-bundle": ">=2.4"
+        "symfony/framework-bundle": "~2.1,<3"
     },
     "require-dev": {
         "phpunit/phpunit": "4.3.*",
         "mockery/mockery": ">=0.7.2",
-        "symfony/browser-kit": "~2.4",
+        "symfony/browser-kit": "~2.2",
         "doctrine/orm": ">=2.2",
         "doctrine/doctrine-bundle": ">=1.2",
         "friendsofsymfony/user-bundle": ">=1.3@dev",
+        "symfony/event-dispatcher":"<2.4",
         "satooshi/php-coveralls": "~0.6"
     },
     "autoload": {
@@ -38,7 +39,7 @@
     "target-dir": "Xiidea/EasyAuditBundle",
     "extra": {
         "branch-alias": {
-            "dev-master": "1.3.x-dev"
+            "dev-master": "1.2.x-dev"
         }
     }
 }

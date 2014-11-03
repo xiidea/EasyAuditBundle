@@ -21,6 +21,7 @@ class DummyAuthenticationFailureEvent extends AuthenticationFailureEvent
 
     public function __construct($user = "user")
     {
+        $this->setName('security.authentication.failure');
         $this->authenticationToken = new DummyToken($user);
     }
 

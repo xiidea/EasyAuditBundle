@@ -35,17 +35,16 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
 
     /**
      * @param Event|DoctrineEntityEvent $event
-     * @param $eventName
      *
      * @return array
      */
-    public function getEventLogInfo(Event $event, $eventName)
+    public function getEventLogInfo(Event $event)
     {
         if (!$event instanceof DoctrineEntityEvent) {
             return null;
         }
 
-        $this->initialize($event, $eventName);
+        $this->initialize($event);
 
         if ($this->isUpdateEvent() && null === $this->getChangeSets($this->entity)) {
             return null;
@@ -62,13 +61,11 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
 
     /**
      * @param DoctrineEntityEvent $event
-     * @param string $eventName
      */
-    private function initialize(DoctrineEntityEvent $event, $eventName)
+    private function initialize(DoctrineEntityEvent $event)
     {
         $this->eventShortName = null;
         $this->propertiesFound = array();
-        $this->eventName = $eventName;
         $this->event = $event;
         $this->entity = $event->getLifecycleEventArgs()->getEntity();
     }
@@ -136,7 +133,7 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
     protected function getEventShortName()
     {
         if (null === $this->eventShortName) {
-            $this->eventShortName = DoctrineEvents::getShortEventType($this->getName());
+            $this->eventShortName = DoctrineEvents::getShortEventType($this->event->getName());
         }
 
         return $this->eventShortName;
@@ -195,14 +192,6 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
     protected function isIdProperty($property, $entityIdStr)
     {
         return $property == 'id' || $property == $entityIdStr;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getName()
-    {
-        return $this->eventName;
     }
 
     /**

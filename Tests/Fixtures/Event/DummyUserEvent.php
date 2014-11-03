@@ -21,6 +21,7 @@ class DummyUserEvent extends UserEvent
 
     public function __construct(UserEntity $user)
     {
+        $this->setName('fos_user.security.implicit_login');
         $this->user = $user;
     }
 

@@ -32,9 +32,9 @@ class LogEventsListener
         $this->resolverFactory = $resolverFactory;
     }
 
-    public function resolveEventHandler(Event $event, $eventName)
+    public function resolveEventHandler(Event $event)
     {
-        $eventInfo = $this->resolverFactory->getEventLog($event, $eventName);
+        $eventInfo = $this->resolverFactory->getEventLog($event);
         $this->loggerFactory->executeLoggers($eventInfo);
     }
 }

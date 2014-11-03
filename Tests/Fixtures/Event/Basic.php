@@ -15,7 +15,7 @@ use Symfony\Component\EventDispatcher\Event;
 
 class Basic extends Event
 {
-    public function __construct() {
-
+    public function __construct($name = 'basic') {
+        $this->setName($name);
     }
 }

@@ -16,11 +16,11 @@ use Xiidea\EasyAuditBundle\Resolver\EmbeddedEventResolverInterface;
 
 class WithEmbeddedResolver extends Basic implements EmbeddedEventResolverInterface
 {
-    public function getEventLogInfo($eventName)
+    public function getEventLogInfo()
     {
         return array(
             'description' => 'It is an embedded event',
-            'type' => $eventName,
+            'type' => $this->getName(),
         );
     }
 }

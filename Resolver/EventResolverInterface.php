@@ -18,8 +18,7 @@ interface EventResolverInterface
 
     /**
      * @param Event $event
-     * @param string $eventName
      * @return mixed
      */
-    public function getEventLogInfo(Event $event, $eventName);
+    public function getEventLogInfo(Event $event);
 }

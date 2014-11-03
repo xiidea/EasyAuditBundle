@@ -89,7 +89,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->willReturn(new DummyToken(new UserEntity()));
 
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
+        $auditLog = $this->resolverFactory->getEventLog($this->event);
 
         $this->assertEventInfo($auditLog, array(
             'name'=> 'basic',
@@ -119,7 +119,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
 
         $this->initiateContainerWithDebugMode(false, 3);
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
+        $auditLog = $this->resolverFactory->getEventLog($this->event);
         $this->assertNull($auditLog);
     }
 
@@ -146,7 +146,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
 
         $this->initiateContainerWithDebugMode(true, 3);
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
+        $auditLog = $this->resolverFactory->getEventLog($this->event);
         $this->assertNull($auditLog);
     }
 
@@ -182,7 +182,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->willReturn(new DummyToken(new UserEntity()));
 
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
+        $auditLog = $this->resolverFactory->getEventLog($this->event);
 
         $this->assertEventInfo($auditLog, array(
             'name'=> 'basic',
@@ -194,7 +194,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testEmbeddedEventResolver() {
-        $this->event = new WithEmbeddedResolver();
+        $this->event = new WithEmbeddedResolver('embedded');
 
         $this->container->expects($this->at(0))
             ->method('getParameter')
@@ -215,7 +215,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->willReturn(new DummyToken(new UserEntity()));
 
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event, 'embedded');
+        $auditLog = $this->resolverFactory->getEventLog($this->event);
 
         $this->assertEventInfo($auditLog, array(
             'name'=> 'embedded',
@@ -243,7 +243,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo('xiidea.easy_audit.default_event_resolver'))
             ->willReturn(new NullResolver());
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
+        $auditLog = $this->resolverFactory->getEventLog($this->event);
         $this->assertNull($auditLog);
     }
 
@@ -326,7 +326,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->willReturn(new DummyToken(new UserEntity()));
 
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
+        $auditLog = $this->resolverFactory->getEventLog($this->event);
 
         $this->assertEventInfo($auditLog,
             array(
@@ -354,7 +354,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
 
         $this->initiateContainerWithDebugMode(false, $i);
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
+        $auditLog = $this->resolverFactory->getEventLog($this->event);
         $this->assertNull($auditLog);
 
     }
@@ -379,7 +379,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
 
         $this->initiateContainerWithDebugMode(true, $i);
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
+        $auditLog = $this->resolverFactory->getEventLog($this->event);
         $this->assertNull($auditLog);
 
     }
@@ -422,7 +422,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
 
         $this->mockClientIpResolverForConsoleCommand(8);
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
+        $auditLog = $this->resolverFactory->getEventLog($this->event);
 
 
 
@@ -473,7 +473,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->willReturn(new DummyToken(new UserEntity()));
 
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
+        $auditLog = $this->resolverFactory->getEventLog($this->event);
 
         $this->assertEventInfo($auditLog, array(
             'name'=> 'basic',
@@ -521,7 +521,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
 
         $this->initiateContainerWithDebugMode(false, 8);
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
+        $auditLog = $this->resolverFactory->getEventLog($this->event);
 
         $this->assertEventInfo($auditLog, array(
             'name'=> 'basic',
@@ -572,7 +572,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
 
         $this->initiateContainerWithDebugMode(true, 8);
 
-        $this->resolverFactory->getEventLog($this->event, 'basic');
+        $this->resolverFactory->getEventLog($this->event);
     }
 
     public function testEventTriggeredByAnonymousUser() {
@@ -613,7 +613,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
 
         $this->mockClientIpResolverForBrowserRequest(8);
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
+        $auditLog = $this->resolverFactory->getEventLog($this->event);
 
         $this->assertEventInfo($auditLog,
             array(
@@ -647,7 +647,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
 
         $this->initiateContainerWithDebugMode(true, 1);
 
-        $this->resolverFactory->getEventLog($this->event, 'embedded');
+        $this->resolverFactory->getEventLog($this->event);
     }
 
     /**

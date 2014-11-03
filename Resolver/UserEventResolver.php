@@ -38,12 +38,13 @@ class UserEventResolver extends UserAwareComponent implements EventResolverInter
 
     /**
      * @param Event $event
-     * @param $eventName
      *
      * @return array
      */
-    public function getEventLogInfo(Event $event, $eventName)
+    public function getEventLogInfo(Event $event)
     {
+        $eventName = $event->getName();
+
         $this->default = array(
             'type' => $eventName,
             'description' => $eventName

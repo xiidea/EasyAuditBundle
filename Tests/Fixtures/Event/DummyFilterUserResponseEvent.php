@@ -19,8 +19,9 @@ class DummyFilterUserResponseEvent extends FilterUserResponseEvent
 {
     private $user;
 
-    public function __construct(UserEntity $user)
+    public function __construct(UserEntity $user, $name)
     {
+        $this->setName($name);
         $this->user = $user;
     }
 

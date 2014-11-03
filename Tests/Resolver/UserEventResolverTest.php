@@ -53,22 +53,22 @@ class UserEventResolverTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('security.context'))
             ->willReturn(false);
 
-        $auditLog = $this->eventResolver->getEventLogInfo(new Basic(), 'security.interactive_login');
+        $auditLog = $this->eventResolver->getEventLogInfo(new Basic('security.interactive_login'));
 
         $this->assertNull($auditLog);
     }
 
     public function testUnlistedEvent()
     {
-        $auditLog = $this->eventResolver->getEventLogInfo(new Basic(), 'any_random_event');
+        $auditLog = $this->eventResolver->getEventLogInfo(new Basic('any_random_event'));
         $this->assertEquals(array('type' => 'any_random_event', 'description' => 'any_random_event'), $auditLog);
     }
 
     public function testPasswordChangedEvent()
     {
-        $event = new DummyFilterUserResponseEvent(new UserEntity());
+        $event = new DummyFilterUserResponseEvent(new UserEntity(), 'fos_user.change_password.edit.completed');
 
-        $auditLog = $this->eventResolver->getEventLogInfo($event, 'fos_user.change_password.edit.completed');
+        $auditLog = $this->eventResolver->getEventLogInfo($event);
 
         $this->assertNotNull($auditLog);
 
@@ -82,13 +82,13 @@ class UserEventResolverTest extends \PHPUnit_Framework_TestCase
     public function testLoginEvent()
     {
         $this->initiateContainerWithSecurityContext();
-        $event = new DummyFilterUserResponseEvent(new UserEntity());
+        $event = new DummyFilterUserResponseEvent(new UserEntity(), 'security.interactive_login');
 
         $this->securityContext->expects($this->once())
             ->method('getToken')
             ->willReturn(new DummyToken(new UserEntity()));
 
-        $auditLog = $this->eventResolver->getEventLogInfo($event, 'security.interactive_login');
+        $auditLog = $this->eventResolver->getEventLogInfo($event);
 
         $this->assertEquals(array (
             'description' => "User 'admin' Logged in Successfully",
@@ -99,7 +99,7 @@ class UserEventResolverTest extends \PHPUnit_Framework_TestCase
     public function testLoginUsingRememberMeService() {
         $event = new DummyUserEvent(new UserEntity());
 
-        $auditLog = $this->eventResolver->getEventLogInfo($event, 'fos_user.security.implicit_login');
+        $auditLog = $this->eventResolver->getEventLogInfo($event);
 
         $this->assertEquals(array (
             'description' => "User 'admin' Logged in Successfully using remember me service",
@@ -111,7 +111,7 @@ class UserEventResolverTest extends \PHPUnit_Framework_TestCase
     {
         $event = new DummyAuthenticationFailureEvent();
 
-        $auditLog = $this->eventResolver->getEventLogInfo($event, 'security.authentication.failure');
+        $auditLog = $this->eventResolver->getEventLogInfo($event);
 
         $this->assertNotNull($auditLog);
 
@@ -166,8 +166,8 @@ class UserEventResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function assertIncompatibleEventObject($randomEvent)
     {
-        $event = new Basic();
-        $auditLog = $this->eventResolver->getEventLogInfo($event, $randomEvent);
+        $event = new Basic($randomEvent);
+        $auditLog = $this->eventResolver->getEventLogInfo($event);
 
         $this->assertNotNull($auditLog);
 

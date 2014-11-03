@@ -23,11 +23,11 @@ class MyEvent extends Event implements EmbeddedEventResolverInterface
         return $this->data;
     }
 
-    public function getEventLogInfo($eventName, EventDispatcherInterface $dispatcher)
+    public function getEventLogInfo()
     {
         return array(
             'description'=>'Embeded Event description',
-            'type'=>$eventName
+            'type'=>$this->getName()
         );
     }
 

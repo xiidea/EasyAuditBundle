@@ -22,20 +22,19 @@ class EventResolverFactory extends UserAwareComponent
 {
     /**
      * @param Event $event
-     * @param string $eventName
      * @return null|BaseAuditLog
      * @throws UnrecognizedEventInfoException
      * @throws \Exception
      */
-    public function getEventLog(Event $event, $eventName)
+    public function getEventLog(Event $event)
     {
-        $eventLog = $this->getEventLogObject($this->getEventLogInfo($event, $eventName));
+        $eventLog = $this->getEventLogObject($this->getEventLogInfo($event));
 
         if ($eventLog === null) {
             return null;
         }
 
-        $eventLog->setTypeId($eventName);
+        $eventLog->setTypeId($event->getName());
         $eventLog->setIp($this->getClientIp());
         $eventLog->setEventTime(new \DateTime());
         $this->setUser($eventLog);
@@ -95,21 +94,20 @@ class EventResolverFactory extends UserAwareComponent
 
     /**
      * @param Event $event
-     * @param string $eventName
      * @return null
      * @throws InvalidServiceException
      */
-    protected function getEventLogInfo(Event $event, $eventName)
+    protected function getEventLogInfo(Event $event)
     {
         if ($event instanceof EmbeddedEventResolverInterface) {
-            return $event->getEventLogInfo($eventName);
+            return $event->getEventLogInfo();
         }
 
-        if (null === $eventResolver = $this->getResolver($eventName)) {
+        if (null === $eventResolver = $this->getResolver($event->getName())) {
             return null;
         }
 
-        return $eventResolver->getEventLogInfo($event, $eventName);
+        return $eventResolver->getEventLogInfo($event);
     }
 
     /**
