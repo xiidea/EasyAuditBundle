@@ -2,7 +2,9 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Functional;
 
+use Symfony\Component\DomCrawler\Crawler;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
+use Xiidea\EasyAuditBundle\Tests\Functional\Bundle\TestBundle\Controller\DefaultController;
 
 class CommonTest extends BaseTestCase
 {
@@ -37,8 +39,86 @@ class CommonTest extends BaseTestCase
             new Basic($name)
         );
 
-        $logdir = $container->getParameter('kernel.cache_dir') . DIRECTORY_SEPARATOR . "audit.log";
+        $logFile = realpath($container->getParameter('kernel.cache_dir') . DIRECTORY_SEPARATOR . "audit.log");
 
-        $this->assertStringEqualsFile($logdir, md5('simple.eventsimple.event'));
+        $event = unserialize(file_get_contents($logFile));
+        $this->assertEquals($name, $event['typeId']);
+        $this->assertEquals($name, $event['type']);
+        $this->assertEquals($name, $event['description']);
+        $this->assertEquals('By Command', $event['user']);
+        $this->assertEquals('', $event['ip']);
     }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testSecuredEventWithUserLogin()
+    {
+        $this->logIn();
+        $name = 'simple.event';
+        $crawler = $this->client->request('GET', "/some-secure-url/{$name}");
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
+
+        $event = $this->getEventArrayFromResponse($crawler);
+
+        $this->assertEquals($name, $event['typeId']);
+        $this->assertEquals($name, $event['type']);
+        $this->assertEquals($name, $event['description']);
+        $this->assertEquals('admin', $event['user']);
+        $this->assertEquals('127.0.0.1', $event['ip']);
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testEventOnPublicUrlWithUserLogin()
+    {
+        $this->logIn();
+
+        $name = 'simple.event';
+        $crawler = $this->client->request('GET', "/public/some-public-url/{$name}");
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
+
+        $event = $this->getEventArrayFromResponse($crawler);
+
+        $this->assertEquals($name, $event['typeId']);
+        $this->assertEquals($name, $event['type']);
+        $this->assertEquals($name, $event['description']);
+
+        $this->assertEquals('admin', $event['user']);
+        $this->assertEquals('127.0.0.1', $event['ip']);
+
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testEventOnPublicUrlWithoutUserLogin()
+    {
+        $name = 'simple.event';
+        $crawler = $this->client->request('GET', "/public/some-public-url/{$name}");
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
+
+        $event = $this->getEventArrayFromResponse($crawler);
+
+        $this->assertEquals($name, $event['typeId']);
+        $this->assertEquals($name, $event['type']);
+        $this->assertEquals($name, $event['description']);
+        $this->assertEquals('Anonymous', $event['user']);
+        $this->assertEquals('127.0.0.1', $event['ip']);
+    }
+
+    /**
+     * @param Crawler $crawler
+     * @return mixed
+     */
+    private function getEventArrayFromResponse(Crawler $crawler)
+    {
+        $html = $crawler->html();
+        $parts = explode(DefaultController::RESPONSE_BOUNDARY, $html);
+        $event = unserialize($parts[1]);
+        return $event;
+    }
+
+
 }

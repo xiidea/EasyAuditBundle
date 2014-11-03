@@ -17,6 +17,9 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class BaseTestCase extends WebTestCase
 {
+    /** @var null|\Symfony\Bundle\FrameworkBundle\Client  */
+    protected $client = null;
+
     static protected function createKernel(array $options = array())
     {
         return new TestKernel(
@@ -32,6 +35,7 @@ class BaseTestCase extends WebTestCase
 
     protected function setUp()
     {
+        $this->client = static::createClient();
         $this->cleanTmpDir();
     }
 
@@ -39,5 +43,13 @@ class BaseTestCase extends WebTestCase
     {
         $fs = new Filesystem();
         $fs->remove(sys_get_temp_dir() . '/XiideaEasyAuditBundle');
+    }
+
+    protected function logIn()
+    {
+        $this->client = static::createClient(array(), array(
+            'PHP_AUTH_USER' => 'admin',
+            'PHP_AUTH_PW'   => 'login',
+        ));
     }
 }

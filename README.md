@@ -84,7 +84,6 @@ xiidea_easy_audit:
         - security.interactive_login
 
     #List all custom resolver for event
-    #List all custom resolver for event
     #custom_resolvers :
     #       security.interactive_login : user.event_resolver
     #       security.authentication.failure : user.event_resolver

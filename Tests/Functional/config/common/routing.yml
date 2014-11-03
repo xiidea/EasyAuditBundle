@@ -1,0 +1,7 @@
+easy_audit_public:
+    pattern:  /public/some-public-url/{event}
+    defaults: { _controller: XiideaTestBundle:Default:index}
+
+easy_audit_secure:
+    pattern:  /some-secure-url/{event}
+    defaults: { _controller: XiideaTestBundle:Default:secure}

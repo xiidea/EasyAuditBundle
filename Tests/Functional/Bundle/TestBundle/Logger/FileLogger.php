@@ -11,7 +11,6 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Functional\Bundle\TestBundle\Logger;
 
-use Symfony\Component\Filesystem\Filesystem;
 use Xiidea\EasyAuditBundle\Entity\BaseAuditLog as AuditLog;
 use Xiidea\EasyAuditBundle\Logger\LoggerInterface;
 
@@ -31,6 +30,14 @@ class FileLogger implements LoggerInterface
             return;
         }
 
-        file_put_contents($this->dir . DIRECTORY_SEPARATOR . "audit.log", $event);
+        $array = array (
+            'typeId' => $event->getType(),
+            'type' => $event->getTypeId(),
+            'description' => $event->getDescription(),
+            'user' => $event->getUser(),
+            'ip' => $event->getIp()
+        );
+
+        file_put_contents($this->dir . DIRECTORY_SEPARATOR . "audit.log", serialize($array));
     }
 }

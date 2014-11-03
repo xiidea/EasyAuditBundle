@@ -37,7 +37,6 @@ class XiideaEasyAuditExtensionTest extends \PHPUnit_Framework_TestCase {
         $this->assertHasDefinition('xiidea.easy_audit.default_entity_event_resolver');
         $this->assertHasDefinition('xiidea.easy_audit.event_resolver_factory');
         $this->assertHasDefinition('xiidea.easy_audit.event_listener');
-        $this->assertHasDefinition('xiidea.easy_audit.prepersist_listener');
         $this->assertHasDefinition('xiidea.easy_audit.doctrine_subscriber');
     }
 
@@ -122,17 +121,6 @@ class XiideaEasyAuditExtensionTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('foo.resolver', $this->container->getParameter('xiidea.easy_audit.entity_event_resolver'));
     }
 
-    public function testOverwritePrePersistListener()
-    {
-        $loader = new XiideaEasyAuditExtension();
-        $config = $this->getRequiredConfig();
-        $config['pre_persist_listener'] = 'foo.listener';
-
-        $loader->load(array($config), $this->container);
-
-        $this->assertEquals('foo.listener', $this->container->getParameter('xiidea.easy_audit.pre_persist_listener'));
-    }
-
     public function testFullConfiguration()
     {
         $loader = new XiideaEasyAuditExtension();
@@ -171,7 +159,6 @@ EOF;
 resolver: xiidea.easy_audit.default_event_resolver                           #Optional
 entity_class : MyProject\Bundle\MyBundle\Entity\AuditLog                     #Required
 entity_event_resolver : xiidea.easy_audit.default_entity_event_resolver      #Optional
-pre_persist_listener : Xiidea\EasyAuditBundle\Listener\DoctrineListener      #Optional
 
 #user property to use as actor of an event
 #valid value will be any valid property of your user class ~

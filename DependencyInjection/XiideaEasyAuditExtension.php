@@ -46,8 +46,6 @@ class XiideaEasyAuditExtension extends Extension
             $loader->load('default/entity-event-resolver.yml');
         }
 
-
-
         if ($config['doctrine_entities'] !== false) {
             $loader->load('doctrine_services.yml');
         }

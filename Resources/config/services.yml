@@ -28,11 +28,3 @@ services:
   xiidea.easy_audit.event_listener:
           class: Xiidea\EasyAuditBundle\Listener\LogEventsListener
           arguments: [@xiidea.easy_audit.logger_factory, @xiidea.easy_audit.event_resolver_factory]
-
-  xiidea.easy_audit.prepersist_listener:
-          class: %xiidea.easy_audit.pre_persist_listener%
-          arguments: [%xiidea.easy_audit.entity_class% ]
-          calls:
-              - [ setContainer,[ @service_container ] ]
-          tags:
-              - { name: doctrine.event_listener, event: prePersist  }

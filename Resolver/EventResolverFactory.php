@@ -11,14 +11,14 @@
 
 namespace Xiidea\EasyAuditBundle\Resolver;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Xiidea\EasyAuditBundle\Common\UserAwareComponent;
 use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
 use Xiidea\EasyAuditBundle\Exception\InvalidServiceException;
 use Xiidea\EasyAuditBundle\Exception\UnrecognizedEventInfoException;
 use Xiidea\EasyAuditBundle\Traits\ServiceContainerGetterMethods;
 use Symfony\Component\EventDispatcher\Event;
 
-class EventResolverFactory extends ContainerAware
+class EventResolverFactory extends UserAwareComponent
 {
     use ServiceContainerGetterMethods;
 
@@ -32,6 +32,8 @@ class EventResolverFactory extends ContainerAware
 
         $eventLog->setTypeId($event->getName());
         $eventLog->setIp($this->getClientIp());
+        $eventLog->setEventTime(new \DateTime());
+        $this->setUser($eventLog);
 
         return $eventLog;
     }
@@ -112,6 +114,29 @@ class EventResolverFactory extends ContainerAware
         }
 
         return $eventResolver->getEventLogInfo($event);
+    }
+
+    protected function setUser(BaseAuditLog $entity)
+    {
+        $userProperty = $this->container->getParameter('xiidea.easy_audit.user_property');
+
+        $user = $this->getUser();
+
+        if (empty($userProperty)) {
+            $entity->setUser($user);
+        } elseif ($user && is_callable(array($user, "get{$userProperty}"))) {
+            $propertyGetter = "get{$userProperty}";
+            $entity->setUser($user->$propertyGetter());
+        } elseif ($user === NULL) {
+            $entity->setUser($this->getAnonymousUserName());
+        } elseif ($this->isDebug()) {
+            throw new \Exception("get{$userProperty}() not found in user object");
+        }
+    }
+
+    protected function isDebug()
+    {
+        return $this->container->get('kernel')->isDebug();
     }
 
     /**

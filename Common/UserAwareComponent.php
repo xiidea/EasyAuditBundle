@@ -53,10 +53,27 @@ class UserAwareComponent extends ContainerAware
     {
         $user = $this->getUser();
 
-        if($user === null){
-            return isset($_SERVER['HTTP_HOST']) ? 'Anonymous' : 'By Command';
+        if($user === null) {
+            return $this->getAnonymousUserName();
         }
 
         return $user->getUsername();
+    }
+
+    /**
+     * @return string
+     */
+    protected function getAnonymousUserName()
+    {
+        try {
+            $request = $this->container->get('request');
+            if($request && $request->getClientIp()){
+                return "Anonymous";
+            }
+        } catch (\Exception $e) {
+
+        }
+
+        return "By Command";
     }
 }
