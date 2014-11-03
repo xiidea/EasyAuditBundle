@@ -19,16 +19,7 @@ if (!class_exists('PHPUnit_Framework_MockObject_MockBuilder')) {
     die('PHPUnit MockObject plugin is required, at least 1.0.8 version');
 }
 
-define('TESTS_PATH', __DIR__);
-define('TESTS_TEMP_DIR', __DIR__.'/temp');
-define('VENDOR_PATH', realpath(__DIR__ . '/../vendor'));
+$vendor = realpath(__DIR__ . '/../vendor');
 
-$loader = require(VENDOR_PATH.'/autoload.php');
+$loader = require($vendor.'/autoload.php');
 
-Doctrine\Common\Annotations\AnnotationRegistry::registerFile(
-    VENDOR_PATH.'/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
-);
-
-$reader = new \Doctrine\Common\Annotations\AnnotationReader();
-$reader = new \Doctrine\Common\Annotations\CachedReader($reader, new \Doctrine\Common\Cache\ArrayCache());
-$_ENV['annotation_reader'] = $reader;

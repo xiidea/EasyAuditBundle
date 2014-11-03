@@ -1,0 +1,36 @@
+<?php
+
+/*
+ * This file is part of the XiideaEasyAuditBundle package.
+ *
+ * (c) Xiidea <http://www.xiidea.net>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
+namespace Xiidea\EasyAuditBundle\Tests\Functional\Bundle\TestBundle\Logger;
+
+use Symfony\Component\Filesystem\Filesystem;
+use Xiidea\EasyAuditBundle\Entity\BaseAuditLog as AuditLog;
+use Xiidea\EasyAuditBundle\Logger\LoggerInterface;
+
+class FileLogger implements LoggerInterface
+{
+
+    private $dir;
+
+    public function __construct($dir)
+    {
+        $this->dir = realpath($dir);
+    }
+
+    public function log(AuditLog $event = null)
+    {
+        if(empty($event)) {
+            return;
+        }
+
+        file_put_contents($this->dir . DIRECTORY_SEPARATOR . "audit.log", $event);
+    }
+}

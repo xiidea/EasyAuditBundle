@@ -1,0 +1,11 @@
+framework:
+    secret: test
+    test: ~
+    session:
+        storage_id: session.storage.filesystem
+    router:
+        resource: %kernel.root_dir%/config/common/routing.yml
+
+services:
+    logger: 
+        class: Symfony\Component\HttpKernel\Log\NullLogger

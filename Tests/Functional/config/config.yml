@@ -1,0 +1,19 @@
+imports:
+    - { resource: common/framework.yml }
+    - { resource: common/security.yml }
+
+xiidea_easy_audit:
+    entity_class : Xiidea\EasyAuditBundle\Tests\Functional\Bundle\TestBundle\Entity\AuditLog
+    user_property : username
+    doctrine_entities : false
+
+    events :                                                                      #Optional
+        - simple.event
+
+
+services:
+    xiidea.easy_audit.logger.service:
+          class: Xiidea\EasyAuditBundle\Tests\Functional\Bundle\TestBundle\Logger\FileLogger
+          arguments: ["%kernel.cache_dir%"]
+          tags:
+             - { name: easy_audit.logger }
