@@ -30,19 +30,24 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
 
     protected $entity;
 
+    protected $eventName;
+
+
     /**
      * @param Event|DoctrineEntityEvent $event
      *
+     * @param $eventName
      * @internal param $Event
      *
      * @return array
      */
-    public function getEventLogInfo(Event $event)
+    public function getEventLogInfo(Event $event, $eventName)
     {
         if (!$event instanceof DoctrineEntityEvent) {
             return null;
         }
 
+        $this->eventName = $eventName;
         $this->event = $event;
 
         $entity = $this->getEntity();
@@ -71,6 +76,8 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
         if ($this->isUpdateEvent()) {
             return $this->getUnitOfWork()->getEntityChangeSet($entity);
         }
+
+        return null;
     }
 
     protected function isUpdateEvent()
@@ -176,7 +183,7 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
 
     protected function getName()
     {
-        return $this->event->getName();
+        return $this->eventName;
     }
 
     protected function getReflectionClassFromObject($object)

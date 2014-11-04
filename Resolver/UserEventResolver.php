@@ -23,12 +23,13 @@ class UserEventResolver extends UserAwareComponent implements EventResolverInter
 
     /**
      * @param Event $event
+     * @param $eventName
      *
      * @return array
      */
-    public function getEventLogInfo(Event $event)
+    public function getEventLogInfo(Event $event, $eventName)
     {
-        $eventDetails = $this->getEventLogDetails($event);
+        $eventDetails = $this->getEventLogDetails($event, $eventName);
 
         return array(
             'description' => $eventDetails['description'],
@@ -36,16 +37,14 @@ class UserEventResolver extends UserAwareComponent implements EventResolverInter
         );
     }
 
-    protected function getEventLogDetails(Event $event)
+    protected function getEventLogDetails(Event $event, $eventName)
     {
-        $name = $event->getName();
-
         $eventDetails = array(
-            'type' => $name,
-            'description' => $name
+            'type' => $eventName,
+            'description' => $eventName
         );
 
-        switch ($name) {
+        switch ($eventName) {
             case 'fos_user.change_password.edit.completed':
                 /** @var $event FilterUserResponseEvent */
                 $eventDetails = $this->handlePasswordChangedEvent($event);

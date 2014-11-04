@@ -45,7 +45,7 @@ class CommonTest extends BaseTestCase
         $name = 'simple.event';
 
         $container->get('event_dispatcher')->dispatch($name,
-            new Basic($name)
+            new Basic()
         );
 
         $logFile = realpath($container->getParameter('kernel.cache_dir') . DIRECTORY_SEPARATOR . "audit.log");

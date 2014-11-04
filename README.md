@@ -26,7 +26,7 @@ Add EasyAuditBundle in your composer.json:
 ```js
 {
     "require": {
-        "xiidea/easy-audit": "1.2.*@dev"
+        "xiidea/easy-audit": "1.3.*@dev"
     }
 }
 ```
@@ -56,7 +56,7 @@ public function registerBundles()
 
 ### 3. Create audit_log entity class
 
-The XiideaEasyAuditBundle supports Doctrine ORM by default. However, you must provide a concrete AuditLog class. Follow the [instructions](./Resources/doc/audit-log-entity-orm.md) to set up the class:
+The XiideaEasyAuditBundle supports Doctrine ORM by default. However, you must provide a concrete AuditLog class. Follow the [instructions](https://github.com/xiidea/easy-audit/blob/master/Resources/doc/audit-log-entity-orm.md) to set up the class:
 
 
 ### 4. Configure config.yml
@@ -103,6 +103,14 @@ As all setup done, now you need to update your database schema. To do so,run the
 $ php app/console doctrine:schema:update --force
 ```
 
+### Warning - BC Breaking Changes ###
+
+* Since v1.2.2 `pre_persist_listener` option has been removed. You can use [this cookbook] to achieve the same functionality 
+* Since v1.2.2 `EmbeddedEventResolver` been split into `EmbeddedEventResolverInterface` and `EventResolverInterface`
+* Since v1.3.3 The new Event object has been adapted. And the signature of `EmbeddedEventResolverInterface` and 
+  `EventResolverInterface` also changed. Now it expects extra $eventName parameter     
+
+
 ### Cookbook
 
 Look the cookbook for another interesting things.
@@ -113,3 +121,4 @@ Look the cookbook for another interesting things.
 - [Custom Logger](https://github.com/xiidea/easy-audit/blob/master/Resources/doc/custom-logger.md)
 - [Custom Resolver](https://github.com/xiidea/easy-audit/blob/master/Resources/doc/custom-resolver.md)
 - [Doctrine Entity Event](https://github.com/xiidea/easy-audit/blob/master/Resources/doc/doctrine-entity-events.md)
+- [Pre-Persist Listener](https://github.com/xiidea/easy-audit/blob/master/Resources/doc/pre-persist-listener.md)

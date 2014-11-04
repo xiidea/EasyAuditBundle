@@ -22,15 +22,15 @@ class EventResolverFactory extends UserAwareComponent
 {
     use ServiceContainerGetterMethods;
 
-    public function getEventLog(Event $event)
+    public function getEventLog(Event $event, $eventName)
     {
-        $eventLog = $this->getEventLogObject($this->getEventLogInfo($event));
+        $eventLog = $this->getEventLogObject($this->getEventLogInfo($event, $eventName));
 
         if ($eventLog === null) {
             return null;
         }
 
-        $eventLog->setTypeId($event->getName());
+        $eventLog->setTypeId($eventName);
         $eventLog->setIp($this->getClientIp());
         $eventLog->setEventTime(new \DateTime());
         $this->setUser($eventLog);
@@ -48,17 +48,15 @@ class EventResolverFactory extends UserAwareComponent
     {
         $auditLogClass = $this->getParameter('entity_class');
 
-        if (is_array($eventInfo)) {
+        $eventObject = new $auditLogClass();
 
-            $eventObject = new $auditLogClass();
+        if (is_array($eventInfo) && $eventObject instanceof BaseAuditLog) {
             $fromArray = $eventObject->fromArray($eventInfo);
-
             return $fromArray;
-
         } elseif ($eventInfo instanceof $auditLogClass) {
             return $eventInfo;
         } elseif (empty($eventInfo)) {
-            return NULL;
+            return null;
         }
 
         if ($this->getKernel()->isDebug()) {
@@ -103,17 +101,17 @@ class EventResolverFactory extends UserAwareComponent
         return in_array($eventName, $this->getDoctrineEventsList());
     }
 
-    protected function getEventLogInfo(Event $event)
+    protected function getEventLogInfo(Event $event, $eventName)
     {
         if ($event instanceof EmbeddedEventResolverInterface) {
-            return $event->getEventLogInfo();
+            return $event->getEventLogInfo($eventName);
         }
 
-        if (null === $eventResolver = $this->getResolver($event->getName())) {
+        if (null === $eventResolver = $this->getResolver($eventName)) {
             return null;
         }
 
-        return $eventResolver->getEventLogInfo($event);
+        return $eventResolver->getEventLogInfo($event, $eventName);
     }
 
     protected function setUser(BaseAuditLog $entity)

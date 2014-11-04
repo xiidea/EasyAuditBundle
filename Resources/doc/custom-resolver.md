@@ -15,11 +15,11 @@ use use Xiidea\EasyAuditBundle\Resolver\EventResolverInterface;
 class CustomEventResolver implements EventResolverInterface
 {
 
-    public function getEventLogInfo($event = null)
+    public function getEventLogInfo($event = null, $eventName, EventDispatcherInterface $dispatcher)
     {
         return array(
             'description'=>'Custom description',
-            'type'=>$event->getname()
+            'type'=>$eventName
         );
     }
 

@@ -53,26 +53,26 @@ class UserEventResolverTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('security.context'))
             ->willReturn(false);
 
-        $auditLog = $this->eventResolver->getEventLogInfo(new Basic('security.interactive_login'));
+        $auditLog = $this->eventResolver->getEventLogInfo(new Basic(), 'security.interactive_login');
 
         $this->assertNull($auditLog);
     }
 
     public function testUnlistedEvent()
     {
-        $auditLog = $this->eventResolver->getEventLogInfo(new Basic('any_random_event'));
+        $auditLog = $this->eventResolver->getEventLogInfo(new Basic(), 'any_random_event');
         $this->assertEquals(array('type' => 'any_random_event', 'description' => 'any_random_event'), $auditLog);
     }
 
     public function testPasswordChangedEvent()
     {
-        $event = $this->initializeMockEvent('FOS\UserBundle\Event\FilterUserResponseEvent', 'fos_user.change_password.edit.completed');
+        $event = $this->initializeMockEvent('FOS\UserBundle\Event\FilterUserResponseEvent');
 
         $event->expects($this->once())
             ->method('getUser')
             ->willReturn(new UserEntity());
 
-        $auditLog = $this->eventResolver->getEventLogInfo($event);
+        $auditLog = $this->eventResolver->getEventLogInfo($event, 'fos_user.change_password.edit.completed');
 
         $this->assertNotNull($auditLog);
 
@@ -86,13 +86,13 @@ class UserEventResolverTest extends \PHPUnit_Framework_TestCase
     public function testLoginEvent()
     {
         $this->initiateContainerWithSecurityContext();
-        $event = $this->initializeMockEvent('FOS\UserBundle\Event\FilterUserResponseEvent', 'security.interactive_login');
+        $event = $this->initializeMockEvent('FOS\UserBundle\Event\FilterUserResponseEvent');
 
         $this->securityContext->expects($this->once())
             ->method('getToken')
             ->willReturn(new DummyToken(new UserEntity()));
 
-        $auditLog = $this->eventResolver->getEventLogInfo($event);
+        $auditLog = $this->eventResolver->getEventLogInfo($event, 'security.interactive_login');
 
         $this->assertEquals(array (
             'description' => "User 'admin' Logged in Successfully",
@@ -101,13 +101,13 @@ class UserEventResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     public function testLoginUsingRememberMeService() {
-        $event = $this->initializeMockEvent('FOS\UserBundle\Event\UserEvent', 'fos_user.security.implicit_login');
+        $event = $this->initializeMockEvent('FOS\UserBundle\Event\UserEvent');
 
         $event->expects($this->once())
             ->method('getUser')
             ->willReturn(new UserEntity());
 
-        $auditLog = $this->eventResolver->getEventLogInfo($event);
+        $auditLog = $this->eventResolver->getEventLogInfo($event, 'fos_user.security.implicit_login');
 
         $this->assertEquals(array (
             'description' => "User 'admin' Logged in Successfully using remember me service",
@@ -117,13 +117,13 @@ class UserEventResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testAuthenticationFailureEvent()
     {
-        $event = $this->initializeMockEvent('Symfony\Component\Security\Core\Event\AuthenticationFailureEvent', 'security.authentication.failure');
+        $event = $this->initializeMockEvent('Symfony\Component\Security\Core\Event\AuthenticationFailureEvent');
 
         $event->expects($this->once())
             ->method('getAuthenticationToken')
             ->willReturn(new DummyToken());
 
-        $auditLog = $this->eventResolver->getEventLogInfo($event);
+        $auditLog = $this->eventResolver->getEventLogInfo($event, 'security.authentication.failure');
 
         $this->assertNotNull($auditLog);
 
@@ -155,19 +155,14 @@ class UserEventResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $eventClass
-     * @param $eventName
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function initializeMockEvent($eventClass, $eventName)
+    protected function initializeMockEvent($eventClass)
     {
         $event = $this
             ->getMockBuilder($eventClass)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $event->expects($this->once())
-            ->method('getName')
-            ->willReturn($eventName);
 
         return $event;
     }

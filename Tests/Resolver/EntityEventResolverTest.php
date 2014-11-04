@@ -64,28 +64,26 @@ class EntityEventResolverTest extends \PHPUnit_Framework_TestCase {
 
     public function testIgnoreEventOtherThenDoctrineEntityEvent()
     {
-        $this->assertNull($this->eventResolver->getEventLogInfo(new Basic()));
+        $this->assertNull($this->eventResolver->getEventLogInfo(new Basic(), 'basic'));
     }
 
     public function testIgnoreUnchangedUpdateEvent()
     {
         $this->createEventObjectForEntity(new UserEntity());
 
-        $this->event->setName('easy_audit.doctrine.entity.updated');
-        $this->assertNull($this->eventResolver->getEventLogInfo($this->event), "Ignoring unchanged update event");
+        $this->assertNull($this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.entity.updated'), "Ignoring unchanged update event");
     }
 
     public function testHandleUpdateEventWithChangeSet()
     {
         $this->createEventObjectForEntity(new UserEntity());
-        $this->event->setName('easy_audit.doctrine.entity.updated');
 
         $this->unitOfWork->expects($this->once())
             ->method('getEntityChangeSet')
             ->with($this->equalTo($this->event->getLifecycleEventArgs()->getEntity()))
             ->willReturn($this->equalTo(array(array('something'))));
 
-        $eventInfo = $this->eventResolver->getEventLogInfo($this->event);
+        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.entity.updated');
 
         $this->assertNotNull($eventInfo);
         $this->assertEquals($this->getExpectedEventInfo('updated', 'UserEntity', "id", 1), $eventInfo);
@@ -94,8 +92,7 @@ class EntityEventResolverTest extends \PHPUnit_Framework_TestCase {
     public function testHandleCreatedEvent()
     {
         $this->createEventObjectForEntity(new UserEntity());
-        $this->event->setName('easy_audit.doctrine.entity.created');
-        $eventInfo = $this->eventResolver->getEventLogInfo($this->event);
+        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.entity.created');
 
         $this->assertNotNull($eventInfo);
         $this->assertEquals($this->getExpectedEventInfo('created', 'UserEntity', "id", 1), $eventInfo);
@@ -104,8 +101,7 @@ class EntityEventResolverTest extends \PHPUnit_Framework_TestCase {
     public function testHandleDeletedEvent()
     {
         $this->createEventObjectForEntity(new UserEntity());
-        $this->event->setName('easy_audit.doctrine.entity.deleted');
-        $eventInfo = $this->eventResolver->getEventLogInfo($this->event);
+        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.entity.deleted');
 
         $this->assertNotNull($eventInfo);
         $this->assertEquals($this->getExpectedEventInfo('deleted', 'UserEntity', "id", 1), $eventInfo);
@@ -114,8 +110,7 @@ class EntityEventResolverTest extends \PHPUnit_Framework_TestCase {
     public function testPropertyNameAutoDetect()
     {
         $this->createEventObjectForEntity(new Movie(1, 'Car2'));
-        $this->event->setName('easy_audit.doctrine.entity.created');
-        $eventInfo = $this->eventResolver->getEventLogInfo($this->event);
+        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.entity.created');
 
         $this->assertNotNull($eventInfo);
         $this->assertEquals($this->getExpectedEventInfo('created', 'Movie', "name", "Car2"), $eventInfo);
@@ -124,8 +119,7 @@ class EntityEventResolverTest extends \PHPUnit_Framework_TestCase {
     public function testPropertyNameAutoDetectFallback()
     {
         $this->createEventObjectForEntity(new DummyEntity());
-        $this->event->setName('easy_audit.doctrine.entity.created');
-        $eventInfo = $this->eventResolver->getEventLogInfo($this->event);
+        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.entity.created');
 
         $this->assertNotNull($eventInfo);
         $this->assertEquals($this->getExpectedEventInfo('created', 'DummyEntity'), $eventInfo);
@@ -189,7 +183,6 @@ class EntityEventResolverTest extends \PHPUnit_Framework_TestCase {
     private function createEventObjectForEntity($entity)
     {
         $this->event = new DoctrineEntityEvent(new LifecycleEventArgs($entity, $this->entityManager));
-        $this->event->setDispatcher($this->dispatcher);
     }
 
 }

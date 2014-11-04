@@ -11,8 +11,6 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Fixtures\Common;
 
-use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
-
 class DummyToken
 {
     private $user;

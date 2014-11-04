@@ -18,15 +18,16 @@ use Xiidea\EasyAuditBundle\Resolver\EventResolverInterface;
 class CustomEventResolver implements EventResolverInterface
 {
     /**
-     * @param $event
+     * @param Event $event
      *
+     * @param $eventName
      * @return array
      */
-    public function getEventLogInfo(Event $event)
+    public function getEventLogInfo(Event $event, $eventName)
     {
         return array(
             'description' => 'Custom description',
-            'type' => $event->getname(),
+            'type' => $eventName,
         );
     }
 }

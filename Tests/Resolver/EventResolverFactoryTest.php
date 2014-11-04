@@ -53,7 +53,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testDefaultEventResolver() {
-        $this->event = new Basic('basic');
+        $this->event = new Basic();
 
         $this->container->expects($this->at(0))
             ->method('getParameter')
@@ -89,7 +89,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->willReturn(new DummyToken(new UserEntity()));
 
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event);
+        $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 
         $this->assertEventInfo($auditLog, array(
             'name'=> 'basic',
@@ -100,7 +100,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testInvalidResolverWithDebugOff() {
-        $this->event = new Basic('basic');
+        $this->event = new Basic();
 
         $this->container->expects($this->at(0))
             ->method('getParameter')
@@ -124,7 +124,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
 
         $this->initiateContainerWithDebugMode(false, 4);
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event);
+        $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
         $this->assertNull($auditLog);
     }
 
@@ -132,7 +132,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
      * @expectedException \Xiidea\EasyAuditBundle\Exception\UnrecognizedEventInfoException
      */
     public function testInvalidResolverWithDebugOn() {
-        $this->event = new Basic('basic');
+        $this->event = new Basic();
 
         $this->container->expects($this->at(0))
             ->method('getParameter')
@@ -156,12 +156,12 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
 
         $this->initiateContainerWithDebugMode(true, 4);
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event);
+        $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
         $this->assertNull($auditLog);
     }
 
     public function testAuditLogObjectEventResolver() {
-        $this->event = new Basic('basic');
+        $this->event = new Basic();
 
         $this->container->expects($this->at(0))
             ->method('getParameter')
@@ -197,7 +197,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->willReturn(new DummyToken(new UserEntity()));
 
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event);
+        $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 
         $this->assertEventInfo($auditLog, array(
             'name'=> 'basic',
@@ -209,7 +209,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testEmbeddedEventResolver() {
-        $this->event = new WithEmbeddedResolver('embedded');
+        $this->event = new WithEmbeddedResolver();
 
         $this->container->expects($this->at(0))
             ->method('getParameter')
@@ -230,7 +230,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->willReturn(new DummyToken(new UserEntity()));
 
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event);
+        $auditLog = $this->resolverFactory->getEventLog($this->event, 'embedded');
 
         $this->assertEventInfo($auditLog, array(
             'name'=> 'embedded',
@@ -241,7 +241,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testNullEventInfo() {
-        $this->event = new Basic('basic');
+        $this->event = new Basic();
 
         $this->container->expects($this->at(0))
             ->method('getParameter')
@@ -263,7 +263,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo('xiidea.easy_audit.entity_class'))
             ->willReturn('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog');
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event);
+        $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
         $this->assertNull($auditLog);
     }
 
@@ -305,7 +305,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->willReturn(new DummyToken(new UserEntity()));
 
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event);
+        $auditLog = $this->resolverFactory->getEventLog($this->event, 'easy_audit.doctrine.entity.created');
 
         $this->assertEventInfo($auditLog,
             array(
@@ -318,7 +318,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
 
     public function testCustomValidEventResolver()
     {
-        $this->event = new Basic('basic');
+        $this->event = new Basic();
 
         $this->container->expects($this->at(0))
             ->method('getParameter')
@@ -349,7 +349,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->willReturn(new DummyToken(new UserEntity()));
 
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event);
+        $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 
         $this->assertEventInfo($auditLog,
             array(
@@ -364,7 +364,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
     {
         $i=0;
 
-        $this->event = new Basic('basic');
+        $this->event = new Basic();
         $this->container->expects($this->at($i++))
             ->method('getParameter')
             ->with($this->equalTo('xiidea.easy_audit.custom_resolvers'))
@@ -382,7 +382,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo('xiidea.easy_audit.entity_class'))
             ->willReturn('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog');
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event);
+        $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
         $this->assertNull($auditLog);
 
     }
@@ -394,7 +394,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
     {
         $i=0;
 
-        $this->event = new Basic('basic');
+        $this->event = new Basic();
         $this->container->expects($this->at($i++))
             ->method('getParameter')
             ->with($this->equalTo('xiidea.easy_audit.custom_resolvers'))
@@ -407,13 +407,13 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
 
         $this->initiateContainerWithDebugMode(true, $i);
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event);
+        $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
         $this->assertNull($auditLog);
 
     }
 
     public function testEventTriggeredFromConsoleCommand() {
-        $this->event = new Basic('basic');
+        $this->event = new Basic();
 
         $this->container->expects($this->at(0))
             ->method('getParameter')
@@ -449,7 +449,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->willReturn(null);
 
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event);
+        $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 
         $this->assertEventInfo($auditLog,
             array(

@@ -17,15 +17,16 @@ class DefaultEventResolver implements EventResolverInterface
 {
 
     /**
-     * @param $event
+     * @param Event $event
      *
+     * @param $eventName
      * @return array
      */
-    public function getEventLogInfo(Event $event)
+    public function getEventLogInfo(Event $event, $eventName)
     {
         return array(
-            'description'=>$event->getname(),
-            'type'=>$event->getname(),
+            'description' => $eventName,
+            'type' => $eventName,
         );
     }
 }
