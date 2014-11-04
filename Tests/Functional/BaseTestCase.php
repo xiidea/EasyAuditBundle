@@ -17,14 +17,14 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class BaseTestCase extends WebTestCase
 {
-    /** @var null|\Symfony\Bundle\FrameworkBundle\Client  */
+    /** @var null|\Symfony\Bundle\FrameworkBundle\Client */
     protected $client = null;
 
     static protected function createKernel(array $options = array())
     {
         return new TestKernel(
             isset($options['config']) ? $options['config'] : 'config',
-            isset($options['debug']) ? (boolean) $options['debug'] : true
+            isset($options['debug']) ? (boolean)$options['debug'] : true
         );
     }
 
@@ -35,6 +35,11 @@ class BaseTestCase extends WebTestCase
 
     protected function setUp()
     {
+        if ($this->isHhvm()) {
+            $this->markTestIncomplete('Test is not working on HHVM');
+            return;
+        }
+
         $this->client = static::createClient();
         $this->cleanTmpDir();
     }
@@ -49,7 +54,12 @@ class BaseTestCase extends WebTestCase
     {
         $this->client = static::createClient(array(), array(
             'PHP_AUTH_USER' => 'admin',
-            'PHP_AUTH_PW'   => 'login',
+            'PHP_AUTH_PW' => 'login',
         ));
+    }
+
+    function isHhvm()
+    {
+        return defined('HHVM_VERSION');
     }
 }
