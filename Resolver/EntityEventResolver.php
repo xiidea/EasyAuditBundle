@@ -64,7 +64,7 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
 
     /**
      * @param DoctrineEntityEvent $event
-     * @param $eventName
+     * @param string $eventName
      */
     private function initialize(DoctrineEntityEvent $event, $eventName)
     {

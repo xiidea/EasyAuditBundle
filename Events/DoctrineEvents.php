@@ -19,6 +19,11 @@ class DoctrineEvents
     const ENTITY_CREATED = 'easy_audit.doctrine.entity.created';
     const ENTITY_DELETED = 'easy_audit.doctrine.entity.deleted';
 
+
+    /**
+     * @param string $eventName
+     * @return string
+     */
     public static function getShortEventType($eventName)
     {
         return str_replace(self::$prefix, '', $eventName);
