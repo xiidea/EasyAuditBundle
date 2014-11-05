@@ -11,10 +11,13 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Functional;
 
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Kernel;
 use Xiidea\EasyAuditBundle\Tests\Functional\Bundle\TestBundle\XiideaTestBundle;
+use Xiidea\EasyAuditBundle\XiideaEasyAuditBundle;
 
 class TestKernel extends Kernel
 {
@@ -39,9 +42,9 @@ class TestKernel extends Kernel
     public function registerBundles()
     {
         return array(
-            new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new \Symfony\Bundle\SecurityBundle\SecurityBundle(),
-            new \Xiidea\EasyAuditBundle\XiideaEasyAuditBundle(),
+            new FrameworkBundle(),
+            new SecurityBundle(),
+            new XiideaEasyAuditBundle(),
             new XiideaTestBundle()
         );
     }

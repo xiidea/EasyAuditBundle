@@ -16,7 +16,6 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Xiidea\EasyAuditBundle\Events\DoctrineEntityEvent;
 use Xiidea\EasyAuditBundle\Resolver\EntityEventResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
-use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\DummyEntity;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;

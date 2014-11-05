@@ -53,7 +53,7 @@ class UserAwareComponent extends ContainerAware
     {
         $user = $this->getUser();
 
-        if($user === null) {
+        if(empty($user)) {
             return $this->getAnonymousUserName();
         }
 

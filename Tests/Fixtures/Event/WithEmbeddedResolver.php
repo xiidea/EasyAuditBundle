@@ -13,7 +13,6 @@ namespace Xiidea\EasyAuditBundle\Tests\Fixtures\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 use Xiidea\EasyAuditBundle\Resolver\EmbeddedEventResolverInterface;
-use Xiidea\EasyAuditBundle\Resolver\EventResolverInterface;
 
 class WithEmbeddedResolver extends Basic implements EmbeddedEventResolverInterface
 {

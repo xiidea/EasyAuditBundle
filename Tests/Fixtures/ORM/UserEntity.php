@@ -53,4 +53,9 @@ class UserEntity
     {
         return $this->id;
     }
+
+    public function __toString()
+    {
+        return $this->getUsername();
+    }
 }

@@ -19,6 +19,8 @@ if (!class_exists('PHPUnit_Framework_MockObject_MockBuilder')) {
     die('PHPUnit MockObject plugin is required, at least 1.0.8 version');
 }
 
+date_default_timezone_set("Asia/Dhaka");
+
 $vendor = realpath(__DIR__ . '/../vendor');
 
 $loader = require($vendor.'/autoload.php');
