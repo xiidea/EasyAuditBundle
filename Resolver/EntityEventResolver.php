@@ -49,24 +49,18 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
 
         $this->eventName = $eventName;
         $this->event = $event;
+        $this->entity = $event->getLifecycleEventArgs()->getEntity();
 
-        $entity = $this->getEntity();
-
-        $changesMetaData = $this->getChangeSets($entity);
-
-        if ($this->isUpdateEvent() && $changesMetaData === null) {
+        if ($this->isUpdateEvent() && null === $this->getChangeSets($this->entity)) {
             return null;
         }
 
-        $reflectionClass = $this->getReflectionClassFromObject($entity);
 
-        $typeName = $reflectionClass->getShortName();
-        $eventType = $this->getEventType($typeName);
-        $eventDescription = $this->getDescription($reflectionClass, $typeName);
+        $entityClass = $this->getReflectionClassFromObject($this->entity);
 
         return array(
-            'description' => $eventDescription,
-            'type' => $eventType,
+            'description' => $this->getDescription($entityClass),
+            'type' => $this->getEventType($entityClass->getShortName()),
         );
 
     }
@@ -99,10 +93,13 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
 
     protected function getProperty($name)
     {
-        $entity = $this->getEntity();
         $propertyGetter = 'get' . $this->propertiesFound[$name];
 
-        return $entity->$propertyGetter();
+        if(!is_callable(array($this->entity, $propertyGetter))) {
+            return "";
+        }
+
+        return $this->entity->$propertyGetter();
     }
 
     protected function getEventType($typeName)
@@ -110,7 +107,7 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
         return $typeName . " " . $this->getEventShortName();
     }
 
-    protected function getDescription(\ReflectionClass $reflectionClass, $typeName)
+    protected function getDescription(\ReflectionClass $reflectionClass)
     {
         $property = $this->getBestCandidatePropertyForIdentify($reflectionClass);
 
@@ -122,14 +119,13 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
 
         return sprintf(
             $descriptionTemplate,
-            $typeName,
+            $reflectionClass->getShortName(),
             $this->getEventShortName()
         );
     }
 
     protected function getEventShortName()
     {
-
         if (!$this->eventShortName) {
             $this->eventShortName = DoctrineEvents::getShortEventType($this->getName());
         }
@@ -143,41 +139,38 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
             \ReflectionProperty::IS_PROTECTED | \ReflectionProperty::IS_PRIVATE
         );
 
-        $hasIdProperty = false;
-        $idPropertyName = null;
+        $propertyName = null;
+
+        $entityIdStr = strtolower($reflectionClass->getShortName()) . "id";
 
         foreach ($properties as $property) {
-            $propertyName = strtolower($property->name);
-            $hasIdProperty = $hasIdProperty || $this->isId($propertyName, $reflectionClass);
+            $propertyNameLower = strtolower($property->name);
 
-            if (!$idPropertyName && $hasIdProperty) {
-                $idPropertyName = $property->name;
-                $this->propertiesFound['id'] = $idPropertyName;
+            if (null !== $foundPropertyName = $this->getPropertyNameInCandidateList($propertyNameLower, $property)) {
+                return $foundPropertyName;
             }
 
-            foreach ($this->candidateProperties as $candidate) {
-                $hasNameProperty = $this->isPropertyName($propertyName, $candidate);
-
-                if ($hasNameProperty) {
-                    $this->propertiesFound[$candidate] = $property->name;
-
-                    return $property->name;
-                }
+            if (null == $propertyName && $this->isIdProperty($propertyNameLower, $entityIdStr)) {
+                $this->propertiesFound['id'] = $propertyName = $property->name;
             }
         }
 
-        return $idPropertyName;
+        return $propertyName;
     }
 
-    protected function isPropertyName($property, $name)
+    protected function getPropertyNameInCandidateList($propertyName, $property)
     {
-        return $property == $name;
+        foreach ($this->candidateProperties as $candidate) {
+            if ($propertyName == $candidate) {
+                return $this->propertiesFound[$candidate] = $property->name;
+            }
+        }
+
+        return null;
     }
 
-    protected function isId($property, \ReflectionClass $reflectionClass)
+    protected function isIdProperty($property, $entityIdStr)
     {
-        $entityIdStr = strtolower($reflectionClass->getShortName()) . "id";
-
         return $property == 'id' || $property == $entityIdStr;
     }
 
