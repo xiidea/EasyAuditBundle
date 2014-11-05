@@ -15,5 +15,11 @@ use Symfony\Component\EventDispatcher\Event;
 
 interface EventResolverInterface
 {
+
+    /**
+     * @param Event $event
+     * @param string $eventName
+     * @return mixed
+     */
     public function getEventLogInfo(Event $event, $eventName);
 }

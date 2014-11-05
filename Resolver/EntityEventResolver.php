@@ -68,7 +68,8 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
      */
     private function initialize(DoctrineEntityEvent $event, $eventName)
     {
-        $this->eventShortName = $this->propertiesFound = null;
+        $this->eventShortName = null;
+        $this->propertiesFound = array();
         $this->eventName = $eventName;
         $this->event = $event;
         $this->entity = $event->getLifecycleEventArgs()->getEntity();
