@@ -47,14 +47,11 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
             return null;
         }
 
-        $this->eventName = $eventName;
-        $this->event = $event;
-        $this->entity = $event->getLifecycleEventArgs()->getEntity();
+        $this->initialize($event, $eventName);
 
         if ($this->isUpdateEvent() && null === $this->getChangeSets($this->entity)) {
             return null;
         }
-
 
         $entityClass = $this->getReflectionClassFromObject($this->entity);
 
@@ -63,6 +60,18 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
             'type' => $this->getEventType($entityClass->getShortName()),
         );
 
+    }
+
+    /**
+     * @param DoctrineEntityEvent $event
+     * @param $eventName
+     */
+    private function initialize(DoctrineEntityEvent $event, $eventName)
+    {
+        $this->eventShortName = $this->propertiesFound = null;
+        $this->eventName = $eventName;
+        $this->event = $event;
+        $this->entity = $event->getLifecycleEventArgs()->getEntity();
     }
 
     protected function getChangeSets($entity)
@@ -91,6 +100,10 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
         return $this->entity;
     }
 
+    /**
+     * @param string $name
+     * @return string|mixed
+     */
     protected function getProperty($name)
     {
         $propertyGetter = 'get' . $this->propertiesFound[$name];
@@ -102,11 +115,20 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
         return $this->entity->$propertyGetter();
     }
 
+
+    /**
+     * @param string $typeName
+     * @return string
+     */
     protected function getEventType($typeName)
     {
         return $typeName . " " . $this->getEventShortName();
     }
 
+    /**
+     * @param \ReflectionClass $reflectionClass
+     * @return string
+     */
     protected function getDescription(\ReflectionClass $reflectionClass)
     {
         $property = $this->getBestCandidatePropertyForIdentify($reflectionClass);
@@ -124,15 +146,22 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
         );
     }
 
+    /**
+     * @return string
+     */
     protected function getEventShortName()
     {
-        if (!$this->eventShortName) {
+        if (null === $this->eventShortName) {
             $this->eventShortName = DoctrineEvents::getShortEventType($this->getName());
         }
 
         return $this->eventShortName;
     }
 
+    /**
+     * @param \ReflectionClass $reflectionClass
+     * @return null|string
+     */
     protected function getBestCandidatePropertyForIdentify(\ReflectionClass $reflectionClass)
     {
         $properties = $reflectionClass->getProperties(
@@ -158,7 +187,12 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
         return $propertyName;
     }
 
-    protected function getPropertyNameInCandidateList($propertyName, $property)
+    /**
+     * @param string $propertyName
+     * @param \ReflectionProperty $property
+     * @return null | string
+     */
+    protected function getPropertyNameInCandidateList($propertyName, \ReflectionProperty $property)
     {
         foreach ($this->candidateProperties as $candidate) {
             if ($propertyName == $candidate) {
@@ -169,21 +203,31 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
         return null;
     }
 
+    /**
+     * @param string $property
+     * @param string $entityIdStr
+     * @return bool
+     */
     protected function isIdProperty($property, $entityIdStr)
     {
         return $property == 'id' || $property == $entityIdStr;
     }
 
+    /**
+     * @return string
+     */
     protected function getName()
     {
         return $this->eventName;
     }
 
+    /**
+     * @param $object
+     * @return \ReflectionClass
+     */
     protected function getReflectionClassFromObject($object)
     {
-        $class = get_class($object);
-
-        return new \ReflectionClass($class);
+        return new \ReflectionClass(get_class($object));
     }
 
     /**

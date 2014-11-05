@@ -42,6 +42,11 @@ trait ServiceContainerGetterMethods
         return $this->getContainer()->get($this->getContainer()->getParameter('xiidea.easy_audit.entity_event_resolver'));
     }
 
+
+    /**
+     * @param string $parameter
+     * @return mixed
+     */
     public function getParameter($parameter)
     {
         return $this->getContainer()->getParameter('xiidea.easy_audit.'.$parameter);

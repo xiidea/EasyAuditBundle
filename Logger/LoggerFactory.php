@@ -21,6 +21,9 @@ class LoggerFactory  extends ContainerAware
 
     static private $loggers = array();
 
+    /**
+     * @param null|\Xiidea\EasyAuditBundle\Entity\BaseAuditLog $eventInfo
+     */
     public function executeLoggers($eventInfo)
     {
         if(empty($eventInfo)) {
@@ -34,6 +37,11 @@ class LoggerFactory  extends ContainerAware
         }
     }
 
+    /**
+     * @param string $loggerName
+     * @param $logger
+     * @throws InvalidServiceException
+     */
     public function addLogger($loggerName, $logger)
     {
         if ($logger instanceof LoggerInterface) {

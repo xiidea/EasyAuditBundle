@@ -22,6 +22,13 @@ class EventResolverFactory extends UserAwareComponent
 {
     use ServiceContainerGetterMethods;
 
+    /**
+     * @param Event $event
+     * @param string $eventName
+     * @return null|BaseAuditLog
+     * @throws UnrecognizedEventInfoException
+     * @throws \Exception
+     */
     public function getEventLog(Event $event, $eventName)
     {
         $eventLog = $this->getEventLogObject($this->getEventLogInfo($event, $eventName));
@@ -96,11 +103,21 @@ class EventResolverFactory extends UserAwareComponent
         return $this->getCommonResolver();
     }
 
+    /**
+     * @param string $eventName
+     * @return bool
+     */
     protected function isEntityEvent($eventName)
     {
         return in_array($eventName, $this->getDoctrineEventsList());
     }
 
+    /**
+     * @param Event $event
+     * @param string $eventName
+     * @return null
+     * @throws InvalidServiceException
+     */
     protected function getEventLogInfo(Event $event, $eventName)
     {
         if ($event instanceof EmbeddedEventResolverInterface) {
@@ -114,6 +131,10 @@ class EventResolverFactory extends UserAwareComponent
         return $eventResolver->getEventLogInfo($event, $eventName);
     }
 
+    /**
+     * @param BaseAuditLog $entity
+     * @throws \Exception
+     */
     protected function setUser(BaseAuditLog $entity)
     {
         $userProperty = $this->container->getParameter('xiidea.easy_audit.user_property');
@@ -132,6 +153,9 @@ class EventResolverFactory extends UserAwareComponent
         }
     }
 
+    /**
+     * @return boolean
+     */
     protected function isDebug()
     {
         return $this->container->get('kernel')->isDebug();

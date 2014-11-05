@@ -37,6 +37,11 @@ class UserEventResolver extends UserAwareComponent implements EventResolverInter
         );
     }
 
+    /**
+     * @param Event $event
+     * @param string $eventName
+     * @return array
+     */
     protected function getEventLogDetails(Event $event, $eventName)
     {
         $eventDetails = array(
@@ -68,6 +73,12 @@ class UserEventResolver extends UserAwareComponent implements EventResolverInter
         return $eventDetails;
     }
 
+    /**
+     * @param $type
+     * @param $template
+     * @param $username
+     * @return array
+     */
     private function getEventDetailsArray($type, $template, $username)
     {
         return array(
@@ -91,6 +102,11 @@ class UserEventResolver extends UserAwareComponent implements EventResolverInter
         return $eventDetails;
     }
 
+    /**
+     * @param $getUsername
+     * @param string $using
+     * @return array
+     */
     private function handleLoginEventBy($getUsername, $using = "")
     {
         return $this->getEventDetailsArray(
@@ -100,6 +116,10 @@ class UserEventResolver extends UserAwareComponent implements EventResolverInter
         );
     }
 
+    /**
+     * @param AuthenticationFailureEvent $event
+     * @return array
+     */
     private function handleAuthenticationFailureEvent(AuthenticationFailureEvent $event)
     {
         return $this->getEventDetailsArray(
