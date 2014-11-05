@@ -11,15 +11,31 @@
 
 namespace Xiidea\EasyAuditBundle\Resolver;
 
-use FOS\UserBundle\Event\FilterUserResponseEvent;
-use FOS\UserBundle\Event\UserEvent;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Security\Core\Event\AuthenticationFailureEvent;
 use Xiidea\EasyAuditBundle\Common\UserAwareComponent;
+use Xiidea\EasyAuditBundle\Resolver\UserEventCommand\AuthenticationFailedCommand;
+use Xiidea\EasyAuditBundle\Resolver\UserEventCommand\ImplicitLoginCommand;
+use Xiidea\EasyAuditBundle\Resolver\UserEventCommand\InteractiveLoginCommand;
+use Xiidea\EasyAuditBundle\Resolver\UserEventCommand\PasswordChangedCommand;
+use Xiidea\EasyAuditBundle\Resolver\UserEventCommand\ResolverCommand;
 
 /** Custom Event Resolver Example For FosUserBundle  */
 class UserEventResolver extends UserAwareComponent implements EventResolverInterface
 {
+    private $commands = array();
+
+    private $default;
+
+    public function __construct()
+    {
+        $this->commands = array(
+            'fos_user.change_password.edit.completed' => new PasswordChangedCommand(),
+            'security.interactive_login' => new InteractiveLoginCommand($this),
+            'fos_user.security.implicit_login' => new ImplicitLoginCommand(),
+            'security.authentication.failure' => new AuthenticationFailedCommand(),
+        );
+    }
 
     /**
      * @param Event $event
@@ -29,103 +45,25 @@ class UserEventResolver extends UserAwareComponent implements EventResolverInter
      */
     public function getEventLogInfo(Event $event, $eventName)
     {
-        $eventDetails = $this->getEventLogDetails($event, $eventName);
-
-        return array(
-            'description' => $eventDetails['description'],
-            'type' => $eventDetails['type']
-        );
-    }
-
-    /**
-     * @param Event $event
-     * @param string $eventName
-     * @return array
-     */
-    protected function getEventLogDetails(Event $event, $eventName)
-    {
-        $eventDetails = array(
+        $this->default = array(
             'type' => $eventName,
             'description' => $eventName
         );
 
-        switch ($eventName) {
-            case 'fos_user.change_password.edit.completed':
-                /** @var $event FilterUserResponseEvent */
-                $eventDetails = $this->handlePasswordChangedEvent($event);
-                break;
-
-            case 'security.interactive_login':
-                $eventDetails = $this->handleLoginEventBy($this->getUsername());
-                break;
-
-            case 'fos_user.security.implicit_login':
-                /** @var $event UserEvent */
-                $eventDetails = $this->handleLoginEventBy($event->getUser()->getUsername(), "remember me service");
-                break;
-
-            case 'security.authentication.failure':
-                /** @var AuthenticationFailureEvent $event */
-                $eventDetails = $this->handleAuthenticationFailureEvent($event);
-                break;
+        if (!isset($this->commands[$eventName])) {
+            return $this->default;
         }
 
-        return $eventDetails;
+        return $this->getEventLogDetails($event, $this->commands[$eventName]);
     }
 
     /**
-     * @param $type
-     * @param $template
-     * @param $username
+     * @param Event $event
+     * @param ResolverCommand $command
      * @return array
      */
-    private function getEventDetailsArray($type, $template, $username)
+    protected function getEventLogDetails(Event $event, ResolverCommand $command)
     {
-        return array(
-            'type' => $type,
-            'description' => sprintf($template, $username)
-        );
-    }
-
-    /**
-     * @param FilterUserResponseEvent $event
-     * @return array
-     */
-    protected function handlePasswordChangedEvent(FilterUserResponseEvent $event)
-    {
-        $eventDetails = $this->getEventDetailsArray(
-            "Password Changed",
-            "Password of user '%s' Changed Successfully",
-            $event->getUser()->getUsername()
-        );
-        
-        return $eventDetails;
-    }
-
-    /**
-     * @param $getUsername
-     * @param string $using
-     * @return array
-     */
-    private function handleLoginEventBy($getUsername, $using = "")
-    {
-        return $this->getEventDetailsArray(
-            "User Logged in",
-            "User '%s' Logged in Successfully" . ("" == $using ? "" : " using $using"),
-            $getUsername
-        );
-    }
-
-    /**
-     * @param AuthenticationFailureEvent $event
-     * @return array
-     */
-    private function handleAuthenticationFailureEvent(AuthenticationFailureEvent $event)
-    {
-        return $this->getEventDetailsArray(
-            "Authentication Failed",
-            'Bad credentials Username: %s',
-            $event->getAuthenticationToken()->getUser()
-        );
+        return $command->resolve($event, $this->default);
     }
 }
