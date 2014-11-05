@@ -106,7 +106,7 @@ $ php app/console doctrine:schema:update --force
 ### Warning - BC Breaking Changes ###
 
 * Since v1.2.2 `pre_persist_listener` option has been removed. You can use [this cookbook](https://github.com/xiidea/easy-audit/blob/master/Resources/doc/pre-persist-listener.md) to achieve the same functionality 
-* Since v1.2.2 `EmbeddedEventResolver` been split into `EmbeddedEventResolverInterface` and `EventResolverInterface`
+* Since v1.2.2 `EventResolverInterface` been split into `EmbeddedEventResolverInterface` and `EventResolverInterface`
 * Since v1.3.x The new Event object has been adapted. And the signature of `EmbeddedEventResolverInterface` and 
   `EventResolverInterface` also changed. Now it expects extra $eventName parameter     
 
