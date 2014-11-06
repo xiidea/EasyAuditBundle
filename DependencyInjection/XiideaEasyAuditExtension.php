@@ -11,6 +11,7 @@
 
 namespace Xiidea\EasyAuditBundle\DependencyInjection;
 
+use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -38,16 +39,25 @@ class XiideaEasyAuditExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
 
-        if($config['resolver'] == 'xiidea.easy_audit.default_event_resolver') {
-            $loader->load('default/event-resolver.yml');
-        }
-
-        if($config['entity_event_resolver'] == 'xiidea.easy_audit.default_entity_event_resolver') {
-            $loader->load('default/entity-event-resolver.yml');
-        }
+        $this->loadDefaultResolverServices($config, $loader);
 
         if ($config['doctrine_entities'] !== false) {
             $loader->load('doctrine_services.yml');
+        }
+    }
+
+    /**
+     * @param $config
+     * @param $loader
+     */
+    protected function loadDefaultResolverServices($config, LoaderInterface $loader)
+    {
+        if ($config['resolver'] == 'xiidea.easy_audit.default_event_resolver') {
+            $loader->load('default/event-resolver.yml');
+        }
+
+        if ($config['entity_event_resolver'] == 'xiidea.easy_audit.default_entity_event_resolver') {
+            $loader->load('default/entity-event-resolver.yml');
         }
     }
 }

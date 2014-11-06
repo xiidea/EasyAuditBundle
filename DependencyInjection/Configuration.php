@@ -27,9 +27,8 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('xiidea_easy_audit');
 
-        $rootNode
+        $treeBuilder->root('xiidea_easy_audit')
             ->children()
                 ->scalarNode('resolver')->defaultValue('xiidea.easy_audit.default_event_resolver')->end()
                 ->scalarNode('entity_event_resolver')->defaultValue('xiidea.easy_audit.default_entity_event_resolver')->end()

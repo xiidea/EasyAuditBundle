@@ -14,6 +14,7 @@ namespace Xiidea\EasyAuditBundle\Resolver;
 use Xiidea\EasyAuditBundle\Common\UserAwareComponent;
 use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
 use Xiidea\EasyAuditBundle\Exception\InvalidServiceException;
+use Xiidea\EasyAuditBundle\Exception\UnrecognizedEntityException;
 use Xiidea\EasyAuditBundle\Exception\UnrecognizedEventInfoException;
 use Xiidea\EasyAuditBundle\Traits\ServiceContainerGetterMethods;
 use Symfony\Component\EventDispatcher\Event;
@@ -53,24 +54,15 @@ class EventResolverFactory extends UserAwareComponent
      */
     protected function getEventLogObject($eventInfo)
     {
-        $auditLogClass = $this->getParameter('entity_class');
-
-        $eventObject = new $auditLogClass();
-
-        if (is_array($eventInfo) && $eventObject instanceof BaseAuditLog) {
-            $fromArray = $eventObject->fromArray($eventInfo);
-            return $fromArray;
-        } elseif ($eventInfo instanceof $auditLogClass) {
-            return $eventInfo;
-        } elseif (empty($eventInfo)) {
+        if (empty($eventInfo)) {
             return null;
         }
 
-        if ($this->getKernel()->isDebug()) {
-            throw new UnrecognizedEventInfoException();
+        if ($eventInfo instanceof BaseAuditLog) {
+            return $eventInfo;
         }
 
-        return NULL;
+        return $this->createEventObjectFromArray($eventInfo);
     }
 
     /**
@@ -81,23 +73,15 @@ class EventResolverFactory extends UserAwareComponent
      */
     protected function getResolver($eventName)
     {
-        $customResolvers = $this->getParameter('custom_resolvers');
 
         if ($this->isEntityEvent($eventName)) {
             return $this->getEntityEventResolver();
-        } elseif (isset($customResolvers[$eventName])) {
+        }
 
-            $resolver = $this->getService($customResolvers[$eventName]);
+        $customResolvers = $this->getParameter('custom_resolvers');
 
-            if (!$resolver instanceof EventResolverInterface) {
-                if ($this->getKernel()->isDebug()) {
-                    throw new InvalidServiceException('Resolver Service must implement' . __NAMESPACE__ . "EventResolverInterface");
-                }
-
-                return null;
-            }
-
-            return $resolver;
+        if (isset($customResolvers[$eventName])) {
+            return $this->getCustomResolver($customResolvers[$eventName]);
         }
 
         return $this->getCommonResolver();
@@ -139,18 +123,12 @@ class EventResolverFactory extends UserAwareComponent
     {
         $userProperty = $this->container->getParameter('xiidea.easy_audit.user_property');
 
-        $user = $this->getUser();
-
-        if (empty($userProperty)) {
-            $entity->setUser($user);
-        } elseif ($user && is_callable(array($user, "get{$userProperty}"))) {
-            $propertyGetter = "get{$userProperty}";
-            $entity->setUser($user->$propertyGetter());
-        } elseif ($user === NULL) {
+        if (null === $user = $this->getUser()) {
             $entity->setUser($this->getAnonymousUserName());
-        } elseif ($this->isDebug()) {
-            throw new \Exception("get{$userProperty}() not found in user object");
+            return;
         }
+
+        $entity->setUser($this->getSettablePropertyValue($userProperty, $user));
     }
 
     /**
@@ -179,5 +157,91 @@ class EventResolverFactory extends UserAwareComponent
     protected function getContainer()
     {
         return $this->container;
+    }
+
+    /**
+     * @return null
+     * @throws InvalidServiceException
+     */
+    protected function handleInvalidResolverConfiguration()
+    {
+        if ($this->getKernel()->isDebug()) {
+            throw new InvalidServiceException(
+                'Resolver Service must implement' . __NAMESPACE__ . "EventResolverInterface"
+            );
+        }
+
+        return null;
+    }
+
+    /**
+     * @param $serviceName
+     * @return null|object
+     * @throws InvalidServiceException
+     */
+    protected function getCustomResolver($serviceName)
+    {
+        $resolver = $this->getService($serviceName);
+
+        if (!$resolver instanceof EventResolverInterface) {
+            return $this->handleInvalidResolverConfiguration();
+        }
+
+        return $resolver;
+    }
+
+    /**
+     * @param \Exception $e
+     * @throws \Exception
+     * @return null
+     */
+    protected function handleException(\Exception $e)
+    {
+        if ($this->getKernel()->isDebug()) {
+            throw $e;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param $eventInfo
+     * @return $this|null
+     * @throws \Exception
+     */
+    protected function createEventObjectFromArray($eventInfo)
+    {
+        if (!is_array($eventInfo)) {
+            return $this->handleException(new UnrecognizedEventInfoException());
+        }
+
+        $auditLogClass = $this->getParameter('entity_class');
+        $eventObject = new $auditLogClass();
+
+        if (!$eventObject instanceof BaseAuditLog) {
+            return $this->handleException(new UnrecognizedEntityException());
+        }
+
+        return $eventObject->fromArray($eventInfo);
+    }
+
+    /**
+     * @param $userProperty
+     * @param $user
+     * @return mixed
+     */
+    protected function getSettablePropertyValue($userProperty, $user)
+    {
+        if (empty($userProperty)) {
+            return $user;
+        }
+
+        try {
+            return call_user_func(array($user, "get{$userProperty}"));
+        } catch (\Exception $e) {
+            return $this->handleException(
+                new \Exception(sprintf("get%s() not found in %s object", $userProperty, get_class($user)))
+            );
+        }
     }
 }

@@ -75,7 +75,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo('xiidea.easy_audit.entity_class'))
             ->willReturn('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog');
 
-        $this->mockClientIpResolver(4);
+        $this->mockClientIpResolverForBrowserRequest(4);
 
         $this->container->expects($this->at(5))
             ->method('getParameter')
@@ -117,12 +117,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo('xiidea.easy_audit.default_event_resolver'))
             ->willReturn(new InvalidEventInfoResolver());
 
-        $this->container->expects($this->at(3))
-            ->method('getParameter')
-            ->with($this->equalTo('xiidea.easy_audit.entity_class'))
-            ->willReturn('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog');
-
-        $this->initiateContainerWithDebugMode(false, 4);
+        $this->initiateContainerWithDebugMode(false, 3);
 
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
         $this->assertNull($auditLog);
@@ -149,12 +144,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo('xiidea.easy_audit.default_event_resolver'))
             ->willReturn(new InvalidEventInfoResolver());
 
-        $this->container->expects($this->at(3))
-            ->method('getParameter')
-            ->with($this->equalTo('xiidea.easy_audit.entity_class'))
-            ->willReturn('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog');
-
-        $this->initiateContainerWithDebugMode(true, 4);
+        $this->initiateContainerWithDebugMode(true, 3);
 
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
         $this->assertNull($auditLog);
@@ -178,19 +168,14 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo('xiidea.easy_audit.default_event_resolver'))
             ->willReturn(new AuditObjectResolver());
 
-        $this->container->expects($this->at(3))
-            ->method('getParameter')
-            ->with($this->equalTo('xiidea.easy_audit.entity_class'))
-            ->willReturn('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog');
+        $this->mockClientIpResolverForBrowserRequest(3);
 
-        $this->mockClientIpResolver(4);
-
-        $this->container->expects($this->at(5))
+        $this->container->expects($this->at(4))
             ->method('getParameter')
             ->with($this->equalTo('xiidea.easy_audit.user_property'))
             ->willReturn('username');
 
-        $this->initiateContainerWithSecurityContext(6);
+        $this->initiateContainerWithSecurityContext(5);
 
         $this->securityContext->expects($this->once())
             ->method('getToken')
@@ -216,7 +201,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo('xiidea.easy_audit.entity_class'))
             ->willReturn('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog');
 
-        $this->mockClientIpResolver(1);
+        $this->mockClientIpResolverForBrowserRequest(1);
 
         $this->container->expects($this->at(2))
             ->method('getParameter')
@@ -258,47 +243,39 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo('xiidea.easy_audit.default_event_resolver'))
             ->willReturn(new NullResolver());
 
-        $this->container->expects($this->at(3))
-            ->method('getParameter')
-            ->with($this->equalTo('xiidea.easy_audit.entity_class'))
-            ->willReturn('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog');
-
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
         $this->assertNull($auditLog);
     }
 
     public function testEntityEventResolver()
     {
+        $i=0;
+
         $this->event = new EntityEvent();
 
-        $this->container->expects($this->at(0))
-            ->method('getParameter')
-            ->with($this->equalTo('xiidea.easy_audit.custom_resolvers'))
-            ->willReturn(array());
-
-        $this->container->expects($this->at(1))
+        $this->container->expects($this->at($i++))
             ->method('getParameter')
             ->with($this->equalTo('xiidea.easy_audit.entity_event_resolver'))
             ->willReturn('xiidea.easy_audit.default_entity_event_resolver');
 
-        $this->container->expects($this->at(2))
+        $this->container->expects($this->at($i++))
             ->method('get')
             ->with($this->equalTo('xiidea.easy_audit.default_entity_event_resolver'))
             ->willReturn(new DefaultEventResolver());
 
-        $this->container->expects($this->at(3))
+        $this->container->expects($this->at($i++))
             ->method('getParameter')
             ->with($this->equalTo('xiidea.easy_audit.entity_class'))
             ->willReturn('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog');
 
-        $this->mockClientIpResolver(4);
+        $this->mockClientIpResolverForBrowserRequest($i++);
 
-        $this->container->expects($this->at(5))
+        $this->container->expects($this->at($i++))
             ->method('getParameter')
             ->with($this->equalTo('xiidea.easy_audit.user_property'))
             ->willReturn('username');
 
-        $this->initiateContainerWithSecurityContext(6);
+        $this->initiateContainerWithSecurityContext($i);
 
         $this->securityContext->expects($this->once())
             ->method('getToken')
@@ -335,7 +312,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo('xiidea.easy_audit.entity_class'))
             ->willReturn('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog');
 
-        $this->mockClientIpResolver(3);
+        $this->mockClientIpResolverForBrowserRequest(3);
 
         $this->container->expects($this->at(4))
             ->method('getParameter')
@@ -375,12 +352,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo('xiidea.easy_audit.custom_event_resolver'))
             ->willReturn(new InvalidEventResolver());
 
-        $this->initiateContainerWithDebugMode(false, $i++);
-
-        $this->container->expects($this->at($i))
-            ->method('getParameter')
-            ->with($this->equalTo('xiidea.easy_audit.entity_class'))
-            ->willReturn('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog');
+        $this->initiateContainerWithDebugMode(false, $i);
 
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
         $this->assertNull($auditLog);
@@ -435,7 +407,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo('xiidea.easy_audit.entity_class'))
             ->willReturn('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog');
 
-        $this->mockClientIpResolver(4, true);
+        $this->mockClientIpResolverForConsoleCommand(4);
 
         $this->container->expects($this->at(5))
             ->method('getParameter')
@@ -448,7 +420,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->method('getToken')
             ->willReturn(null);
 
-        $this->mockClientIpResolver(8, true);
+        $this->mockClientIpResolverForConsoleCommand(8);
 
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 
@@ -487,7 +459,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo('xiidea.easy_audit.entity_class'))
             ->willReturn('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog');
 
-        $this->mockClientIpResolver(4);
+        $this->mockClientIpResolverForBrowserRequest(4);
 
         $this->container->expects($this->at(5))
             ->method('getParameter')
@@ -510,7 +482,6 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             'ip'=>'127.0.0.1'
         ));
     }
-
 
     public function testEventResolverWhenInvalidUserPropertyOptionIsGivenWithDebugOff() {
         $this->event = new Basic();
@@ -535,7 +506,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo('xiidea.easy_audit.entity_class'))
             ->willReturn('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog');
 
-        $this->mockClientIpResolver(4);
+        $this->mockClientIpResolverForBrowserRequest(4);
 
         $this->container->expects($this->at(5))
             ->method('getParameter')
@@ -586,7 +557,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo('xiidea.easy_audit.entity_class'))
             ->willReturn('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog');
 
-        $this->mockClientIpResolver(4);
+        $this->mockClientIpResolverForBrowserRequest(4);
 
         $this->container->expects($this->at(5))
             ->method('getParameter')
@@ -627,7 +598,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo('xiidea.easy_audit.entity_class'))
             ->willReturn('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog');
 
-        $this->mockClientIpResolverForAnonymousUser(4);
+        $this->mockClientIpResolverForBrowserRequest(4);
 
         $this->container->expects($this->at(5))
             ->method('getParameter')
@@ -640,7 +611,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->method('getToken')
             ->willReturn(new DummyToken(""));
 
-        $this->mockClientIpResolverForAnonymousUser(8);
+        $this->mockClientIpResolverForBrowserRequest(8);
 
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 
@@ -657,7 +628,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
     public function testGetUserNameForAnonymousUser()
     {
         $this->initiateContainerWithSecurityContext(0);
-        $this->mockClientIpResolverForAnonymousUser(2);
+        $this->mockClientIpResolverForBrowserRequest(2);
         $username = $this->resolverFactory->getUsername();
         $this->assertEquals('Anonymous', $username);
     }
@@ -697,17 +668,8 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->willReturn($this->securityContext);
     }
 
-    private function mockClientIpResolver($callIndex, $fromConsole = false)
+    private function mockClientIpResolverForBrowserRequest($callIndex)
     {
-        if ($fromConsole) {
-            $this->container->expects($this->at($callIndex))
-                ->method('get')
-                ->with($this->equalTo('request'))
-                ->willThrowException(new \Exception());
-
-            return;
-        }
-
         $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
 
         $request->expects($this->once())
@@ -721,18 +683,14 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->willReturn($request);
     }
 
-    private function mockClientIpResolverForAnonymousUser($callIndex)
+    private function mockClientIpResolverForConsoleCommand($callIndex)
     {
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
-
-        $request->expects($this->once())
-            ->method('getClientIp')
-            ->willReturn('127.0.0.1');
-
         $this->container->expects($this->at($callIndex))
             ->method('get')
             ->with($this->equalTo('request'))
-            ->willReturn($request);
+            ->willThrowException(new \Exception());
+
+        return;
     }
 
     /**
