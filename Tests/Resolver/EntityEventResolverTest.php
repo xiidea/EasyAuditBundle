@@ -17,6 +17,7 @@ use Xiidea\EasyAuditBundle\Events\DoctrineEntityEvent;
 use Xiidea\EasyAuditBundle\Resolver\EntityEventResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\DummyEntity;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\EntityWithoutGetMethod;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
 
@@ -122,6 +123,18 @@ class EntityEventResolverTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertNotNull($eventInfo);
         $this->assertEquals($this->getExpectedEventInfo('created', 'DummyEntity'), $eventInfo);
+    }
+
+    public function testPropertyNameAutoDetectedButInaccessible()
+    {
+        $this->createEventObjectForEntity(new EntityWithoutGetMethod());
+        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.entity.created');
+
+        $this->assertNotNull($eventInfo);
+        $template = "{INACCESSIBLE} property Please define a '%s' function in '%s' class";
+        $title = sprintf($template, 'getTitle', 'Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\EntityWithoutGetMethod');
+
+        $this->assertEquals($this->getExpectedEventInfo('created', 'EntityWithoutGetMethod', 'title', $title), $eventInfo);
     }
 
     protected function mockMethodCallTree()

@@ -122,6 +122,26 @@ class UserEventResolverTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    public function testUnknownUserEvent()
+    {
+        $this->assertIncompatibleEventObject('random.event');
+    }
+
+    public function testAuthenticationFailedCommandWithIncompatibleEventObject()
+    {
+        $this->assertIncompatibleEventObject('security.authentication.failure');
+    }
+
+    public function testImplicitLoginCommandWithIncompatibleEventObject()
+    {
+        $this->assertIncompatibleEventObject('fos_user.security.implicit_login');
+    }
+
+    public function testPasswordChangedCommandWithIncompatibleEventObject()
+    {
+        $this->assertIncompatibleEventObject('fos_user.change_password.edit.completed');
+    }
+
 
     protected function initiateContainerWithSecurityContext()
     {
@@ -139,6 +159,25 @@ class UserEventResolverTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with($this->equalTo('security.context'))
             ->willReturn($this->securityContext);
+    }
+
+    /**
+     * @param $randomEvent
+     */
+    public function assertIncompatibleEventObject($randomEvent)
+    {
+        $event = new Basic();
+        $auditLog = $this->eventResolver->getEventLogInfo($event, $randomEvent);
+
+        $this->assertNotNull($auditLog);
+
+        $this->assertEquals(
+            array(
+                'description' => $randomEvent,
+                'type' => $randomEvent
+            ),
+            $auditLog
+        );
     }
 
     /**

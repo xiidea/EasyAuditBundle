@@ -12,9 +12,9 @@
 namespace Xiidea\EasyAuditBundle\Resolver;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\EventDispatcher\Event;
 use Xiidea\EasyAuditBundle\Events\DoctrineEntityEvent;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
-use Symfony\Component\EventDispatcher\Event;
 
 /** Custom Event Resolver Example Class */
 class EntityEventResolver extends ContainerAware implements EventResolverInterface
@@ -35,9 +35,7 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
 
     /**
      * @param Event|DoctrineEntityEvent $event
-     *
      * @param $eventName
-     * @internal param $Event
      *
      * @return array
      */
@@ -91,10 +89,11 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
      */
     protected function getProperty($name)
     {
-        $propertyGetter = 'get' . $this->propertiesFound[$name];
+        $propertyGetter = 'get' . ucfirst($this->propertiesFound[$name]);
 
         if(!is_callable(array($this->entity, $propertyGetter))) {
-            return "";
+            $template = "{INACCESSIBLE} property Please define a '%s' function in '%s' class";
+            return sprintf($template, $propertyGetter, get_class($this->entity));
         }
 
         return $this->entity->$propertyGetter();

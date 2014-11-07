@@ -634,6 +634,23 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
+     * @expectedException \Xiidea\EasyAuditBundle\Exception\UnrecognizedEntityException
+     */
+    public function testCreateEventObjectFromArrayThrowsExceptionOnInvalidEntity()
+    {
+        $this->event = new WithEmbeddedResolver();
+
+        $this->container->expects($this->at(0))
+            ->method('getParameter')
+            ->with($this->equalTo('xiidea.easy_audit.entity_class'))
+            ->willReturn('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie');
+
+        $this->initiateContainerWithDebugMode(true, 1);
+
+        $this->resolverFactory->getEventLog($this->event, 'embedded');
+    }
+
+    /**
      * @param bool $on
      * @param int $callIndex
      * @return \PHPUnit_Framework_MockObject_MockObject
