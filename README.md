@@ -2,6 +2,7 @@ Easy Audit
 ==========
 [![Build Status](https://travis-ci.org/xiidea/easy-audit.png?branch=master)](https://travis-ci.org/xiidea/easy-audit)
 [![HHVM Status](http://hhvm.h4cc.de/badge/xiidea/easy-audit.svg)](http://hhvm.h4cc.de/package/xiidea/easy-audit)
+[![Coverage Status](https://coveralls.io/repos/xiidea/easy-audit/badge.png?branch=master)](https://coveralls.io/r/xiidea/easy-audit?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/xiidea/easy-audit/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/xiidea/easy-audit/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/xiidea/easy-audit/v/stable.png)](https://packagist.org/packages/xiidea/easy-audit)
 [![Total Downloads](https://poser.pugx.org/xiidea/easy-audit/downloads.png)](https://packagist.org/packages/xiidea/easy-audit)
