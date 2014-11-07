@@ -11,13 +11,13 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Resolver;
 
-
-use FOS\UserBundle\Event\FilterUserResponseEvent;
-use Symfony\Component\EventDispatcher\Event;
 use Xiidea\EasyAuditBundle\Resolver\UserEventResolver;
-use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
-use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\DummyToken;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\DummyAuthenticationFailureEvent;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\DummyFilterUserResponseEvent;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\DummyUserEvent;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
 
 class UserEventResolverTest extends \PHPUnit_Framework_TestCase
 {
@@ -66,11 +66,7 @@ class UserEventResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testPasswordChangedEvent()
     {
-        $event = $this->initializeMockEvent('FOS\UserBundle\Event\FilterUserResponseEvent');
-
-        $event->expects($this->once())
-            ->method('getUser')
-            ->willReturn(new UserEntity());
+        $event = new DummyFilterUserResponseEvent(new UserEntity());
 
         $auditLog = $this->eventResolver->getEventLogInfo($event, 'fos_user.change_password.edit.completed');
 
@@ -86,7 +82,7 @@ class UserEventResolverTest extends \PHPUnit_Framework_TestCase
     public function testLoginEvent()
     {
         $this->initiateContainerWithSecurityContext();
-        $event = $this->initializeMockEvent('FOS\UserBundle\Event\FilterUserResponseEvent');
+        $event = new DummyFilterUserResponseEvent(new UserEntity());
 
         $this->securityContext->expects($this->once())
             ->method('getToken')
@@ -101,11 +97,7 @@ class UserEventResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     public function testLoginUsingRememberMeService() {
-        $event = $this->initializeMockEvent('FOS\UserBundle\Event\UserEvent');
-
-        $event->expects($this->once())
-            ->method('getUser')
-            ->willReturn(new UserEntity());
+        $event = new DummyUserEvent(new UserEntity());
 
         $auditLog = $this->eventResolver->getEventLogInfo($event, 'fos_user.security.implicit_login');
 
@@ -117,11 +109,7 @@ class UserEventResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testAuthenticationFailureEvent()
     {
-        $event = $this->initializeMockEvent('Symfony\Component\Security\Core\Event\AuthenticationFailureEvent');
-
-        $event->expects($this->once())
-            ->method('getAuthenticationToken')
-            ->willReturn(new DummyToken());
+        $event = new DummyAuthenticationFailureEvent();
 
         $auditLog = $this->eventResolver->getEventLogInfo($event, 'security.authentication.failure');
 
