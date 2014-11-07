@@ -16,13 +16,10 @@ use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
 use Xiidea\EasyAuditBundle\Exception\InvalidServiceException;
 use Xiidea\EasyAuditBundle\Exception\UnrecognizedEntityException;
 use Xiidea\EasyAuditBundle\Exception\UnrecognizedEventInfoException;
-use Xiidea\EasyAuditBundle\Traits\ServiceContainerGetterMethods;
 use Symfony\Component\EventDispatcher\Event;
 
 class EventResolverFactory extends UserAwareComponent
 {
-    use ServiceContainerGetterMethods;
-
     /**
      * @param Event $event
      * @param string $eventName
@@ -131,13 +128,6 @@ class EventResolverFactory extends UserAwareComponent
         $entity->setUser($this->getSettablePropertyValue($userProperty, $user));
     }
 
-    /**
-     * @return boolean
-     */
-    protected function isDebug()
-    {
-        return $this->container->get('kernel')->isDebug();
-    }
 
     /**
      * @return string
@@ -165,7 +155,7 @@ class EventResolverFactory extends UserAwareComponent
      */
     protected function handleInvalidResolverConfiguration()
     {
-        if ($this->getKernel()->isDebug()) {
+        if ($this->isDebug()) {
             throw new InvalidServiceException(
                 'Resolver Service must implement' . __NAMESPACE__ . "EventResolverInterface"
             );
@@ -197,7 +187,7 @@ class EventResolverFactory extends UserAwareComponent
      */
     protected function handleException(\Exception $e)
     {
-        if ($this->getKernel()->isDebug()) {
+        if ($this->isDebug()) {
             throw $e;
         }
 

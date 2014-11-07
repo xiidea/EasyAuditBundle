@@ -25,7 +25,7 @@ trait ServiceContainerGetterMethods
      */
     public function getCommonResolver()
     {
-        return $this->getContainer()->get($this->getContainer()->getParameter('xiidea.easy_audit.resolver'));
+        return $this->getService($this->getParameter('resolver'));
     }
 
 
@@ -39,9 +39,8 @@ trait ServiceContainerGetterMethods
      */
     public function getEntityEventResolver()
     {
-        return $this->getContainer()->get($this->getContainer()->getParameter('xiidea.easy_audit.entity_event_resolver'));
+        return $this->getService($this->getParameter('entity_event_resolver'));
     }
-
 
     /**
      * @param string $parameter
@@ -57,7 +56,15 @@ trait ServiceContainerGetterMethods
      */
     public function getKernel()
     {
-        return $this->getContainer()->get('kernel');
+        return $this->getService('kernel');
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isDebug()
+    {
+        return $this->getKernel()->isDebug();
     }
 
     public function getDoctrineEventsList()

@@ -46,7 +46,7 @@ class LoggerFactory  extends ContainerAware
     {
         if ($logger instanceof LoggerInterface) {
             self::$loggers[$loggerName] = $logger;
-        } elseif($this->getKernel()->isDebug()) {
+        } elseif($this->isDebug()) {
             throw new InvalidServiceException('Logger Service must implement' . __NAMESPACE__ . "LoggerInterface");
         }
     }

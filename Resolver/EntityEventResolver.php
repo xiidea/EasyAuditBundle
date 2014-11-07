@@ -77,28 +77,12 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
 
     protected function getChangeSets($entity)
     {
-        if ($this->isUpdateEvent()) {
-            return $this->getUnitOfWork()->getEntityChangeSet($entity);
-        }
-
-        return null;
+        return $this->isUpdateEvent() ? $this->getUnitOfWork()->getEntityChangeSet($entity) : null;
     }
 
     protected function isUpdateEvent()
     {
         return $this->getEventShortName() == 'updated';
-    }
-
-    /**
-     * @return mixed
-     */
-    protected function getEntity()
-    {
-        if (!$this->entity) {
-            $this->entity = $this->event->getLifecycleEventArgs()->getEntity();
-        }
-
-        return $this->entity;
     }
 
     /**

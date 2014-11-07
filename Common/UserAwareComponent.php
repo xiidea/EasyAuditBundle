@@ -12,9 +12,12 @@
 namespace Xiidea\EasyAuditBundle\Common;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Xiidea\EasyAuditBundle\Traits\ServiceContainerGetterMethods;
 
 class UserAwareComponent extends ContainerAware
 {
+    use ServiceContainerGetterMethods;
+
     /**
      * @return \Symfony\Component\DependencyInjection\ContainerInterface
      */
@@ -66,7 +69,7 @@ class UserAwareComponent extends ContainerAware
     protected function getAnonymousUserName()
     {
         try {
-            $request = $this->container->get('request');
+            $request = $this->getService('request');
         } catch (\Exception $e) {
             $request = false;
         }
