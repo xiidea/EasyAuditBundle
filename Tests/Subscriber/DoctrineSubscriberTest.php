@@ -12,7 +12,7 @@
 namespace Xiidea\EasyAuditBundle\Tests\Subscriber;
 
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\DummyLifecycleEventArgs as LifecycleEventArgs;
 use Xiidea\EasyAuditBundle\Annotation\ORMSubscribedEvents;
 use Xiidea\EasyAuditBundle\Subscriber\DoctrineSubscriber;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie;
@@ -119,16 +119,6 @@ class DoctrineSubscriberTest extends \PHPUnit_Framework_TestCase
             ->willReturn($annotationReader);
     }
 
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getObjectManager()
-    {
-        return $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-    }
-
     private function initializeDispatcher()
     {
         $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
@@ -140,33 +130,33 @@ class DoctrineSubscriberTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $subscriber
+     * @param DoctrineSubscriber $subscriber
      */
     private function invokeCreatedEventCall($subscriber)
     {
         $subscriber->setContainer($this->container);
 
-        $subscriber->postPersist(new LifecycleEventArgs(new Movie(), $this->getObjectManager()));
+        $subscriber->postPersist(new LifecycleEventArgs(new Movie()));
     }
 
     /**
-     * @param $subscriber
+     * @param DoctrineSubscriber $subscriber
      */
     private function invokeUpdatedEventCall($subscriber)
     {
         $subscriber->setContainer($this->container);
 
-        $subscriber->postUpdate(new LifecycleEventArgs(new Movie(), $this->getObjectManager()));
+        $subscriber->postUpdate(new LifecycleEventArgs(new Movie()));
     }
 
     /**
-     * @param $subscriber
+     * @param DoctrineSubscriber $subscriber
      */
     private function invokeDeletedEventCall($subscriber)
     {
         $subscriber->setContainer($this->container);
 
-        $subscriber->preRemove(new LifecycleEventArgs(new Movie(), $this->getObjectManager()));
+        $subscriber->preRemove(new LifecycleEventArgs(new Movie()));
     }
 }
  
