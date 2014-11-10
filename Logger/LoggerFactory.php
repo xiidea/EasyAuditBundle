@@ -46,7 +46,7 @@ class LoggerFactory extends ContainerAware
 
     /**
      * @param string $loggerName
-     * @param $logger
+     * @param LoggerInterface $logger
      * @throws InvalidServiceException
      */
     public function addLogger($loggerName, $logger)
@@ -77,14 +77,34 @@ class LoggerFactory extends ContainerAware
             return true;
         }
 
-        if ($this->loggersChanel[$id]['type'] == 'inclusive') {
-            return in_array($level, $this->loggersChanel[$id]['elements']);
+        if ($this->isChanelTypeOf('inclusive', $id)) {
+            return $this->levelExistsInList($level, $id);
         }
 
-        if ($this->loggersChanel[$id]['type'] == 'exclusive') {
-            return !in_array($level, $this->loggersChanel[$id]['elements']);
+        if ($this->isChanelTypeOf('exclusive', $id)) {
+            return !$this->levelExistsInList($level, $id);
         }
 
         return false;
+    }
+
+    /**
+     * @param string $type
+     * @param string $id
+     * @return bool
+     */
+    private function isChanelTypeOf($type, $id)
+    {
+        return $this->loggersChanel[$id]['type'] == $type;
+    }
+
+    /**
+     * @param string $level
+     * @param string $id
+     * @return bool
+     */
+    private function levelExistsInList($level, $id)
+    {
+        return in_array($level, $this->loggersChanel[$id]['elements']);
     }
 }
