@@ -11,6 +11,8 @@
 
 namespace Xiidea\EasyAuditBundle\Entity;
 
+use Psr\Log\InvalidArgumentException;
+use Psr\Log\LogLevel;
 use Xiidea\EasyAuditBundle\Traits\EntityHydrationMethod;
 
 abstract class BaseAuditLog
@@ -43,6 +45,11 @@ abstract class BaseAuditLog
      * @var String
      */
     protected $ip;
+
+    /**
+     * @var String
+     */
+    protected $level = LogLevel::INFO;
 
     public function getUser()
     {
@@ -140,5 +147,35 @@ abstract class BaseAuditLog
         $this->ip = $ip;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    final public function getLevel()
+    {
+        return $this->level;
+    }
+
+    /**
+     * @param string $level
+     * @return $this
+     */
+    final public function setLevel($level)
+    {
+        if (!in_array(strtolower($level), $this->getAllowedLevel())) {
+            throw new InvalidArgumentException();
+        }
+
+        $this->level = $level;
+
+        return $this;
+    }
+
+    private function getAllowedLevel()
+    {
+        $oClass = new \ReflectionClass ('Psr\Log\LogLevel');
+
+        return $oClass->getConstants();
     }
 }

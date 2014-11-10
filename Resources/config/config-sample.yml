@@ -20,6 +20,9 @@ xiidea_easy_audit:
         - security.authentication.failure : user.event_resolver
        #- //More event
 
+    logger_chanel:
+        xiidea.easy_audit.logger.service: ["info", "debug"]
+        file.logger: ["!info", "!debug"]
 
 #Custom Event Resolver Service
 #services:

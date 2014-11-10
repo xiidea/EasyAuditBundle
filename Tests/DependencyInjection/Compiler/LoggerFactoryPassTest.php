@@ -51,6 +51,8 @@ class LoggerFactoryPassTest extends \PHPUnit_Framework_TestCase {
      */
     protected function getDefinitionMock()
     {
+        $i = 0;
+
         $definitionMock = $this->getMockBuilder('Symfony\Component\DependencyInjection\Definition')
             ->disableOriginalConstructor()
             ->getMock();
@@ -61,26 +63,26 @@ class LoggerFactoryPassTest extends \PHPUnit_Framework_TestCase {
         );
 
         $definitionMock
-            ->expects($this->at(0))
+            ->expects($this->at($i++))
             ->method('getMethodCalls')
             ->will($this->returnValue(array()));
         $definitionMock
-            ->expects($this->at(1))
+            ->expects($this->at($i++))
             ->method('setMethodCalls')
             ->with($this->equalTo(array()));
         $definitionMock
-            ->expects($this->at(2))
+            ->expects($this->at($i++))
             ->method('addMethodCall')
             ->with($this->equalTo('addLogger'), $this->equalTo($loggers[0][1]));
-        $definitionMock->expects($this->at(3))
+        $definitionMock->expects($this->at($i++))
             ->method('addMethodCall')
             ->with($this->equalTo('addLogger'), $this->equalTo($loggers[1][1]));
         $definitionMock
-            ->expects($this->at(4))
+            ->expects($this->at($i++))
             ->method('getMethodCalls')
             ->will($this->returnValue($loggers));
         $definitionMock
-            ->expects($this->at(5))
+            ->expects($this->at($i))
             ->method('setMethodCalls')
             ->with($this->equalTo($loggers));
         return $definitionMock;

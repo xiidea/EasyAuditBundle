@@ -64,6 +64,18 @@ class XiideaEasyAuditExtensionTest extends \PHPUnit_Framework_TestCase {
         $loader->load(array($config), new ContainerBuilder());
     }
 
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     */
+    public function testEasyAuditLoadThrowsExceptionForInvalidLoggerChanelDefinition()
+    {
+        $loader = new XiideaEasyAuditExtension();
+        $config = $this->getRequiredConfig();
+        $config['logger_chanel']  = array('foo.logger' => array("info", "!debug"));
+
+        $loader->load(array($config), new ContainerBuilder());
+    }
+
     public function testDoctrineEventSubscriberLoadedWithTrueParameter()
     {
         $loader = new XiideaEasyAuditExtension();
@@ -128,10 +140,23 @@ class XiideaEasyAuditExtensionTest extends \PHPUnit_Framework_TestCase {
 
         $loader->load(array($config), $this->container);
 
+        $chanel = array(
+            'xiidea.easy_audit.logger.service' => array(
+                'type' => 'inclusive',
+                'elements' => array('info', 'debug')
+            ),
+            'file.logger' => array(
+                'type' => 'exclusive',
+                'elements' => array('info', 'debug')
+            ),
+        );
+
         $this->assertNotFalse($this->container->getParameter('xiidea.easy_audit.doctrine_entities'));
         $this->assertNotFalse($this->container->getParameter('xiidea.easy_audit.events'));
         $this->assertCount(2, $this->container->getParameter('xiidea.easy_audit.doctrine_entities'));
         $this->assertCount(2, $this->container->getParameter('xiidea.easy_audit.events'));
+        $this->assertCount(2, $this->container->getParameter('xiidea.easy_audit.logger_chanel'));
+        $this->assertEquals($chanel, $this->container->getParameter('xiidea.easy_audit.logger_chanel'));
     }
 
     /**
@@ -173,6 +198,10 @@ doctrine_entities :                                                          #Op
 events :                                                                      #Optional
     - security.interactive_login
     - security.authentication.failure : user.event_resolver
+
+logger_chanel:
+    xiidea.easy_audit.logger.service: ["info", "debug"]
+    file.logger: ["!info", "!debug"]
 EOF;
         return $this->getArrayFromYaml($yaml);
     }

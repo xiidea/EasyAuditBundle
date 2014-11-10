@@ -89,6 +89,10 @@ xiidea_easy_audit:
     #       security.interactive_login : user.event_resolver
     #       security.authentication.failure : user.event_resolver
 
+    #logger_chanel:
+    #    xiidea.easy_audit.logger.service: ["info", "debug"]
+    #    file.logger: ["!info", "!debug"]
+
     #Custom Event Resolver Service
 services:
     #user.event_resolver:
@@ -123,3 +127,4 @@ Look the cookbook for another interesting things.
 - [Custom Resolver](https://github.com/xiidea/easy-audit/blob/master/Resources/doc/custom-resolver.md)
 - [Doctrine Entity Event](https://github.com/xiidea/easy-audit/blob/master/Resources/doc/doctrine-entity-events.md)
 - [Pre-Persist Listener](https://github.com/xiidea/easy-audit/blob/master/Resources/doc/pre-persist-listener.md)
+- [Logger Chanel](https://github.com/xiidea/easy-audit/blob/master/Resources/doc/logger-chanel.md)
