@@ -42,6 +42,8 @@
 
 <p>A Symfony2 Bundle To Log Selective Events. It is easy to configure and easy to customize for your need.</p>
 
+<p><strong>Note:</strong> If you are using <strong>Symfony</strong> version <strong>older then 2.4</strong> you need to use <a href="https://github.com/xiidea/easy-audit/tree/1.2.x">EasyAuditBundle 1.2.x</a></p>
+
 <h2>
 <a id="install" class="anchor" href="#install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install</h2>
 
@@ -118,6 +120,10 @@
     <span class="c1">#       security.interactive_login : user.event_resolver</span>
     <span class="c1">#       security.authentication.failure : user.event_resolver</span>
 
+    <span class="c1">#logger_chanel:</span>
+    <span class="c1">#    xiidea.easy_audit.logger.service: ["info", "debug"]</span>
+    <span class="c1">#    file.logger: ["!info", "!debug"]</span>
+
     <span class="c1">#Custom Event Resolver Service</span>
 <span class="sh"><span class="nt">services<span class="o">:</span></span><span class="sh"></span></span>
     <span class="c1">#user.event_resolver:</span>
@@ -157,6 +163,7 @@
 <li><a href="https://github.com/xiidea/easy-audit/blob/master/Resources/doc/custom-resolver.md">Custom Resolver</a></li>
 <li><a href="https://github.com/xiidea/easy-audit/blob/master/Resources/doc/doctrine-entity-events.md">Doctrine Entity Event</a></li>
 <li><a href="https://github.com/xiidea/easy-audit/blob/master/Resources/doc/pre-persist-listener.md">Pre-Persist Listener</a></li>
+<li><a href="https://github.com/xiidea/easy-audit/blob/master/Resources/doc/logger-chanel.md">Logger Chanel</a></li>
 </ul>
       </section>
     </div>
