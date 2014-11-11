@@ -12,6 +12,8 @@ Easy Audit
 
 A Symfony2 Bundle To Log Selective Events. It is easy to configure and easy to customize for your need.
 
+**Note:** If you are using **Symfony** version **older then 2.4** you need to use [EasyAuditBundle 1.2.x](https://github.com/xiidea/easy-audit/tree/1.2.x)
+
 Install
 -------
 1. Add EasyAuditBundle in your composer.json
