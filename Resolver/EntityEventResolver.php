@@ -30,8 +30,6 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
 
     protected $entity;
 
-    protected $eventName;
-
 
     /**
      * @param Event|DoctrineEntityEvent $event
