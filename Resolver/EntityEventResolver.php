@@ -163,7 +163,7 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
                 return $foundPropertyName;
             }
 
-            if (null == $propertyName && $this->isIdProperty($propertyNameLower, $entityIdStr)) {
+            if (null === $propertyName && $this->isIdProperty($propertyNameLower, $entityIdStr)) {
                 $this->propertiesFound['id'] = $propertyName = $property->name;
             }
         }
