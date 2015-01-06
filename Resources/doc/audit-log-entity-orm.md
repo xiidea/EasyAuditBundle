@@ -1,6 +1,6 @@
 Step 3:  Create audit_log entity Doctrine ORM mapping
 ======================================================
-The ORM implementation does not provide a concrete Comment class for your use,
+The ORM implementation does not provide a concrete AuditLog class for your use,
 you must create one. This can be done by extending the abstract entities
 provided by the bundle and creating the appropriate mappings.
 
