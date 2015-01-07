@@ -53,6 +53,10 @@ class DoctrineSubscriber extends ContainerAware implements EventSubscriber
         $this->handleEvent(DoctrineEvents::ENTITY_DELETED, $args);
     }
 
+    /**
+     * @param string $eventName
+     * @param LifecycleEventArgs $args
+     */
     private function handleEvent($eventName, LifecycleEventArgs $args)
     {
         if (!$this->isConfiguredToTrack($args->getEntity(), $eventName)) {
@@ -64,6 +68,11 @@ class DoctrineSubscriber extends ContainerAware implements EventSubscriber
         );
     }
 
+    /**
+     * @param $entity
+     * @param string $eventName
+     * @return bool|null
+     */
     private function isConfiguredToTrack($entity, $eventName = '')
     {
         $class = get_class($entity);
@@ -84,6 +93,11 @@ class DoctrineSubscriber extends ContainerAware implements EventSubscriber
         return $this->shouldTrackEventType($eventType, $class);
     }
 
+    /**
+     * @param $entity
+     * @param string $eventType
+     * @return bool|null
+     */
     protected function isAnnotatedEvent($entity, $eventType)
     {
         $metaData = $this->hasAnnotation($entity);
@@ -95,6 +109,10 @@ class DoctrineSubscriber extends ContainerAware implements EventSubscriber
         return empty($metaData->events) || in_array($eventType, $metaData->events);
     }
 
+    /**
+     * @param $entity
+     * @return null|object
+     */
     protected function hasAnnotation($entity)
     {
         $reflection = $this->getReflectionClassFromObject($entity);

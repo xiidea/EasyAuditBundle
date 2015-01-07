@@ -11,12 +11,12 @@
 
 namespace Xiidea\EasyAuditBundle\Resolver;
 
+use Symfony\Component\EventDispatcher\Event;
 use Xiidea\EasyAuditBundle\Common\UserAwareComponent;
 use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
 use Xiidea\EasyAuditBundle\Exception\InvalidServiceException;
 use Xiidea\EasyAuditBundle\Exception\UnrecognizedEntityException;
 use Xiidea\EasyAuditBundle\Exception\UnrecognizedEventInfoException;
-use Symfony\Component\EventDispatcher\Event;
 
 class EventResolverFactory extends UserAwareComponent
 {
@@ -166,7 +166,7 @@ class EventResolverFactory extends UserAwareComponent
 
     /**
      * @param $serviceName
-     * @return null|object
+     * @return null|EventResolverInterface
      * @throws InvalidServiceException
      */
     protected function getCustomResolver($serviceName)
@@ -196,7 +196,7 @@ class EventResolverFactory extends UserAwareComponent
 
     /**
      * @param $eventInfo
-     * @return $this|null
+     * @return null|BaseAuditLog
      * @throws \Exception
      */
     protected function createEventObjectFromArray($eventInfo)

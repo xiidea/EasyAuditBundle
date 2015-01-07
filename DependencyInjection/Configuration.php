@@ -126,7 +126,7 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * @return callable
+     * @return \Closure
      */
     private function getChanelTypeValidator()
     {
@@ -154,6 +154,10 @@ class Configuration implements ConfigurationInterface
         };
     }
 
+    /**
+     * @param boolean $invalid
+     * @throws InvalidConfigurationException
+     */
     public static function throwExceptionOnInvalid($invalid)
     {
         if(!$invalid) {
