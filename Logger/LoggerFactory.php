@@ -12,6 +12,7 @@
 namespace Xiidea\EasyAuditBundle\Logger;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
 use Xiidea\EasyAuditBundle\Exception\InvalidServiceException;
 use Xiidea\EasyAuditBundle\Traits\ServiceContainerGetterMethods;
 
@@ -19,6 +20,7 @@ class LoggerFactory extends ContainerAware
 {
     use ServiceContainerGetterMethods;
 
+    /** @var LoggerInterface[] */
     static private $loggers = array();
 
     private $loggersChanel;
@@ -38,7 +40,7 @@ class LoggerFactory extends ContainerAware
         }
 
         foreach (self::$loggers as $id => $logger) {
-            if ($logger instanceof LoggerInterface && $this->isChanelRegisterWithLogger($id, $eventInfo->getLevel())) {
+            if ($this->isValidLoggerForThisEvent($eventInfo, $logger, $id)) {
                 $logger->log($eventInfo);
             }
         }
@@ -106,5 +108,16 @@ class LoggerFactory extends ContainerAware
     private function levelExistsInList($level, $id)
     {
         return in_array($level, $this->loggersChanel[$id]['elements']);
+    }
+
+    /**
+     * @param BaseAuditLog $eventInfo
+     * @param $logger
+     * @param $id
+     * @return bool
+     */
+    protected function isValidLoggerForThisEvent(BaseAuditLog $eventInfo, $logger, $id)
+    {
+        return $logger instanceof LoggerInterface && $this->isChanelRegisterWithLogger($id, $eventInfo->getLevel());
     }
 }
