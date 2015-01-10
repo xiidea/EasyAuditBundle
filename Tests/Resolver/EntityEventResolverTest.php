@@ -131,8 +131,9 @@ class EntityEventResolverTest extends \PHPUnit_Framework_TestCase {
         $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.entity.created');
 
         $this->assertNotNull($eventInfo);
-        $template = "{INACCESSIBLE} property Please define a '%s' function in '%s' class";
-        $title = sprintf($template, 'getTitle', 'Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\EntityWithoutGetMethod');
+        $template = 'Neither the property "%1$s" nor one of the methods "get%2$s()", "%1$s()", "is%2$s()",' .
+            ' "has%2$s()", "__get()" exist and have public access in class "%3$s".';
+        $title = sprintf($template, 'title', 'Title', 'Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\EntityWithoutGetMethod');
 
         $this->assertEquals($this->getExpectedEventInfo('created', 'EntityWithoutGetMethod', 'title', $title), $eventInfo);
     }
