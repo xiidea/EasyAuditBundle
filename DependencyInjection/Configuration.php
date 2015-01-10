@@ -131,26 +131,14 @@ class Configuration implements ConfigurationInterface
     private function getChanelTypeValidator()
     {
         return function ($v) {
-            $isExclusive = isset($v['type']) ? 'exclusive' === $v['type'] : null;
-
+            $isExclusiveList = isset($v['type']) ? 'exclusive' === $v['type'] : null;
             $elements = array();
 
             foreach ($v['elements'] as $element) {
-                if (0 === strpos($element, '!')) {
-
-                    Configuration::throwExceptionOnInvalid(false === $isExclusive);
-
-                    $elements[] = substr($element, 1);
-                    $isExclusive = true;
-                } else {
-                    Configuration::throwExceptionOnInvalid(true === $isExclusive);
-
-                    $elements[] = $element;
-                    $isExclusive = false;
-                }
+                Configuration::appendChanelTypes($element, $isExclusiveList, $elements);
             }
 
-            return array('type' => $isExclusive ? 'exclusive' : 'inclusive', 'elements' => $elements);
+            return array('type' => $isExclusiveList ? 'exclusive' : 'inclusive', 'elements' => $elements);
         };
     }
 
@@ -167,5 +155,15 @@ class Configuration implements ConfigurationInterface
         throw new InvalidConfigurationException(
             'Cannot combine exclusive/inclusive definitions in channels list'
         );
+    }
+
+    public static function appendChanelTypes($element, &$isExclusiveList, &$elements = array())
+    {
+        $isExclusiveItem = 0 === strpos($element, '!');
+
+        Configuration::throwExceptionOnInvalid(!$isExclusiveItem === $isExclusiveList);
+
+        $elements[] = $isExclusiveItem ? substr($element, 1) : $element;
+        $isExclusiveList = $isExclusiveItem;
     }
 }
