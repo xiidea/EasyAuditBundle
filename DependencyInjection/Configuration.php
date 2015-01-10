@@ -161,7 +161,7 @@ class Configuration implements ConfigurationInterface
     {
         $isExclusiveItem = 0 === strpos($element, '!');
 
-        Configuration::throwExceptionOnInvalid(!$isExclusiveItem === $isExclusiveList);
+        self::throwExceptionOnInvalid(!$isExclusiveItem === $isExclusiveList);
 
         $elements[] = $isExclusiveItem ? substr($element, 1) : $element;
         $isExclusiveList = $isExclusiveItem;
