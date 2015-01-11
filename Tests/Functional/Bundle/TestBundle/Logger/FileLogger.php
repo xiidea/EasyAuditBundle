@@ -22,7 +22,7 @@ class FileLogger implements LoggerInterface
 
     public function __construct($dir)
     {
-        $this->dir = realpath($dir);
+        $this->dir = $dir;
     }
 
     public function log(AuditLog $event = null)

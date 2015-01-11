@@ -9,11 +9,22 @@ xiidea_easy_audit:
 
     events :                                                                      #Optional
         - simple.event
+        - simple.event2
+
+    logger_chanel:
+        xiidea.easy_audit.logger.service: ["!emergency"]
+        xiidea.easy_audit.logger.service2: ["emergency"]
 
 
 services:
     xiidea.easy_audit.logger.service:
           class: Xiidea\EasyAuditBundle\Tests\Functional\Bundle\TestBundle\Logger\FileLogger
           arguments: ["%kernel.cache_dir%"]
+          tags:
+             - { name: easy_audit.logger }
+
+    xiidea.easy_audit.logger.service2:
+          class: Xiidea\EasyAuditBundle\Tests\Functional\Bundle\TestBundle\Logger\FileLogger
+          arguments: ["%kernel.cache_dir%2"]
           tags:
              - { name: easy_audit.logger }

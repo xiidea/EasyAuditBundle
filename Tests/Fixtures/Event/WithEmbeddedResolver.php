@@ -11,7 +11,6 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Fixtures\Event;
 
-use Symfony\Component\EventDispatcher\Event;
 use Xiidea\EasyAuditBundle\Resolver\EmbeddedEventResolverInterface;
 
 class WithEmbeddedResolver extends Basic implements EmbeddedEventResolverInterface
@@ -21,6 +20,7 @@ class WithEmbeddedResolver extends Basic implements EmbeddedEventResolverInterfa
         return array(
             'description' => 'It is an embedded event',
             'type' => $eventName,
+            'level' => 'emergency'
         );
     }
 }

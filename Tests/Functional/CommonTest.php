@@ -13,6 +13,7 @@ namespace Xiidea\EasyAuditBundle\Tests\Functional;
 
 use Symfony\Component\DomCrawler\Crawler;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\WithEmbeddedResolver;
 use Xiidea\EasyAuditBundle\Tests\Functional\Bundle\TestBundle\Controller\DefaultController;
 
 class CommonTest extends BaseTestCase
@@ -56,6 +57,45 @@ class CommonTest extends BaseTestCase
         $this->assertEquals($name, $event['description']);
         $this->assertEquals('By Command', $event['user']);
         $this->assertEquals('', $event['ip']);
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testMultipleChanel()
+    {
+        $kernel = self::createKernel();
+        $kernel->boot();
+
+        $container = $kernel->getContainer();
+
+        $name = 'simple.event';
+
+        $container->get('event_dispatcher')->dispatch($name,
+            new Basic()
+        );
+
+        $container->get('event_dispatcher')->dispatch($name."2",
+            new WithEmbeddedResolver($name."2")
+        );
+
+        $logFile = realpath($container->getParameter('kernel.cache_dir') . DIRECTORY_SEPARATOR . "audit.log");
+        $logFile2 = realpath($container->getParameter('kernel.cache_dir') . "2" . DIRECTORY_SEPARATOR . "audit.log");
+
+        $event2 = unserialize(file_get_contents($logFile2));
+        $event = unserialize(file_get_contents($logFile));
+
+        $this->assertEquals($name, $event['typeId']);
+        $this->assertEquals($name, $event['type']);
+        $this->assertEquals($name, $event['description']);
+        $this->assertEquals('By Command', $event['user']);
+        $this->assertEquals('', $event['ip']);
+
+        $this->assertEquals($name."2", $event2['typeId']);
+        $this->assertEquals($name."2", $event2['type']);
+        $this->assertEquals("It is an embedded event", $event2['description']);
+        $this->assertEquals('By Command', $event2['user']);
+        $this->assertEquals('', $event2['ip']);
     }
 
     /**
