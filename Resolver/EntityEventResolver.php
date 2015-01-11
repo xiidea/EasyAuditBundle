@@ -96,7 +96,7 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
         try {
             return $propertyAccessor->getValue($this->entity, $this->propertiesFound[$name]);
         } catch (NoSuchPropertyException $e) {
-            return $e->getMessage();
+            return '{INACCESSIBLE} property! ' . $e->getMessage();
         }
     }
 
