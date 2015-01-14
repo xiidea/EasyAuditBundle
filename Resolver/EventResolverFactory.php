@@ -12,6 +12,8 @@
 namespace Xiidea\EasyAuditBundle\Resolver;
 
 use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Xiidea\EasyAuditBundle\Common\UserAwareComponent;
 use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
 use Xiidea\EasyAuditBundle\Exception\InvalidServiceException;
@@ -227,11 +229,10 @@ class EventResolverFactory extends UserAwareComponent
         }
 
         try {
-            return call_user_func(array($user, "get{$userProperty}"));
-        } catch (\Exception $e) {
-            return $this->handleException(
-                new \Exception(sprintf("get%s() not found in %s object", $userProperty, get_class($user)))
-            );
+            $propertyAccessor = PropertyAccess::createPropertyAccessor();
+            return $propertyAccessor->getValue($user, $userProperty);
+        } catch (NoSuchPropertyException $e) {
+            return $this->handleException($e);
         }
     }
 }
