@@ -68,6 +68,7 @@ You can find sample config data in `Resources/config/config-sample.yml` file
 # app/config/config.yml
 xiidea_easy_audit:
     #resolver: xiidea.easy_audit.default_event_resolver        #Optional
+    #logger: xiidea.easy_audit.logger.service                  #Optional
     entity_class : MyProject\MyBundle\Entity\AuditLog          #Required
 
     #user property to use as actor of an event
@@ -108,13 +109,39 @@ As all setup done, now you need to update your database schema. To do so,run the
 $ php app/console doctrine:schema:update --force
 ```
 
-### Warning - BC Breaking Changes ###
+Core Concepts
+-------------
 
-* Since v1.2.2 `pre_persist_listener` option has been removed. You can use [this cookbook](https://github.com/xiidea/easy-audit/blob/1.2.x/Resources/doc/pre-persist-listener.md) to achieve the same functionality
+#### Logger:
+
+`Logger` is the core service which are responsible for persist the event info. You can define as many logger as you like.
+EasyAudit Bundled with a logger service `xiidea.easy_audit.logger.service` which is the default logger service. You can easily
+override the service and define your own service as a default logger.
+
+#### Resolver:
+`Resolver` is like translator for an event. It used to translate an event to AuditLog entity. EasyAudit bundled with two(2)
+resolver services `xiidea.easy_audit.default_event_resolver`, `xiidea.easy_audit.default_entity_event_resolver`. And a
+custom EventResolver class `UserEventResolver` to illustrate how the transformation works. You can define as many resolver
+service as you want and use them to handle different event. Here is the place you can set the severity level for a event. Default
+level is `Psr\Log\LogLevel::INFO`. Custom severity levels are not available. EasyAudit supports the logging levels
+described by [PSR-3](http://www.php-fig.org/psr/psr-3). These values are present for basic filtering purposes. You can
+use this value as chanel to register different logger to handle different event. If you add any other field to your
+AuditLog object, this is the place to add those extra information (tags, metadata, etc..)
+
+#### Chanel
+It is now possible to register logger for specific chanel. chanel is refers to log level. you can configure EasyAudit logger
+services to handle only specific level of event.
+
+
+Warning - BC Breaking Changes
+-----------------------------
+
+* Since v1.2.2 `pre_persist_listener` option has been removed. You can use [this cookbook](https://github.com/xiidea/easy-audit/blob/master/Resources/doc/pre-persist-listener.md) to achieve the same functionality 
 * Since v1.2.2 `EventResolverInterface` been split into `EmbeddedEventResolverInterface` and `EventResolverInterface`
 
 
-### Cookbook
+Cookbook
+--------
 
 Look the cookbook for another interesting things.
 

@@ -139,10 +139,10 @@ class EntityEventResolverTest extends \PHPUnit_Framework_TestCase {
         $eventInfo = $this->eventResolver->getEventLogInfo($this->event);
 
         $this->assertNotNull($eventInfo);
-        $template = "{INACCESSIBLE} property Please define a '%s' function in '%s' class";
-        $title = sprintf($template, 'getTitle', 'Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\EntityWithoutGetMethod');
+        $expectedEventInfo = $this->getExpectedEventInfo('created', 'EntityWithoutGetMethod', 'title', "");
 
-        $this->assertEquals($this->getExpectedEventInfo('created', 'EntityWithoutGetMethod', 'title', $title), $eventInfo);
+        $this->assertEquals($expectedEventInfo['type'], $eventInfo['type']);
+        $this->assertTrue(strpos($eventInfo['description'],'{INACCESSIBLE} property') !== false);
     }
 
     protected function mockMethodCallTree()

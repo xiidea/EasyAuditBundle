@@ -13,6 +13,8 @@ namespace Xiidea\EasyAuditBundle\Resolver;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Xiidea\EasyAuditBundle\Events\DoctrineEntityEvent;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 
@@ -84,14 +86,13 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
      */
     protected function getProperty($name)
     {
-        $propertyGetter = 'get' . ucfirst($this->propertiesFound[$name]);
+        $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
-        if(!is_callable(array($this->entity, $propertyGetter))) {
-            $template = "{INACCESSIBLE} property Please define a '%s' function in '%s' class";
-            return sprintf($template, $propertyGetter, get_class($this->entity));
+        try {
+            return $propertyAccessor->getValue($this->entity, $this->propertiesFound[$name]);
+        } catch (NoSuchPropertyException $e) {
+            return '{INACCESSIBLE} property! ' . $e->getMessage();
         }
-
-        return $this->entity->$propertyGetter();
     }
 
 
@@ -144,27 +145,13 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
     protected function getBestCandidatePropertyForIdentify(\ReflectionClass $reflectionClass)
     {
         $properties = $reflectionClass->getProperties(
-            \ReflectionProperty::IS_PROTECTED | \ReflectionProperty::IS_PRIVATE
+            \ReflectionProperty::IS_PROTECTED | \ReflectionProperty::IS_PRIVATE | \ReflectionProperty::IS_PUBLIC
         );
 
-        $propertyName = null;
-
-        $entityIdStr = strtolower($reflectionClass->getShortName()) . "id";
-
-        foreach ($properties as $property) {
-            $propertyNameLower = strtolower($property->name);
-
-            if (null !== $foundPropertyName = $this->getPropertyNameInCandidateList($propertyNameLower, $property)) {
-                return $foundPropertyName;
+        return $this->getNameOrIdPropertyFromPropertyList($properties,
+            strtolower($reflectionClass->getShortName()) . "id"
+        );
             }
-
-            if (null === $propertyName && $this->isIdProperty($propertyNameLower, $entityIdStr)) {
-                $this->propertiesFound['id'] = $propertyName = $property->name;
-            }
-        }
-
-        return $propertyName;
-    }
 
     /**
      * @param string $propertyName
@@ -207,5 +194,29 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
     protected function getUnitOfWork()
     {
         return $this->container->get('doctrine')->getManager()->getUnitOfWork();
+    }
+
+    /**
+     * @param $properties
+     * @param $entityIdStr
+     * @return null|string
+     */
+    private function getNameOrIdPropertyFromPropertyList($properties, $entityIdStr)
+    {
+        $propertyName = null;
+
+        foreach ($properties as $property) {
+            $propertyNameLower = strtolower($property->name);
+
+            if (null !== $foundPropertyName = $this->getPropertyNameInCandidateList($propertyNameLower, $property)) {
+                return $foundPropertyName;
+            }
+
+            if (null === $propertyName && $this->isIdProperty($propertyNameLower, $entityIdStr)) {
+                $this->propertiesFound['id'] = $propertyName = $property->name;
+            }
+        }
+
+        return $propertyName;
     }
 }
