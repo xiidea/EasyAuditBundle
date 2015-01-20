@@ -13,7 +13,6 @@ namespace Xiidea\EasyAuditBundle\Resolver;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\EventDispatcher\Event;
-use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Xiidea\EasyAuditBundle\Events\DoctrineEntityEvent;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
@@ -90,7 +89,7 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
 
         try {
             return $propertyAccessor->getValue($this->entity, $this->propertiesFound[$name]);
-        } catch (NoSuchPropertyException $e) {
+        } catch (\Exception $e) {
             return '{INACCESSIBLE} property! ' . $e->getMessage();
         }
     }
