@@ -86,7 +86,7 @@ class EntityEventResolver extends ContainerAware implements EventResolverInterfa
      */
     protected function getProperty($name)
     {
-        $propertyAccessor = PropertyAccess::createPropertyAccessor();
+        $propertyAccessor = PropertyAccess::getPropertyAccessor();
 
         try {
             return $propertyAccessor->getValue($this->entity, $this->propertiesFound[$name]);

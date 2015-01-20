@@ -227,7 +227,7 @@ class EventResolverFactory extends UserAwareComponent
         }
 
         try {
-            $propertyAccessor = PropertyAccess::createPropertyAccessor();
+            $propertyAccessor = PropertyAccess::getPropertyAccessor();
             return $propertyAccessor->getValue($user, $userProperty);
         } catch (NoSuchPropertyException $e) {
             return $this->handleException($e);
