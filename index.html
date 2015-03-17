@@ -31,18 +31,18 @@
         <h1>
 <a id="easy-audit" class="anchor" href="#easy-audit" aria-hidden="true"><span class="octicon octicon-link"></span></a>Easy Audit</h1>
 
-<p><a href="https://travis-ci.org/xiidea/EasyAuditBundle"><img src="https://travis-ci.org/xiidea/EasyAuditBundle.png?branch=master" alt="Build Status"></a>
+<p><a href="https://travis-ci.org/xiidea/EasyAuditBundle"><img src="https://travis-ci.org/xiidea/EasyAuditBundle.svg?branch=master" alt="Build Status"></a>
 <a href="http://hhvm.h4cc.de/package/xiidea/easy-audit"><img src="http://hhvm.h4cc.de/badge/xiidea/easy-audit.svg" alt="HHVM Status"></a>
-<a href="https://coveralls.io/r/xiidea/easy-audit?branch=master"><img src="https://coveralls.io/repos/xiidea/easy-audit/badge.png?branch=master" alt="Coverage Status"></a>
-<a href="https://scrutinizer-ci.com/g/xiidea/easy-audit/?branch=master"><img src="https://scrutinizer-ci.com/g/xiidea/easy-audit/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality"></a>
+<a href="https://coveralls.io/r/xiidea/EasyAuditBundle?branch=master"><img src="https://coveralls.io/repos/xiidea/EasyAuditBundle/badge.svg?branch=master" alt="Coverage Status"></a>
+<a href="https://scrutinizer-ci.com/g/xiidea/EasyAuditBundle/?branch=master"><img src="https://scrutinizer-ci.com/g/xiidea/EasyAuditBundle/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality"></a>
 <a href="https://packagist.org/packages/xiidea/easy-audit"><img src="https://poser.pugx.org/xiidea/easy-audit/v/stable.png" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/xiidea/easy-audit"><img src="https://poser.pugx.org/xiidea/easy-audit/downloads.png" alt="Total Downloads"></a>
 <a href="https://insight.sensiolabs.com/projects/b8802bf0-af10-4343-a6c4-846d6b481978"><img src="https://insight.sensiolabs.com/projects/b8802bf0-af10-4343-a6c4-846d6b481978/mini.png" alt="SensioLabsInsight"></a>
-<a href="http://knpbundles.com/xiidea/easy-audit"><img src="http://knpbundles.com/xiidea/easy-audit/badge-short" alt="knpbundles.com"></a></p>
+<a href="http://knpbundles.com/xiidea/EasyAuditBundle"><img src="http://knpbundles.com/xiidea/EasyAuditBundle/badge-short" alt="knpbundles.com"></a></p>
 
 <p>A Symfony2 Bundle To Log Selective Events. It is easy to configure and easy to customize for your need.</p>
 
-<p><strong>Note:</strong> If you are using <strong>Symfony</strong> version <strong>older then 2.4</strong> you need to use <a href="https://github.com/xiidea/easy-audit/tree/1.2.x">EasyAuditBundle 1.2.x</a></p>
+<p><strong>Note:</strong> If you are using <strong>Symfony</strong> version <strong>older then 2.4</strong> you need to use <a href="https://github.com/xiidea/EasyAuditBundle/tree/1.2.x">EasyAuditBundle 1.2.x</a></p>
 
 <h2>
 <a id="install" class="anchor" href="#install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install</h2>
@@ -89,7 +89,7 @@
 <h3>
 <a id="3-create-audit_log-entity-class" class="anchor" href="#3-create-audit_log-entity-class" aria-hidden="true"><span class="octicon octicon-link"></span></a>3. Create audit_log entity class</h3>
 
-<p>The XiideaEasyAuditBundle supports Doctrine ORM by default. However, you must provide a concrete AuditLog class. Follow the <a href="https://github.com/xiidea/easy-audit/blob/master/Resources/doc/audit-log-entity-orm.md">instructions</a> to set up the class:</p>
+<p>The XiideaEasyAuditBundle supports Doctrine ORM by default. However, you must provide a concrete AuditLog class. Follow the <a href="https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/audit-log-entity-orm.md">instructions</a> to set up the class:</p>
 
 <h3>
 <a id="4-configure-configyml" class="anchor" href="#4-configure-configyml" aria-hidden="true"><span class="octicon octicon-link"></span></a>4. Configure config.yml</h3>
@@ -171,7 +171,7 @@ services to handle only specific level of event.</p>
 <a id="warning---bc-breaking-changes" class="anchor" href="#warning---bc-breaking-changes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Warning - BC Breaking Changes</h2>
 
 <ul>
-<li>Since v1.2.2 <code>pre_persist_listener</code> option has been removed. You can use <a href="https://github.com/xiidea/easy-audit/blob/master/Resources/doc/pre-persist-listener.md">this cookbook</a> to achieve the same functionality </li>
+<li>Since v1.2.2 <code>pre_persist_listener</code> option has been removed. You can use <a href="https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/pre-persist-listener.md">this cookbook</a> to achieve the same functionality</li>
 <li>Since v1.2.2 <code>EventResolverInterface</code> been split into <code>EmbeddedEventResolverInterface</code> and <code>EventResolverInterface</code>
 </li>
 <li>Since v1.3.x The new Event object has been adapted. And the signature of <code>EmbeddedEventResolverInterface</code> and 
@@ -185,14 +185,14 @@ services to handle only specific level of event.</p>
 <p>Look the cookbook for another interesting things.</p>
 
 <ul>
-<li><a href="https://github.com/xiidea/easy-audit/blob/master/Resources/doc/embed-resolver.md">Embed Resolver with event</a></li>
-<li><a href="https://github.com/xiidea/easy-audit/blob/master/Resources/doc/subscriber.md">Define events with subscriber</a></li>
-<li><a href="https://github.com/xiidea/easy-audit/blob/master/Resources/doc/override-resolver.md">Override Resolver</a></li>
-<li><a href="https://github.com/xiidea/easy-audit/blob/master/Resources/doc/custom-logger.md">Custom Logger</a></li>
-<li><a href="https://github.com/xiidea/easy-audit/blob/master/Resources/doc/custom-resolver.md">Custom Resolver</a></li>
-<li><a href="https://github.com/xiidea/easy-audit/blob/master/Resources/doc/doctrine-entity-events.md">Doctrine Entity Event</a></li>
-<li><a href="https://github.com/xiidea/easy-audit/blob/master/Resources/doc/pre-persist-listener.md">Pre-Persist Listener</a></li>
-<li><a href="https://github.com/xiidea/easy-audit/blob/master/Resources/doc/logger-chanel.md">Logger Chanel</a></li>
+<li><a href="https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/embed-resolver.md">Embed Resolver with event</a></li>
+<li><a href="https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/subscriber.md">Define events with subscriber</a></li>
+<li><a href="https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/override-resolver.md">Override Resolver</a></li>
+<li><a href="https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/custom-logger.md">Custom Logger</a></li>
+<li><a href="https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/custom-resolver.md">Custom Resolver</a></li>
+<li><a href="https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/doctrine-entity-events.md">Doctrine Entity Event</a></li>
+<li><a href="https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/pre-persist-listener.md">Pre-Persist Listener</a></li>
+<li><a href="https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/logger-chanel.md">Logger Chanel</a></li>
 </ul>
       </section>
     </div>
