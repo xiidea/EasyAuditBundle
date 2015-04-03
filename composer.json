@@ -13,8 +13,8 @@
         }
     ],
     "support": {
-        "issues": "http://xiidea.github.io/EasyAuditBundle/issues",
-        "source": "http://xiidea.github.io/EasyAuditBundle"
+        "issues": "https://github.com/xiidea/EasyAuditBundle/issues",
+        "source": "https://github.com/xiidea/EasyAuditBundle"
     },
     "require": {
         "php": ">=5.4.0",
