@@ -86,7 +86,7 @@ class Configuration implements ConfigurationInterface
     private function addChanelHandlers(ArrayNodeDefinition $rootNode)
     {
         $rootNode
-            ->fixXmlConfig('logger')
+            ->fixXmlConfig('loggerChanel')
             ->children()
                 ->arrayNode('logger_chanel')
                     ->canBeUnset()
