@@ -63,7 +63,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('entity_event_resolver')
                     ->defaultValue('xiidea.easy_audit.default_entity_event_resolver')
                 ->end()
-                ->scalarNode('logger')->defaultValue('xiidea.easy_audit.logger.service')->end()
+                ->booleanNode('default_logger')->defaultValue(true)->end()
             ->end();
     }
 

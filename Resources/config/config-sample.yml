@@ -4,6 +4,7 @@ xiidea_easy_audit:
     #resolver: xiidea.easy_audit.default_event_resolver                           #Optional
     #entity_class : MyProject\Bundle\MyBundle\Entity\AuditLog                     #Required
     #entity_event_resolver : xiidea.easy_audit.default_entity_event_resolver      #Optional
+    #default_logger : true                                                        #Optional
 
     #user property to use as actor of an event
     #valid value will be any valid property of your user class ~

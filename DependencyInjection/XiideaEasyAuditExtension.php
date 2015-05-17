@@ -56,6 +56,10 @@ class XiideaEasyAuditExtension extends Extension
             $loader->load('default/event-resolver.yml');
         }
 
+        if (true === $config['default_logger']) {
+            $loader->load('default/logger.yml');
+        }
+
         if ($config['entity_event_resolver'] == 'xiidea.easy_audit.default_entity_event_resolver') {
             $loader->load('default/entity-event-resolver.yml');
         }

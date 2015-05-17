@@ -67,10 +67,11 @@ You can find sample config data in `Resources/config/config-sample.yml` file
 ``` yaml
 # app/config/config.yml
 xiidea_easy_audit:
-    #resolver: xiidea.easy_audit.default_event_resolver        #Optional
-    #logger: xiidea.easy_audit.logger.service                  #Optional
-    entity_class : MyProject\MyBundle\Entity\AuditLog          #Required
-
+    #resolver: xiidea.easy_audit.default_event_resolver                           #Optional
+    #entity_class : MyProject\Bundle\MyBundle\Entity\AuditLog                     #Required
+    #entity_event_resolver : xiidea.easy_audit.default_entity_event_resolver      #Optional
+    #default_logger : true                                                        #Optional
+    
     #user property to use as actor of an event
     #valid value will be any valid property of your user class
     user_property : ~ # or username                            #Optional
@@ -116,7 +117,7 @@ Core Concepts
 
 `Logger` is the core service which are responsible for persist the event info. You can define as many logger as you like.
 EasyAudit Bundled with a logger service `xiidea.easy_audit.logger.service` which is the default logger service. You can easily
-override the service and define your own service as a default logger.
+disable the service by setting `default_logger: false` in configuration.
 
 #### Resolver:
 `Resolver` is like translator for an event. It used to translate an event to AuditLog entity. EasyAudit bundled with two(2)

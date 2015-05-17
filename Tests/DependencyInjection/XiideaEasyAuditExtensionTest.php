@@ -30,7 +30,6 @@ class XiideaEasyAuditExtensionTest extends \PHPUnit_Framework_TestCase {
         $loader = new XiideaEasyAuditExtension();
         $loader->load(array($this->getRequiredConfig()), $this->container);
 
-        $this->assertHasDefinition('xiidea.easy_audit.audit_log_repository');
         $this->assertHasDefinition('xiidea.easy_audit.logger.service');
         $this->assertHasDefinition('xiidea.easy_audit.logger_factory');
         $this->assertHasDefinition('xiidea.easy_audit.default_event_resolver');
@@ -94,6 +93,16 @@ class XiideaEasyAuditExtensionTest extends \PHPUnit_Framework_TestCase {
 
         $loader->load(array($config), $this->container);
         $this->assertNotHasDefinition('xiidea.easy_audit.doctrine_subscriber');
+    }
+
+    public function testDisableDefaultLogger()
+    {
+        $loader = new XiideaEasyAuditExtension();
+        $config = $this->getRequiredConfig();
+        $config['default_logger'] = false;
+
+        $loader->load(array($config), $this->container);
+        $this->assertNotHasDefinition('xiidea.easy_audit.logger.service');
     }
 
     public function testOverwriteResolver()
