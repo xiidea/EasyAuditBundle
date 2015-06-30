@@ -93,7 +93,7 @@ xiidea_easy_audit:
     #       security.interactive_login : user.event_resolver
     #       security.authentication.failure : user.event_resolver
 
-    #logger_chanel:
+    #logger_channel:
     #    xiidea.easy_audit.logger.service: ["info", "debug"]
     #    file.logger: ["!info", "!debug"]
 
@@ -128,11 +128,11 @@ custom EventResolver class `UserEventResolver` to illustrate how the transformat
 service as you want and use them to handle different event. Here is the place you can set the severity level for a event. Default
 level is `Psr\Log\LogLevel::INFO`. Custom severity levels are not available. EasyAudit supports the logging levels
 described by [PSR-3](http://www.php-fig.org/psr/psr-3). These values are present for basic filtering purposes. You can
-use this value as chanel to register different logger to handle different event. If you add any other field to your
+use this value as channel to register different logger to handle different event. If you add any other field to your
 AuditLog object, this is the place to add those extra information (tags, metadata, etc..)
 
-#### Chanel
-It is now possible to register logger for specific chanel. chanel is refers to log level. you can configure EasyAudit logger
+#### Channel
+It is now possible to register logger for specific channel. channel is refers to log level. you can configure EasyAudit logger
 services to handle only specific level of event.
 
 Warning - BC Breaking Changes
@@ -156,4 +156,4 @@ Look the cookbook for another interesting things.
 - [Custom Resolver](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/custom-resolver.md)
 - [Doctrine Entity Event](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/doctrine-entity-events.md)
 - [Pre-Persist Listener](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/pre-persist-listener.md)
-- [Logger Chanel](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/logger-chanel.md)
+- [Logger Channel](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/logger-channel.md)

@@ -23,11 +23,11 @@ class LoggerFactory extends ContainerAware
     /** @var LoggerInterface[] */
     static private $loggers = array();
 
-    private $loggersChanel;
+    private $loggersChannel;
 
-    public function __construct(array $chanel = array())
+    public function __construct(array $channel = array())
     {
-        $this->loggersChanel = $chanel;
+        $this->loggersChannel = $channel;
     }
 
     /**
@@ -73,17 +73,17 @@ class LoggerFactory extends ContainerAware
      * @param string $level
      * @return bool
      */
-    private function isChanelRegisterWithLogger($id, $level)
+    private function isChannelRegisterWithLogger($id, $level)
     {
-        if (!isset($this->loggersChanel[$id])) {
+        if (!isset($this->loggersChannel[$id])) {
             return true;
         }
 
-        if ($this->isChanelTypeOf('inclusive', $id)) {
+        if ($this->isChannelTypeOf('inclusive', $id)) {
             return $this->levelExistsInList($level, $id);
         }
 
-        if ($this->isChanelTypeOf('exclusive', $id)) {
+        if ($this->isChannelTypeOf('exclusive', $id)) {
             return !$this->levelExistsInList($level, $id);
         }
 
@@ -95,9 +95,9 @@ class LoggerFactory extends ContainerAware
      * @param string $id
      * @return bool
      */
-    private function isChanelTypeOf($type, $id)
+    private function isChannelTypeOf($type, $id)
     {
-        return $this->loggersChanel[$id]['type'] == $type;
+        return $this->loggersChannel[$id]['type'] == $type;
     }
 
     /**
@@ -107,7 +107,7 @@ class LoggerFactory extends ContainerAware
      */
     private function levelExistsInList($level, $id)
     {
-        return in_array($level, $this->loggersChanel[$id]['elements']);
+        return in_array($level, $this->loggersChannel[$id]['elements']);
     }
 
     /**
@@ -118,6 +118,6 @@ class LoggerFactory extends ContainerAware
      */
     protected function isValidLoggerForThisEvent(BaseAuditLog $eventInfo, $logger, $id)
     {
-        return $logger instanceof LoggerInterface && $this->isChanelRegisterWithLogger($id, $eventInfo->getLevel());
+        return $logger instanceof LoggerInterface && $this->isChannelRegisterWithLogger($id, $eventInfo->getLevel());
     }
 }

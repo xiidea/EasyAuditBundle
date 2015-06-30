@@ -35,7 +35,7 @@ class Configuration implements ConfigurationInterface
         $this->addRequiredConfigs($rootNode);
         $this->addDefaultServices($rootNode);
         $this->addOptionalConfigs($rootNode);
-        $this->addChanelHandlers($rootNode);
+        $this->addChannelHandlers($rootNode);
 
         return $treeBuilder;
     }
@@ -83,12 +83,12 @@ class Configuration implements ConfigurationInterface
     /**
      * @param ArrayNodeDefinition $rootNode
      */
-    private function addChanelHandlers(ArrayNodeDefinition $rootNode)
+    private function addChannelHandlers(ArrayNodeDefinition $rootNode)
     {
         $rootNode
-            ->fixXmlConfig('loggerChanel')
+            ->fixXmlConfig('loggerChannel')
             ->children()
-                ->arrayNode('logger_chanel')
+                ->arrayNode('logger_channel')
                     ->canBeUnset()
                     ->useAttributeAsKey('name')
                     ->prototype('array')
@@ -106,7 +106,7 @@ class Configuration implements ConfigurationInterface
                                 ->ifTrue(function($v) { return empty($v); })
                                 ->thenUnset()
                             ->end()
-                            ->validate()->always($this->getChanelTypeValidator())->end()
+                            ->validate()->always($this->getChannelTypeValidator())->end()
                             ->children()
                                 ->scalarNode('type')
                                     ->validate()
@@ -128,14 +128,14 @@ class Configuration implements ConfigurationInterface
     /**
      * @return \Closure
      */
-    private function getChanelTypeValidator()
+    private function getChannelTypeValidator()
     {
         return function ($v) {
             $isExclusiveList = isset($v['type']) ? 'exclusive' === $v['type'] : null;
             $elements = array();
 
             foreach ($v['elements'] as $element) {
-                Configuration::appendChanelTypes($element, $isExclusiveList, $elements);
+                Configuration::appendChannelTypes($element, $isExclusiveList, $elements);
             }
 
             return array('type' => $isExclusiveList ? 'exclusive' : 'inclusive', 'elements' => $elements);
@@ -157,7 +157,7 @@ class Configuration implements ConfigurationInterface
         );
     }
 
-    public static function appendChanelTypes($element, &$isExclusiveList, &$elements = array())
+    public static function appendChannelTypes($element, &$isExclusiveList, &$elements = array())
     {
         $isExclusiveItem = 0 === strpos($element, '!');
 

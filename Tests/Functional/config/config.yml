@@ -11,7 +11,7 @@ xiidea_easy_audit:
         - simple.event
         - simple.event2
 
-    logger_chanel:
+    logger_channel:
         xiidea.easy_audit.logger.service: ["!emergency"]
         xiidea.easy_audit.logger.service2: ["emergency"]
 

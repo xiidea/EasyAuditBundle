@@ -4,7 +4,7 @@ services:
   xiidea.easy_audit.logger_factory:
           class: Xiidea\EasyAuditBundle\Logger\LoggerFactory
           public: false
-          arguments : [ %xiidea.easy_audit.logger_chanel% ]
+          arguments : [ %xiidea.easy_audit.logger_channel% ]
           calls:
               - [ setContainer,[ @service_container ] ]
 

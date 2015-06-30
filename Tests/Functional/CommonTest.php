@@ -62,7 +62,7 @@ class CommonTest extends BaseTestCase
     /**
      * @runInSeparateProcess
      */
-    public function testMultipleChanel()
+    public function testMultipleChannel()
     {
         $kernel = self::createKernel();
         $kernel->boot();

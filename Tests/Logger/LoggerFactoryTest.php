@@ -27,7 +27,7 @@ class LoggerFactoryTest extends \PHPUnit_Framework_TestCase
     /** @var  LoggerFactory */
     private $loggerFactory;
 
-    private $chanel = array(
+    private $channel = array(
         'logger1' => array(
             'type' => 'inclusive',
             'elements' => array('info', 'debug'),
@@ -130,7 +130,7 @@ class LoggerFactoryTest extends \PHPUnit_Framework_TestCase
         $loggerFactory->executeLoggers(null);
     }
 
-    public function testOnlyExecuteLogForRegisteredChanel()
+    public function testOnlyExecuteLogForRegisteredChannel()
     {
         $logger1 = $this->getMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
         $logger2 = $this->getMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
@@ -144,7 +144,7 @@ class LoggerFactoryTest extends \PHPUnit_Framework_TestCase
         $logger2->expects($this->never())
             ->method('log');
 
-        $loggerFactory = new LoggerFactory($this->chanel);
+        $loggerFactory = new LoggerFactory($this->channel);
 
         $loggerFactory->addLogger("logger1", $logger1);
         $loggerFactory->addLogger("logger2", $logger2);
@@ -152,7 +152,7 @@ class LoggerFactoryTest extends \PHPUnit_Framework_TestCase
         $loggerFactory->executeLoggers($eventInfo);
     }
 
-    public function testExecuteLogIfChanelIsNotDefined()
+    public function testExecuteLogIfChannelIsNotDefined()
     {
         $logger1 = $this->getMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
         $logger2 = $this->getMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
@@ -175,7 +175,7 @@ class LoggerFactoryTest extends \PHPUnit_Framework_TestCase
         $loggerFactory->executeLoggers($eventInfo);
     }
 
-    public function testInvalidChanelType()
+    public function testInvalidChannelType()
     {
         $logger1 = $this->getMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
 
