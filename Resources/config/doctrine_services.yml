@@ -3,6 +3,6 @@ services:
   xiidea.easy_audit.doctrine_subscriber:
           class: Xiidea\EasyAuditBundle\Subscriber\DoctrineSubscriber
           calls:
-              - [ setContainer,[ @service_container ] ]
+              - [ setContainer,[ '@service_container' ] ]
           tags:
               - { name: doctrine.event_subscriber }
