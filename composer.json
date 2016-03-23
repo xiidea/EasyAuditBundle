@@ -22,12 +22,13 @@
         "symfony/symfony": "3.0.*"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.5.*",
+        "phpunit/phpunit": "^5.2",
         "mockery/mockery": ">=0.7.2",
         "doctrine/orm": "~2.2,>=2.2.3",
         "doctrine/doctrine-bundle": "~1.2",
         "friendsofsymfony/user-bundle": ">=1.3@dev",
-        "satooshi/php-coveralls": "~0.6"
+        "satooshi/php-coveralls": "~0.6",
+        "symfony/event-dispatcher": "^3.0"
     },
     "autoload": {
       "psr-4": {

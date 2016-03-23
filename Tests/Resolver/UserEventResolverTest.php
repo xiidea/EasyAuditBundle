@@ -50,7 +50,7 @@ class UserEventResolverTest extends \PHPUnit_Framework_TestCase
     {
         $this->container->expects($this->at(0))
             ->method('has')
-            ->with($this->equalTo('security.context'))
+            ->with($this->equalTo('security.token_storage'))
             ->willReturn(false);
 
         $auditLog = $this->eventResolver->getEventLogInfo(new Basic(), 'security.interactive_login');
@@ -152,12 +152,12 @@ class UserEventResolverTest extends \PHPUnit_Framework_TestCase
 
         $this->container->expects($this->at(0))
             ->method('has')
-            ->with($this->equalTo('security.context'))
+            ->with($this->equalTo('security.token_storage'))
             ->willReturn(true);
 
         $this->container->expects($this->at(1))
             ->method('get')
-            ->with($this->equalTo('security.context'))
+            ->with($this->equalTo('security.token_storage'))
             ->willReturn($this->securityContext);
     }
 

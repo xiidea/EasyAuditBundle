@@ -1,11 +1,11 @@
 easy_audit_public:
-    pattern:  /public/some-public-url/{event}
+    path:  /public/some-public-url/{event}
     defaults: { _controller: XiideaTestBundle:Default:index}
 
 easy_audit_multiple_logger:
-    pattern:  /public/multiple-logger-url/{event}
+    path:  /public/multiple-logger-url/{event}
     defaults: { _controller: XiideaTestBundle:Default:multipleEvent}
 
 easy_audit_secure:
-    pattern:  /some-secure-url/{event}
+    path:  /some-secure-url/{event}
     defaults: { _controller: XiideaTestBundle:Default:secure}
