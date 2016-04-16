@@ -6,14 +6,14 @@ services:
           public: false
           arguments : [ %xiidea.easy_audit.logger_channel% ]
           calls:
-              - [ setContainer,[ @service_container ] ]
+              - [ setContainer,[ '@service_container' ] ]
 
   xiidea.easy_audit.event_resolver_factory:
           class: Xiidea\EasyAuditBundle\Resolver\EventResolverFactory
           public: false
           calls:
-              - [ setContainer,[ @service_container ] ]
+              - [ setContainer,[ '@service_container' ] ]
 
   xiidea.easy_audit.event_listener:
           class: Xiidea\EasyAuditBundle\Listener\LogEventsListener
-          arguments: [@xiidea.easy_audit.logger_factory, @xiidea.easy_audit.event_resolver_factory]
+          arguments: ['@xiidea.easy_audit.logger_factory', '@xiidea.easy_audit.event_resolver_factory']
