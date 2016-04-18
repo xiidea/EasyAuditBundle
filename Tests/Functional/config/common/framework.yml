@@ -8,4 +8,4 @@ framework:
 
 services:
     logger: 
-        class: Symfony\Component\HttpKernel\Log\NullLogger
+        class: Psr\Log\NullLogger

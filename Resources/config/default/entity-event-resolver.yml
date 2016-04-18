@@ -3,4 +3,4 @@ services:
   xiidea.easy_audit.default_entity_event_resolver:
           class: Xiidea\EasyAuditBundle\Resolver\EntityEventResolver
           calls:
-              - [ setContainer,[ @service_container ] ]
+              - [ setContainer,[ '@service_container' ] ]

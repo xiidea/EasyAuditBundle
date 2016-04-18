@@ -1,5 +1,6 @@
 # IDE
 .nbproject
+.DS_Store
 
 vendor
 composer.lock

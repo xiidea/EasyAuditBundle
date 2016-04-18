@@ -11,12 +11,14 @@
 
 namespace Xiidea\EasyAuditBundle\Common;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Xiidea\EasyAuditBundle\Traits\ServiceContainerGetterMethods;
 
-class UserAwareComponent extends ContainerAware
+class UserAwareComponent implements ContainerAwareInterface
 {
     use ServiceContainerGetterMethods;
+    use ContainerAwareTrait;
 
     /**
      * @return \Symfony\Component\DependencyInjection\ContainerInterface
@@ -34,11 +36,11 @@ class UserAwareComponent extends ContainerAware
      */
     public function getUser()
     {
-        if (!$this->getContainer()->has('security.context')) {
+        if (!$this->getContainer()->has('security.token_storage')) {
             throw new \LogicException('The SecurityBundle is not registered in your application.');
         }
 
-        if (null === $token = $this->getContainer()->get('security.context')->getToken()) {
+        if (null === $token = $this->getContainer()->get('security.token_storage')->getToken()) {
             return null;
         }
 
