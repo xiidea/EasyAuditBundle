@@ -670,7 +670,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
     protected function initiateContainerWithSecurityContext($callIndex = 0)
     {
         $this->securityContext = $this
-            ->getMockBuilder('Symfony\Component\Security\Core\SecurityContext')
+            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -687,24 +687,29 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
 
     private function mockClientIpResolverForBrowserRequest($callIndex)
     {
+        $requestStack = $this->getMock('Symfony\Component\HttpFoundation\RequestStack');
         $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
 
         $request->expects($this->once())
             ->method('getClientIp')
             ->willReturn('127.0.0.1');
 
+        $requestStack->expects($this->once())
+            ->method('getCurrentRequest')
+            ->willReturn($request);
+
 
         $this->container->expects($this->at($callIndex))
             ->method('get')
-            ->with($this->equalTo('request'))
-            ->willReturn($request);
+            ->with($this->equalTo('request_stack'))
+            ->willReturn($requestStack);
     }
 
     private function mockClientIpResolverForConsoleCommand($callIndex)
     {
         $this->container->expects($this->at($callIndex))
             ->method('get')
-            ->with($this->equalTo('request'))
+            ->with($this->equalTo('request_stack'))
             ->willThrowException(new \Exception());
 
         return;

@@ -70,11 +70,7 @@ class UserAwareComponent implements ContainerAwareInterface
      */
     protected function getAnonymousUserName()
     {
-        try {
-            $request = $this->getService('request');
-        } catch (\Exception $e) {
-            $request = false;
-        }
+        $request = $this->getRequest();
 
         if ($request && $request->getClientIp()) {
             return "Anonymous";

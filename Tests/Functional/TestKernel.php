@@ -25,7 +25,7 @@ class TestKernel extends Kernel
 
     public function __construct($config, $debug)
     {
-        parent::__construct('test', $debug);
+        parent::__construct('config', $debug);
 
         $fs = new Filesystem();
         if (!$fs->isAbsolutePath($config)) {

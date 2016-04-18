@@ -146,7 +146,7 @@ class UserEventResolverTest extends \PHPUnit_Framework_TestCase
     protected function initiateContainerWithSecurityContext()
     {
         $this->securityContext = $this
-            ->getMockBuilder('Symfony\Component\Security\Core\SecurityContext')
+            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage')
             ->disableOriginalConstructor()
             ->getMock();
 

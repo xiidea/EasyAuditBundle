@@ -35,6 +35,18 @@ trait ServiceContainerGetterMethods
     }
 
     /**
+     * @return boolean|\Symfony\Component\HttpFoundation\Request
+     */
+    public function getRequest()
+    {
+        try {
+            return $this->getService('request_stack')->getCurrentRequest();
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    /**
      * @return \Xiidea\EasyAuditBundle\Resolver\EventResolverInterface
      */
     public function getEntityEventResolver()

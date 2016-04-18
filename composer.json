@@ -1,8 +1,8 @@
 {
     "name": "xiidea/easy-audit",
-    "type": "symfony3-bundle",
-    "description": "A Symfony3 Bundle To Log Selective Events. It is easy to configure and easy to customize for your need",
-    "keywords": ["Event Log", "Audit Log", "Symfony3", "Audit trail"],
+    "type": "symfony2-bundle",
+    "description": "A Symfony Bundle To Log Selective Events. It is easy to configure and easy to customize for your need",
+    "keywords": ["Event Log", "Audit Log", "Symfony2", "Symfony3", "Audit trail"],
     "license": "MIT",
     "homepage": "http://xiidea.github.io/EasyAuditBundle/",
     "authors": [
@@ -19,16 +19,15 @@
     "require": {
         "php": ">=5.5.9",
         "psr/log": ">=1",
-        "symfony/symfony": "3.0.*"
+        "symfony/symfony": "~2.6|~3.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.2",
+        "phpunit/phpunit": "4.8.*",
         "mockery/mockery": ">=0.7.2",
         "doctrine/orm": "~2.2,>=2.2.3",
         "doctrine/doctrine-bundle": "~1.2",
-        "friendsofsymfony/user-bundle": ">=1.3@dev",
-        "satooshi/php-coveralls": "~0.6",
-        "symfony/event-dispatcher": "^3.0"
+        "friendsofsymfony/user-bundle": ">=2.0@dev",
+        "satooshi/php-coveralls": "~0.6"
     },
     "autoload": {
       "psr-4": {
@@ -40,7 +39,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.3.x-dev"
+            "dev-master": "1.4.x-dev"
         }
     }
 }

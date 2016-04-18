@@ -136,11 +136,13 @@ class EventResolverFactory extends UserAwareComponent
      */
     protected function getClientIp()
     {
-        try {
-            return $this->container->get('request')->getClientIp();
-        } catch (\Exception $e) {
-            return "";
+        $request = $this->getRequest();
+        
+        if ($request) {
+            return $request->getClientIp();
         }
+
+        return "";
     }
 
     /**
