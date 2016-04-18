@@ -1,9 +1,9 @@
 Easy Audit
 ==========
-[![Build Status](https://travis-ci.org/xiidea/EasyAuditBundle.svg?branch=master)](https://travis-ci.org/xiidea/EasyAuditBundle)
+[![Build Status](https://travis-ci.org/xiidea/EasyAuditBundle.svg?branch=1.3.x)](https://travis-ci.org/xiidea/EasyAuditBundle)
 [![HHVM Status](http://hhvm.h4cc.de/badge/xiidea/easy-audit.svg)](http://hhvm.h4cc.de/package/xiidea/easy-audit)
-[![Coverage Status](https://coveralls.io/repos/xiidea/EasyAuditBundle/badge.svg?branch=master&service=github)](https://coveralls.io/github/xiidea/EasyAuditBundle?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/xiidea/EasyAuditBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/xiidea/EasyAuditBundle/?branch=master)
+[![Coverage Status](https://coveralls.io/repos/xiidea/EasyAuditBundle/badge.svg?branch=1.3.x&service=github)](https://coveralls.io/github/xiidea/EasyAuditBundle?branch=1.3.x)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/xiidea/EasyAuditBundle/badges/quality-score.png?b=1.3.x)](https://scrutinizer-ci.com/g/xiidea/EasyAuditBundle/?branch=1.3.x)
 [![Latest Stable Version](https://poser.pugx.org/xiidea/easy-audit/v/stable.png)](https://packagist.org/packages/xiidea/easy-audit)
 [![Total Downloads](https://poser.pugx.org/xiidea/easy-audit/downloads.png)](https://packagist.org/packages/xiidea/easy-audit)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/b8802bf0-af10-4343-a6c4-846d6b481978/mini.png)](https://insight.sensiolabs.com/projects/b8802bf0-af10-4343-a6c4-846d6b481978)
@@ -59,7 +59,7 @@ public function registerBundles()
 
 ### 3. Create audit_log entity class
 
-The XiideaEasyAuditBundle supports Doctrine ORM by default. However, you must provide a concrete AuditLog class. Follow the [instructions](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/audit-log-entity-orm.md) to set up the class:
+The XiideaEasyAuditBundle supports Doctrine ORM by default. However, you must provide a concrete AuditLog class. Follow the [instructions](https://github.com/xiidea/EasyAuditBundle/blob/1.3.x/Resources/doc/audit-log-entity-orm.md) to set up the class:
 
 
 ### 4. Configure config.yml
@@ -138,7 +138,7 @@ services to handle only specific level of event.
 Warning - BC Breaking Changes
 -----------------------------
 
-* Since v1.2.2 `pre_persist_listener` option has been removed. You can use [this cookbook](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/pre-persist-listener.md) to achieve the same functionality
+* Since v1.2.2 `pre_persist_listener` option has been removed. You can use [this cookbook](https://github.com/xiidea/EasyAuditBundle/blob/1.3.x/Resources/doc/pre-persist-listener.md) to achieve the same functionality
 * Since v1.2.2 `EventResolverInterface` been split into `EmbeddedEventResolverInterface` and `EventResolverInterface`
 * Since v1.3.x The new Event object has been adapted. And the signature of `EmbeddedEventResolverInterface` and 
   `EventResolverInterface` also changed. Now it expects extra $eventName parameter     
@@ -149,11 +149,11 @@ Cookbook
 
 Look the cookbook for another interesting things.
 
-- [Embed Resolver with event](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/embed-resolver.md)
-- [Define events with subscriber](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/subscriber.md)
-- [Override Resolver](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/override-resolver.md)
-- [Custom Logger](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/custom-logger.md)
-- [Custom Resolver](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/custom-resolver.md)
-- [Doctrine Entity Event](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/doctrine-entity-events.md)
-- [Pre-Persist Listener](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/pre-persist-listener.md)
-- [Logger Channel](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/logger-channel.md)
+- [Embed Resolver with event](https://github.com/xiidea/EasyAuditBundle/blob/1.3.x/Resources/doc/embed-resolver.md)
+- [Define events with subscriber](https://github.com/xiidea/EasyAuditBundle/blob/1.3.x/Resources/doc/subscriber.md)
+- [Override Resolver](https://github.com/xiidea/EasyAuditBundle/blob/1.3.x/Resources/doc/override-resolver.md)
+- [Custom Logger](https://github.com/xiidea/EasyAuditBundle/blob/1.3.x/Resources/doc/custom-logger.md)
+- [Custom Resolver](https://github.com/xiidea/EasyAuditBundle/blob/1.3.x/Resources/doc/custom-resolver.md)
+- [Doctrine Entity Event](https://github.com/xiidea/EasyAuditBundle/blob/1.3.x/Resources/doc/doctrine-entity-events.md)
+- [Pre-Persist Listener](https://github.com/xiidea/EasyAuditBundle/blob/1.3.x/Resources/doc/pre-persist-listener.md)
+- [Logger Channel](https://github.com/xiidea/EasyAuditBundle/blob/1.3.x/Resources/doc/logger-channel.md)
