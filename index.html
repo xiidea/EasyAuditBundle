@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
 
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
 
     <title>Easy Audit Bundle by xiidea</title>
@@ -29,11 +29,11 @@
     <div class="container">
       <section id="main_content">
         <h1>
-<a id="easy-audit" class="anchor" href="#easy-audit" aria-hidden="true"><span class="octicon octicon-link"></span></a>Easy Audit</h1>
+<a id="easy-audit" class="anchor" href="#easy-audit" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Easy Audit</h1>
 
 <p><a href="https://travis-ci.org/xiidea/EasyAuditBundle"><img src="https://travis-ci.org/xiidea/EasyAuditBundle.svg?branch=master" alt="Build Status"></a>
 <a href="http://hhvm.h4cc.de/package/xiidea/easy-audit"><img src="http://hhvm.h4cc.de/badge/xiidea/easy-audit.svg" alt="HHVM Status"></a>
-<a href="https://coveralls.io/r/xiidea/EasyAuditBundle?branch=master"><img src="https://coveralls.io/repos/xiidea/EasyAuditBundle/badge.svg?branch=master" alt="Coverage Status"></a>
+<a href="https://coveralls.io/github/xiidea/EasyAuditBundle?branch=master"><img src="https://coveralls.io/repos/xiidea/EasyAuditBundle/badge.svg?branch=master&amp;service=github" alt="Coverage Status"></a>
 <a href="https://scrutinizer-ci.com/g/xiidea/EasyAuditBundle/?branch=master"><img src="https://scrutinizer-ci.com/g/xiidea/EasyAuditBundle/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality"></a>
 <a href="https://packagist.org/packages/xiidea/easy-audit"><img src="https://poser.pugx.org/xiidea/easy-audit/v/stable.png" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/xiidea/easy-audit"><img src="https://poser.pugx.org/xiidea/easy-audit/downloads.png" alt="Total Downloads"></a>
@@ -42,10 +42,11 @@
 
 <p>A Symfony2 Bundle To Log Selective Events. It is easy to configure and easy to customize for your need.</p>
 
-<p><strong>Note:</strong> If you are using <strong>Symfony</strong> version <strong>older then 2.4</strong> you need to use <a href="https://github.com/xiidea/EasyAuditBundle/tree/1.2.x">EasyAuditBundle 1.2.x</a></p>
+<p><strong>Note:</strong> If you are using <strong>Symfony</strong> version <strong>older then 2.4</strong> you need to use <a href="https://github.com/xiidea/EasyAuditBundle/tree/1.2.x">EasyAuditBundle 1.2.x</a><br>
+<strong>Note:</strong> If you are using <strong>Symfony</strong> version <strong>older then 2.6</strong> you need to use <a href="https://github.com/xiidea/EasyAuditBundle/tree/1.3.x">EasyAuditBundle 1.3.x</a></p>
 
 <h2>
-<a id="install" class="anchor" href="#install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install</h2>
+<a id="install" class="anchor" href="#install" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Install</h2>
 
 <ol>
 <li>Add EasyAuditBundle in your composer.json</li>
@@ -56,55 +57,56 @@
 </ol>
 
 <h3>
-<a id="1-add-easyauditbundle-in-your-composerjson" class="anchor" href="#1-add-easyauditbundle-in-your-composerjson" aria-hidden="true"><span class="octicon octicon-link"></span></a>1. Add EasyAuditBundle in your composer.json</h3>
+<a id="1-add-easyauditbundle-in-your-composerjson" class="anchor" href="#1-add-easyauditbundle-in-your-composerjson" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1. Add EasyAuditBundle in your composer.json</h3>
 
 <p>Add EasyAuditBundle in your composer.json:</p>
 
-<div class="highlight highlight-js"><pre>{
-    <span class="pl-s1"><span class="pl-pds">"</span>require<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-        <span class="pl-s1"><span class="pl-pds">"</span>xiidea/easy-audit<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>1.3.*@dev<span class="pl-pds">"</span></span>
+<div class="highlight highlight-source-js"><pre>{
+    <span class="pl-s"><span class="pl-pds">"</span>require<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+        <span class="pl-s"><span class="pl-pds">"</span>xiidea/easy-audit<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>1.4.*@dev<span class="pl-pds">"</span></span>
     }
 }</pre></div>
 
 <p>Now tell composer to download the bundle by running the command:</p>
 
-<div class="highlight highlight-bash"><pre>$ php composer.phar update xiidea/easy-audit</pre></div>
+<div class="highlight highlight-source-shell"><pre>$ php composer.phar update xiidea/easy-audit</pre></div>
 
 <p>Composer will install the bundle to your project's <code>vendor/xiidea</code> directory.</p>
 
 <h3>
-<a id="2-enable-the-bundle" class="anchor" href="#2-enable-the-bundle" aria-hidden="true"><span class="octicon octicon-link"></span></a>2. Enable the Bundle</h3>
+<a id="2-enable-the-bundle" class="anchor" href="#2-enable-the-bundle" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2. Enable the Bundle</h3>
 
-<div class="highlight highlight-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s2"></span>
-<span class="pl-s2"><span class="pl-c">// app/AppKernel.php</span></span>
-<span class="pl-s2"></span>
-<span class="pl-s2"><span class="pl-s">public</span> <span class="pl-st">function</span> <span class="pl-en">registerBundles</span>()</span>
-<span class="pl-s2">{</span>
-<span class="pl-s2">    <span class="pl-vo">$bundles</span> <span class="pl-k">=</span> <span class="pl-s3">array</span>(</span>
-<span class="pl-s2">        <span class="pl-c">// ...</span></span>
-<span class="pl-s2">        <span class="pl-k">new</span> <span class="pl-s3">Xiidea\EasyAuditBundle\</span><span class="pl-s3">XiideaEasyAuditBundle</span>(),</span>
-<span class="pl-s2">    );</span>
-<span class="pl-s2">}</span></pre></div>
+<div class="highlight highlight-text-html-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c">// app/AppKernel.php</span></span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">registerBundles</span>()</span>
+<span class="pl-s1">{</span>
+<span class="pl-s1">    <span class="pl-smi">$bundles</span> <span class="pl-k">=</span> <span class="pl-c1">array</span>(</span>
+<span class="pl-s1">        <span class="pl-c">// ...</span></span>
+<span class="pl-s1">        <span class="pl-k">new</span> <span class="pl-c1">Xiidea\EasyAuditBundle\</span><span class="pl-c1">XiideaEasyAuditBundle</span>(),</span>
+<span class="pl-s1">    );</span>
+<span class="pl-s1">}</span></pre></div>
 
 <h3>
-<a id="3-create-audit_log-entity-class" class="anchor" href="#3-create-audit_log-entity-class" aria-hidden="true"><span class="octicon octicon-link"></span></a>3. Create audit_log entity class</h3>
+<a id="3-create-audit_log-entity-class" class="anchor" href="#3-create-audit_log-entity-class" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3. Create audit_log entity class</h3>
 
 <p>The XiideaEasyAuditBundle supports Doctrine ORM by default. However, you must provide a concrete AuditLog class. Follow the <a href="https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/audit-log-entity-orm.md">instructions</a> to set up the class:</p>
 
 <h3>
-<a id="4-configure-configyml" class="anchor" href="#4-configure-configyml" aria-hidden="true"><span class="octicon octicon-link"></span></a>4. Configure config.yml</h3>
+<a id="4-configure-configyml" class="anchor" href="#4-configure-configyml" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>4. Configure config.yml</h3>
 
 <p>You can find sample config data in <code>Resources/config/config-sample.yml</code> file</p>
 
-<div class="highlight highlight-yaml"><pre><span class="pl-c"># app/config/config.yml</span>
-<span class="pl-s1"><span class="pl-ent">xiidea_easy_audit:</span></span>
-    <span class="pl-c">#resolver: xiidea.easy_audit.default_event_resolver        #Optional</span>
-    <span class="pl-c">#logger: xiidea.easy_audit.logger.service                  #Optional</span>
-    <span class="pl-s1"><span class="pl-ent">entity_class :</span> <span class="pl-s1">MyProject\MyBundle\Entity\AuditLog          </span></span><span class="pl-c">#Required</span>
+<div class="highlight highlight-source-yaml"><pre><span class="pl-c"># app/config/config.yml</span>
+<span class="pl-s"><span class="pl-ent">xiidea_easy_audit:</span></span>
+    <span class="pl-c">#resolver: xiidea.easy_audit.default_event_resolver                           #Optional</span>
+    <span class="pl-c">#entity_class : MyProject\Bundle\MyBundle\Entity\AuditLog                     #Required</span>
+    <span class="pl-c">#entity_event_resolver : xiidea.easy_audit.default_entity_event_resolver      #Optional</span>
+    <span class="pl-c">#default_logger : true                                                        #Optional</span>
 
     <span class="pl-c">#user property to use as actor of an event</span>
     <span class="pl-c">#valid value will be any valid property of your user class</span>
-    <span class="pl-s1"><span class="pl-ent">user_property :</span> <span class="pl-s1">~ </span></span><span class="pl-c"># or username                            #Optional</span>
+    <span class="pl-s"><span class="pl-ent">user_property :</span> <span class="pl-s">~ </span></span><span class="pl-c"># or username                            #Optional</span>
 
     <span class="pl-c">#List of doctrine entity:event you wish to track or set to false to disable logs for doctrine events</span>
     <span class="pl-c"># valid events are = [created, updated, deleted]</span>
@@ -113,44 +115,44 @@
     <span class="pl-c">#     MyProject\Bundle\MyBundle\Entity\MyEntity2 : ~</span>
 
     <span class="pl-c">#List all events you want to track  (Optional from v1.2.1 you can now use subscriber to define it)</span>
-    <span class="pl-s1"><span class="pl-ent">events :</span>                                                   </span><span class="pl-c">#Optional</span>
-        <span class="pl-s1">- <span class="pl-s1">security.interactive_login</span></span>
+    <span class="pl-s"><span class="pl-ent">events :</span>                                                   </span><span class="pl-c">#Optional</span>
+        <span class="pl-s">- <span class="pl-s">security.interactive_login</span></span>
 
     <span class="pl-c">#List all custom resolver for event</span>
     <span class="pl-c">#custom_resolvers :</span>
     <span class="pl-c">#       security.interactive_login : user.event_resolver</span>
     <span class="pl-c">#       security.authentication.failure : user.event_resolver</span>
 
-    <span class="pl-c">#logger_chanel:</span>
+    <span class="pl-c">#logger_channel:</span>
     <span class="pl-c">#    xiidea.easy_audit.logger.service: ["info", "debug"]</span>
     <span class="pl-c">#    file.logger: ["!info", "!debug"]</span>
 
     <span class="pl-c">#Custom Event Resolver Service</span>
-<span class="pl-s1"><span class="pl-ent">services:</span></span>
+<span class="pl-s"><span class="pl-ent">services:</span></span>
     <span class="pl-c">#user.event_resolver:</span>
     <span class="pl-c">#     class: Xiidea\EasyAuditBundle\Resolver\UserEventResolver</span>
     <span class="pl-c">#     calls:</span>
     <span class="pl-c">#        - [ setContainer,[ @service_container ] ]</span></pre></div>
 
 <h3>
-<a id="5-update-database-schema" class="anchor" href="#5-update-database-schema" aria-hidden="true"><span class="octicon octicon-link"></span></a>5. Update Database Schema</h3>
+<a id="5-update-database-schema" class="anchor" href="#5-update-database-schema" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>5. Update Database Schema</h3>
 
 <p>As all setup done, now you need to update your database schema. To do so,run the following command from your project directory</p>
 
-<div class="highlight highlight-bash"><pre>$ php app/console doctrine:schema:update --force</pre></div>
+<div class="highlight highlight-source-shell"><pre>$ php app/console doctrine:schema:update --force</pre></div>
 
 <h2>
-<a id="core-concepts" class="anchor" href="#core-concepts" aria-hidden="true"><span class="octicon octicon-link"></span></a>Core Concepts</h2>
+<a id="core-concepts" class="anchor" href="#core-concepts" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Core Concepts</h2>
 
 <h4>
-<a id="logger" class="anchor" href="#logger" aria-hidden="true"><span class="octicon octicon-link"></span></a>Logger:</h4>
+<a id="logger" class="anchor" href="#logger" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Logger:</h4>
 
 <p><code>Logger</code> is the core service which are responsible for persist the event info. You can define as many logger as you like.
 EasyAudit Bundled with a logger service <code>xiidea.easy_audit.logger.service</code> which is the default logger service. You can easily
-override the service and define your own service as a default logger.</p>
+disable the service by setting <code>default_logger: false</code> in configuration.</p>
 
 <h4>
-<a id="resolver" class="anchor" href="#resolver" aria-hidden="true"><span class="octicon octicon-link"></span></a>Resolver:</h4>
+<a id="resolver" class="anchor" href="#resolver" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Resolver:</h4>
 
 <p><code>Resolver</code> is like translator for an event. It used to translate an event to AuditLog entity. EasyAudit bundled with two(2)
 resolver services <code>xiidea.easy_audit.default_event_resolver</code>, <code>xiidea.easy_audit.default_entity_event_resolver</code>. And a
@@ -158,17 +160,17 @@ custom EventResolver class <code>UserEventResolver</code> to illustrate how the 
 service as you want and use them to handle different event. Here is the place you can set the severity level for a event. Default
 level is <code>Psr\Log\LogLevel::INFO</code>. Custom severity levels are not available. EasyAudit supports the logging levels
 described by <a href="http://www.php-fig.org/psr/psr-3">PSR-3</a>. These values are present for basic filtering purposes. You can
-use this value as chanel to register different logger to handle different event. If you add any other field to your
+use this value as channel to register different logger to handle different event. If you add any other field to your
 AuditLog object, this is the place to add those extra information (tags, metadata, etc..)</p>
 
 <h4>
-<a id="chanel" class="anchor" href="#chanel" aria-hidden="true"><span class="octicon octicon-link"></span></a>Chanel</h4>
+<a id="channel" class="anchor" href="#channel" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Channel</h4>
 
-<p>It is now possible to register logger for specific chanel. chanel is refers to log level. you can configure EasyAudit logger
+<p>It is now possible to register logger for specific channel. channel is refers to log level. you can configure EasyAudit logger
 services to handle only specific level of event.</p>
 
 <h2>
-<a id="warning---bc-breaking-changes" class="anchor" href="#warning---bc-breaking-changes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Warning - BC Breaking Changes</h2>
+<a id="warning---bc-breaking-changes" class="anchor" href="#warning---bc-breaking-changes" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Warning - BC Breaking Changes</h2>
 
 <ul>
 <li>Since v1.2.2 <code>pre_persist_listener</code> option has been removed. You can use <a href="https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/pre-persist-listener.md">this cookbook</a> to achieve the same functionality</li>
@@ -180,7 +182,7 @@ services to handle only specific level of event.</p>
 </ul>
 
 <h2>
-<a id="cookbook" class="anchor" href="#cookbook" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cookbook</h2>
+<a id="cookbook" class="anchor" href="#cookbook" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Cookbook</h2>
 
 <p>Look the cookbook for another interesting things.</p>
 
@@ -192,7 +194,7 @@ services to handle only specific level of event.</p>
 <li><a href="https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/custom-resolver.md">Custom Resolver</a></li>
 <li><a href="https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/doctrine-entity-events.md">Doctrine Entity Event</a></li>
 <li><a href="https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/pre-persist-listener.md">Pre-Persist Listener</a></li>
-<li><a href="https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/logger-chanel.md">Logger Chanel</a></li>
+<li><a href="https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/logger-channel.md">Logger Channel</a></li>
 </ul>
       </section>
     </div>
