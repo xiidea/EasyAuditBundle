@@ -34,10 +34,10 @@ abstract class ResolverCommand
     /**
      * @return string
      */
-    public abstract function getType();
+    abstract public function getType();
 
     /**
      * @return string
      */
-    public abstract function getTemplate();
+    abstract public function getTemplate();
 }
