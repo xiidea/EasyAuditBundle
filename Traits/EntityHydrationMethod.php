@@ -11,7 +11,7 @@
 
 namespace Xiidea\EasyAuditBundle\Traits;
 
-trait  EntityHydrationMethod
+trait EntityHydrationMethod
 {
     public function fromArray($data = array())
     {

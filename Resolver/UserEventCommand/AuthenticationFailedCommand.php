@@ -18,19 +18,41 @@ class AuthenticationFailedCommand extends ResolverCommand
 {
     /**
      * @param AuthenticationFailureEvent $event
-     * @param array $default
-     * @return array
+     * @return null|array
      */
-    public function resolve($event, $default = array())
+    public function resolve($event)
     {
-        if( !($event instanceof AuthenticationFailureEvent)) {
-            return $default;
+        if ($event instanceof AuthenticationFailureEvent) {
+            return $this->getEventDetails($event);
         }
 
+        return null;
+    }
+
+    /**
+     * @param AuthenticationFailureEvent $event
+     * @return array
+     */
+    private function getEventDetails(AuthenticationFailureEvent $event)
+    {
         return $this->getEventDetailsArray(
-            "Authentication Failed",
-            'Bad credentials Username: %s',
             $event->getAuthenticationToken()->getUser()
         );
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return "Authentication Failed";
+    }
+
+    /**
+     * @return string
+     */
+    public function getTemplate()
+    {
+        return 'Bad credentials Username: %s';
     }
 }

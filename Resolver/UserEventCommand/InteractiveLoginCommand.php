@@ -13,7 +13,7 @@ namespace Xiidea\EasyAuditBundle\Resolver\UserEventCommand;
 
 use Xiidea\EasyAuditBundle\Common\UserAwareComponent;
 
-class InteractiveLoginCommand extends ResolverCommand
+class InteractiveLoginCommand extends UserLoginCommand
 {
     /**
      * @var UserAwareComponent
@@ -27,15 +27,10 @@ class InteractiveLoginCommand extends ResolverCommand
 
     /**
      * @param $event
-     * @param array $default
      * @return mixed
      */
-    public function resolve($event, $default = array())
+    public function resolve($event)
     {
-        return $this->getEventDetailsArray(
-            "User Logged in",
-            "User '%s' Logged in Successfully",
-            $this->userAwareComponent->getUsername()
-        );
+        return $this->getEventDetailsArray($this->userAwareComponent->getUsername());
     }
 }

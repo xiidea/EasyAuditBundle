@@ -63,6 +63,8 @@ class UserEventResolver extends UserAwareComponent implements EventResolverInter
      */
     protected function getEventLogDetails(Event $event, ResolverCommand $command)
     {
-        return $command->resolve($event, $this->default);
+        $details = $command->resolve($event);
+
+        return empty($details) ? $this->default : $details;
     }
 }

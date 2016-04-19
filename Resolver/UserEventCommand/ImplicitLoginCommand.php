@@ -13,23 +13,23 @@ namespace Xiidea\EasyAuditBundle\Resolver\UserEventCommand;
 
 use FOS\UserBundle\Event\UserEvent;
 
-class ImplicitLoginCommand extends ResolverCommand
+class ImplicitLoginCommand extends UserLoginCommand
 {
     /**
      * @param UserEvent $event
-     * @param array $default
      * @return mixed
      */
-    public function resolve($event, $default = array())
+    public function resolve($event)
     {
-        if( !($event instanceof UserEvent)) {
-            return $default;
+        if ($event instanceof UserEvent) {
+            return $this->getEventDetailsArray($event->getUser()->getUsername());
         }
 
-        return $this->getEventDetailsArray(
-            "User Logged in",
-            "User '%s' Logged in Successfully using remember me service",
-            $event->getUser()->getUsername()
-        );
+        return null;
+    }
+
+    public function getTemplate()
+    {
+        return parent::getTemplate()." using remember me service";
     }
 }

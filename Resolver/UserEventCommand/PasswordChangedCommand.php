@@ -19,19 +19,31 @@ class PasswordChangedCommand extends ResolverCommand
 
     /**
      * @param FilterUserResponseEvent $event
-     * @param array $default
      * @return array
      */
-    public function resolve($event, $default = array())
+    public function resolve($event)
     {
-        if( !($event instanceof FilterUserResponseEvent)) {
-            return $default;
+        if ($event instanceof FilterUserResponseEvent) {
+            return $this->getEventDetailsArray($event->getUser()->getUsername());
         }
 
-        return $this->getEventDetailsArray(
-            "Password Changed",
-            "Password of user '%s' Changed Successfully",
-            $event->getUser()->getUsername()
-        );
+        return null;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return "Password Changed";
+    }
+
+    /**
+     * @return string
+     */
+    public function getTemplate()
+    {
+        return "Password of user '%s' Changed Successfully";
     }
 }

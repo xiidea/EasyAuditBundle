@@ -14,23 +14,30 @@ namespace Xiidea\EasyAuditBundle\Resolver\UserEventCommand;
 abstract class ResolverCommand
 {
     /**
-     * @param string $type
-     * @param string $template
      * @param string $username
      * @return array
      */
-    protected function getEventDetailsArray($type, $template, $username)
+    protected function getEventDetailsArray($username)
     {
         return array(
-            'type' => $type,
-            'description' => sprintf($template, $username)
+            'type' => $this->getType(),
+            'description' => sprintf($this->getTemplate(), $username)
         );
     }
 
     /**
      * @param \Symfony\Component\EventDispatcher\Event $event
-     * @param array $default
      * @return mixed
      */
-    abstract public function resolve($event, $default = array());
+    abstract public function resolve($event);
+
+    /**
+     * @return string
+     */
+    public abstract function getType();
+
+    /**
+     * @return string
+     */
+    public abstract function getTemplate();
 }

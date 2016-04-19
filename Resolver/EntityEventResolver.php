@@ -123,7 +123,7 @@ class EntityEventResolver implements ContainerAwareInterface, EventResolverInter
 
         $descriptionTemplate = '%s has been %s';
 
-        if ($property) {
+        if (!empty($property)) {
             $descriptionTemplate .= sprintf(' with %s = "%s"', $property, $this->getProperty($property));
         }
 
@@ -213,7 +213,7 @@ class EntityEventResolver implements ContainerAwareInterface, EventResolverInter
     }
 
     /**
-     * @param $properties
+     * @param \ReflectionProperty [] $properties
      * @param $entityIdStr
      * @return null|string
      */
