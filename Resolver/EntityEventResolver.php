@@ -152,39 +152,30 @@ class EntityEventResolver implements ContainerAwareInterface, EventResolverInter
      */
     protected function getBestCandidatePropertyForIdentify(\ReflectionClass $reflectionClass)
     {
-        $properties = $reflectionClass->getProperties(
-            \ReflectionProperty::IS_PROTECTED | \ReflectionProperty::IS_PRIVATE | \ReflectionProperty::IS_PUBLIC
-        );
+        $foundPropertyName = $this->getPropertyNameInCandidateList($reflectionClass);
 
-        return $this->getNameOrIdPropertyFromPropertyList($properties,
+        if ("" !== $foundPropertyName) {
+            return $foundPropertyName;
+        }
+
+        return $this->getNameOrIdPropertyFromPropertyList($reflectionClass,
             strtolower($reflectionClass->getShortName()) . "id"
         );
     }
 
     /**
-     * @param string $propertyName
-     * @param \ReflectionProperty $property
-     * @return null | string
+     * @param \ReflectionClass $reflectionClass
+     * @return string
      */
-    protected function getPropertyNameInCandidateList($propertyName, \ReflectionProperty $property)
+    protected function getPropertyNameInCandidateList(\ReflectionClass $reflectionClass)
     {
-        foreach ($this->candidateProperties as $candidate) {
-            if ($propertyName == $candidate) {
-                return $this->propertiesFound[$candidate] = $property->name;
+        foreach ($this->candidateProperties as $property) {
+            if($reflectionClass->hasProperty($property)) {
+                return $this->propertiesFound[$property] = $property;
             }
         }
 
-        return null;
-    }
-
-    /**
-     * @param string $property
-     * @param string $entityIdStr
-     * @return bool
-     */
-    protected function isIdProperty($property, $entityIdStr)
-    {
-        return $property == 'id' || $property == $entityIdStr;
+        return "";
     }
 
     /**
@@ -213,26 +204,18 @@ class EntityEventResolver implements ContainerAwareInterface, EventResolverInter
     }
 
     /**
-     * @param \ReflectionProperty [] $properties
+     * @param \ReflectionClass $reflectionClass
      * @param $entityIdStr
      * @return null|string
      */
-    private function getNameOrIdPropertyFromPropertyList($properties, $entityIdStr)
+    private function getNameOrIdPropertyFromPropertyList(\ReflectionClass $reflectionClass, $entityIdStr)
     {
-        $propertyName = null;
-
-        foreach ($properties as $property) {
-            $propertyNameLower = strtolower($property->name);
-
-            if (null !== $foundPropertyName = $this->getPropertyNameInCandidateList($propertyNameLower, $property)) {
-                return $foundPropertyName;
-            }
-
-            if (null === $propertyName && $this->isIdProperty($propertyNameLower, $entityIdStr)) {
-                $this->propertiesFound['id'] = $propertyName = $property->name;
+        foreach (array('id', $entityIdStr) as $field) {
+            if($reflectionClass->hasProperty($field)) {
+                return $this->propertiesFound['id'] = $field;
             }
         }
 
-        return $propertyName;
+        return "";
     }
 }

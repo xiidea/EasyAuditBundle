@@ -61,19 +61,17 @@ class DoctrineSubscriber implements ContainerAwareInterface, EventSubscriber
      */
     private function handleEvent($eventName, LifecycleEventArgs $args)
     {
-        if (!$this->isConfiguredToTrack($args->getEntity(), $eventName)) {
-            return;
+        if (true === $this->isConfiguredToTrack($args->getEntity(), $eventName)) {
+            $this->container->get('event_dispatcher')->dispatch($eventName,
+                new DoctrineEntityEvent($args)
+            );
         }
-
-        $this->container->get('event_dispatcher')->dispatch($eventName,
-            new DoctrineEntityEvent($args)
-        );
     }
 
     /**
      * @param $entity
      * @param string $eventName
-     * @return bool|null
+     * @return bool
      */
     private function isConfiguredToTrack($entity, $eventName = '')
     {

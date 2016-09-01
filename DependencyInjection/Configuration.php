@@ -93,36 +93,20 @@ class Configuration implements ConfigurationInterface
                     ->useAttributeAsKey('name')
                     ->prototype('array')
                     ->fixXmlConfig('channel', 'elements')
-                            ->canBeUnset()
-                            ->beforeNormalization()
-                                ->ifString()
-                                ->then(function($v) { return array('elements' => array($v)); })
-                            ->end()
-                            ->beforeNormalization()
-                                ->ifTrue(function($v) { return is_array($v) && is_numeric(key($v)); })
-                                ->then(function($v) { return array('elements' => $v); })
-                            ->end()
-                            ->validate()
-                                ->ifTrue(function($v) { return empty($v); })
-                                ->thenUnset()
-                            ->end()
-                            ->validate()->always($this->getChannelTypeValidator())->end()
-                            ->children()
-                                ->scalarNode('type')
-                                    ->validate()
-                                        ->ifNotInArray(array('inclusive', 'exclusive'))
-                                        ->thenInvalid('The type of channels has to be inclusive or exclusive')
-                                    ->end()
-                                ->end()
-                                ->arrayNode('elements')
-                                    ->prototype('scalar')->end()
-                                ->end()
-                            ->end()
+                        ->canBeUnset()
+                        ->beforeNormalization()->ifString()->then($this->changeToArrayFromString())->end()
+                        ->beforeNormalization()->ifTrue($this->isIndexedArray())->then($this->changeToAssoc())->end()
+                        ->validate()->ifTrue($this->isEmpty())->thenUnset()->end()
+                        ->validate()->always($this->getChannelTypeValidator())->end()
+                        ->children()
+                            ->scalarNode('type')->validate()
+                                ->ifNotInArray(array('inclusive', 'exclusive'))
+                                ->thenInvalid('The type of channels has to be inclusive or exclusive')->end()->end()
+                            ->arrayNode('elements')->prototype('scalar')->end()->end()->end()
                         ->end()
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
     }
 
     /**
@@ -165,5 +149,45 @@ class Configuration implements ConfigurationInterface
 
         $elements[] = $isExclusiveItem ? substr($element, 1) : $element;
         $isExclusiveList = $isExclusiveItem;
+    }
+
+    /**
+     * @return \Closure
+     */
+    private function isIndexedArray()
+    {
+        return function ($v) {
+            return is_array($v) && is_numeric(key($v));
+        };
+    }
+
+    /**
+     * @return \Closure
+     */
+    private function changeToAssoc()
+    {
+        return function ($v) {
+            return array('elements' => $v);
+        };
+    }
+
+    /**
+     * @return \Closure
+     */
+    private function changeToArrayFromString()
+    {
+        return function ($v) {
+            return array('elements' => array($v));
+        };
+    }
+
+    /**
+     * @return \Closure
+     */
+    private function isEmpty()
+    {
+        return function ($v) {
+            return empty($v);
+        };
     }
 }
