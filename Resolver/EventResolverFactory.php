@@ -128,6 +128,8 @@ class EventResolverFactory extends UserAwareComponent
         }
 
         $entity->setUser($this->getSettablePropertyValue($userProperty, $user));
+
+        $this->setImpersonatingUser($entity, $userProperty);
     }
 
 
@@ -235,6 +237,17 @@ class EventResolverFactory extends UserAwareComponent
             return $propertyAccessor->getValue($user, $userProperty);
         } catch (NoSuchPropertyException $e) {
             return $this->handleException($e);
+        }
+    }
+
+    /**
+     * @param BaseAuditLog $entity
+     * @param $userProperty
+     */
+    protected function setImpersonatingUser(BaseAuditLog $entity, $userProperty)
+    {
+        if (null !== $user = $this->getImpersonatingUser()) {
+            $entity->setImpersonatingUser($this->getSettablePropertyValue($userProperty, $user));
         }
     }
 }

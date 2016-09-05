@@ -41,6 +41,8 @@ abstract class BaseAuditLog
 
     protected $user;
 
+    protected $impersonatingUser;
+
     /**
      * @var String
      */
@@ -177,5 +179,21 @@ abstract class BaseAuditLog
         $oClass = new \ReflectionClass ('Psr\Log\LogLevel');
 
         return $oClass->getConstants();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImpersonatingUser()
+    {
+        return $this->impersonatingUser;
+    }
+
+    /**
+     * @param mixed $impersonatingUser
+     */
+    public function setImpersonatingUser($impersonatingUser)
+    {
+        $this->impersonatingUser = $impersonatingUser;
     }
 }

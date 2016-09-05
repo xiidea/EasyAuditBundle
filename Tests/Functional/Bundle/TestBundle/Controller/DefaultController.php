@@ -31,4 +31,9 @@ class DefaultController extends Controller
 
         return new Response( self::RESPONSE_BOUNDARY . file_get_contents($logFile) . self::RESPONSE_BOUNDARY);
     }
+
+    public function secureNoEventAction()
+    {
+        return new Response("ok");
+    }
 }

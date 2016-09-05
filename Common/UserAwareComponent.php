@@ -13,6 +13,7 @@ namespace Xiidea\EasyAuditBundle\Common;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\Security\Core\Role\SwitchUserRole;
 use Xiidea\EasyAuditBundle\Traits\ServiceContainerGetterMethods;
 
 class UserAwareComponent implements ContainerAwareInterface
@@ -49,6 +50,26 @@ class UserAwareComponent implements ContainerAwareInterface
         }
 
         return $user;
+    }
+
+    /**
+     * @return mixed
+     */
+    protected final function getImpersonatingUser()
+    {
+        if (null === $token = $this->getContainer()->get('security.token_storage')->getToken()) {
+            return null;
+        }
+
+        if ($this->getContainer()->get('security.authorization_checker')->isGranted('ROLE_PREVIOUS_ADMIN')) {
+            foreach ($token->getRoles() as $role) {
+                if ($role instanceof SwitchUserRole) {
+                    return $role->getSource()->getUser();
+                }
+            }
+        }
+
+        return null;
     }
 
     /**

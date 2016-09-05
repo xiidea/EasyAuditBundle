@@ -30,10 +30,13 @@ class UserEntity
      */
     private $username;
 
-    public function __construct($id = 1, $username = "admin")
+    private $roles;
+
+    public function __construct($id = 1, $username = "admin", $roles = array())
     {
         $this->id = $id;
         $this->username = $username;
+        $this->roles = $roles;
     }
 
     public function getUsername()
@@ -57,5 +60,13 @@ class UserEntity
     public function __toString()
     {
         return $this->getUsername();
+    }
+
+    /**
+     * @return array
+     */
+    public function getRoles()
+    {
+        return $this->roles;
     }
 }

@@ -3,8 +3,9 @@ security:
         in_memory:
             memory:
                 users:
-                    admin: { password: login }
-                
+                    admin: { password: login, roles: 'ROLE_ADMIN' }
+                    user: { password: login, roles: 'ROLE_USER' }
+
     encoders:
         Symfony\Component\Security\Core\User\UserInterface: plaintext
 

@@ -13,6 +13,7 @@ namespace Xiidea\EasyAuditBundle\Tests\Resolver;
 
 
 use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\Security\Core\Role\SwitchUserRole;
 use Xiidea\EasyAuditBundle\Resolver\DefaultEventResolver;
 use Xiidea\EasyAuditBundle\Resolver\EventResolverFactory;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\AuditObjectResolver;
@@ -82,9 +83,9 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo('xiidea.easy_audit.user_property'))
             ->willReturn('username');
 
-        $this->initiateContainerWithSecurityContext(6);
+        $this->initiateContainerWithSecurityContextAndAuthorizationChecker(6);
 
-        $this->securityContext->expects($this->once())
+        $this->securityContext->expects($this->any())
             ->method('getToken')
             ->willReturn(new DummyToken(new UserEntity()));
 
@@ -95,6 +96,56 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             'name'=> 'basic',
             'description' => 'basic',
             'user' => 'admin',
+            'impersonatingUser' => null,
+            'ip'=>'127.0.0.1'
+        ));
+    }
+
+    public function testImpersonatingUser() {
+        $this->event = new Basic();
+
+        $this->container->expects($this->at(0))
+            ->method('getParameter')
+            ->with($this->equalTo('xiidea.easy_audit.custom_resolvers'))
+            ->willReturn(array());
+
+        $this->container->expects($this->at(1))
+            ->method('getParameter')
+            ->with($this->equalTo('xiidea.easy_audit.resolver'))
+            ->willReturn('xiidea.easy_audit.default_event_resolver');
+
+        $this->container->expects($this->at(2))
+            ->method('get')
+            ->with($this->equalTo('xiidea.easy_audit.default_event_resolver'))
+            ->willReturn(new DefaultEventResolver());
+
+        $this->container->expects($this->at(3))
+            ->method('getParameter')
+            ->with($this->equalTo('xiidea.easy_audit.entity_class'))
+            ->willReturn('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog');
+
+        $this->mockClientIpResolverForBrowserRequest(4);
+
+        $this->container->expects($this->at(5))
+            ->method('getParameter')
+            ->with($this->equalTo('xiidea.easy_audit.user_property'))
+            ->willReturn('username');
+
+        $this->initiateContainerWithSecurityContextAndAuthorizationChecker(6, true);
+
+        $userToken = new DummyToken(new UserEntity(2, 'admin'));
+
+        $this->securityContext->expects($this->any())
+            ->method('getToken')
+            ->willReturn(new DummyToken(new UserEntity(1, 'a', array(new SwitchUserRole('', $userToken)))));
+
+        $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
+
+        $this->assertEventInfo($auditLog, array(
+            'name'=> 'basic',
+            'description' => 'basic',
+            'user' => 'a',
+            'impersonatingUser' => 'admin',
             'ip'=>'127.0.0.1'
         ));
     }
@@ -175,9 +226,9 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo('xiidea.easy_audit.user_property'))
             ->willReturn('username');
 
-        $this->initiateContainerWithSecurityContext(5);
+        $this->initiateContainerWithSecurityContextAndAuthorizationChecker(5);
 
-        $this->securityContext->expects($this->once())
+        $this->securityContext->expects($this->any())
             ->method('getToken')
             ->willReturn(new DummyToken(new UserEntity()));
 
@@ -188,6 +239,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             'name'=> 'basic',
             'description'=> 'basic',
             'user' => 'admin',
+            'impersonatingUser' => null,
             'ip'=>'127.0.0.1'
         ));
 
@@ -208,9 +260,9 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo('xiidea.easy_audit.user_property'))
             ->willReturn('username');
 
-        $this->initiateContainerWithSecurityContext(3);
+        $this->initiateContainerWithSecurityContextAndAuthorizationChecker(3);
 
-        $this->securityContext->expects($this->once())
+        $this->securityContext->expects($this->any())
             ->method('getToken')
             ->willReturn(new DummyToken(new UserEntity()));
 
@@ -221,6 +273,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             'name'=> 'embedded',
             'description'=> 'It is an embedded event',
             'user' => 'admin',
+            'impersonatingUser' => null,
             'ip'=>'127.0.0.1'
         ));
     }
@@ -275,9 +328,9 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo('xiidea.easy_audit.user_property'))
             ->willReturn('username');
 
-        $this->initiateContainerWithSecurityContext($i);
+        $this->initiateContainerWithSecurityContextAndAuthorizationChecker($i);
 
-        $this->securityContext->expects($this->once())
+        $this->securityContext->expects($this->any())
             ->method('getToken')
             ->willReturn(new DummyToken(new UserEntity()));
 
@@ -289,6 +342,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
                 'description' => 'easy_audit.doctrine.entity.created',
                 'name' => 'easy_audit.doctrine.entity.created',
                 'user' => 'admin',
+                'impersonatingUser' => null,
                 'ip' => '127.0.0.1',
             ));
     }
@@ -319,9 +373,9 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo('xiidea.easy_audit.user_property'))
             ->willReturn('username');
 
-        $this->initiateContainerWithSecurityContext(5);
+        $this->initiateContainerWithSecurityContextAndAuthorizationChecker(5);
 
-        $this->securityContext->expects($this->once())
+        $this->securityContext->expects($this->any())
             ->method('getToken')
             ->willReturn(new DummyToken(new UserEntity()));
 
@@ -333,6 +387,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
                 'description' => 'Custom description',
                 'name' => 'basic',
                 'user' => 'admin',
+                'impersonatingUser' => null,
                 'ip' => '127.0.0.1',
             ));
     }
@@ -431,6 +486,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
                 'description' => 'basic',
                 'name' => 'basic',
                 'user' => 'By Command',
+                'impersonatingUser' => null,
                 'type' => 'easy_audit.doctrine.entity.created',
                 'ip' => '',
             ));
@@ -466,9 +522,9 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo('xiidea.easy_audit.user_property'))
             ->willReturn(null);
 
-        $this->initiateContainerWithSecurityContext(6);
+        $this->initiateContainerWithSecurityContextAndAuthorizationChecker(6);
 
-        $this->securityContext->expects($this->once())
+        $this->securityContext->expects($this->any())
             ->method('getToken')
             ->willReturn(new DummyToken(new UserEntity()));
 
@@ -479,6 +535,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             'name'=> 'basic',
             'description' => 'basic',
             'user' => 'admin',
+            'impersonatingUser' => null,
             'ip'=>'127.0.0.1'
         ));
     }
@@ -513,13 +570,33 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->with($this->equalTo('xiidea.easy_audit.user_property'))
             ->willReturn('invalidProperty');
 
-        $this->initiateContainerWithSecurityContext(6);
+        $this->securityContext = $this
+            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->securityContext->expects($this->once())
+        $this->container->expects($this->at(6))
+            ->method('has')
+            ->with($this->equalTo('security.token_storage'))
+            ->willReturn(true);
+
+        $this->container->expects($this->at(7))
+            ->method('get')
+            ->with($this->equalTo('security.token_storage'))
+            ->willReturn($this->securityContext);
+
+        $this->securityContext->expects($this->any())
             ->method('getToken')
             ->willReturn(new DummyToken(new UserEntity()));
 
         $this->initiateContainerWithDebugMode(false, 8);
+
+        $this->container->expects($this->at(9))
+            ->method('get')
+            ->with($this->equalTo('security.token_storage'))
+            ->willReturn($this->securityContext);
+
+        $this->mockSecurityAuthChecker(10);
 
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 
@@ -527,6 +604,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             'name'=> 'basic',
             'description' => 'basic',
             'user' => '',
+            'impersonatingUser' => null,
             'ip'=>'127.0.0.1'
         ));
     }
@@ -620,6 +698,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
                 'description' => 'basic',
                 'name' => 'basic',
                 'user' => 'Anonymous',
+                'impersonatingUser' => null,
                 'type' => 'easy_audit.doctrine.entity.created',
                 'ip' => '127.0.0.1',
             ));
@@ -685,6 +764,31 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
             ->willReturn($this->securityContext);
     }
 
+    protected function initiateContainerWithSecurityContextAndAuthorizationChecker($callIndex = 0, $isGranted = false)
+    {
+        $this->initiateContainerWithSecurityContext($callIndex);
+        $this->container->expects($this->at($callIndex + 2))
+            ->method('get')
+            ->with($this->equalTo('security.token_storage'))
+            ->willReturn($this->securityContext);
+
+        $this->mockSecurityAuthChecker($callIndex + 3, $isGranted);
+    }
+
+    private function mockSecurityAuthChecker($callIndex, $isGranted = false) {
+        $authChecker = $this->getMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
+
+        $this->container->expects($this->at($callIndex))
+            ->method('get')
+            ->with($this->equalTo('security.authorization_checker'))
+            ->willReturn($authChecker);
+
+        $authChecker->expects($this->once())
+            ->method('isGranted')
+            ->with('ROLE_PREVIOUS_ADMIN')
+            ->willReturn($isGranted);
+    }
+
     private function mockClientIpResolverForBrowserRequest($callIndex)
     {
         $requestStack = $this->getMock('Symfony\Component\HttpFoundation\RequestStack');
@@ -726,6 +830,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($expected['name'], $auditLog->getType());
         $this->assertEquals($expected['name'], $auditLog->getTypeId());
         $this->assertEquals($expected['user'], $auditLog->getUser());
+        $this->assertEquals($expected['impersonatingUser'], $auditLog->getImpersonatingUser());
         $this->assertEquals($expected['ip'], $auditLog->getIp());
         $this->assertNotNull($auditLog->getEventTime());
     }

@@ -36,6 +36,7 @@ class FileLogger implements LoggerInterface
             'type' => $event->getTypeId(),
             'description' => $event->getDescription(),
             'user' => $event->getUser(),
+            'impersonatingUser' => $event->getImpersonatingUser(),
             'ip' => $event->getIp()
         );
 
