@@ -3,13 +3,19 @@ security:
         in_memory:
             memory:
                 users:
-                    admin: { password: login, roles: 'ROLE_ADMIN' }
-                    user: { password: login, roles: 'ROLE_USER' }
+                    admin: { password: login, roles: ['ROLE_ADMIN'] }
+                    user: { password: login, roles: ['ROLE_USER'] }
+
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_USER, ROLE_ALLOWED_TO_SWITCH]
 
     encoders:
         Symfony\Component\Security\Core\User\UserInterface: plaintext
 
     firewalls:
+        login_form:
+                pattern: ^/login$
+                security: false
         main:
             anonymous:    true
             http_basic: ~

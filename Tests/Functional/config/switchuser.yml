@@ -1,0 +1,33 @@
+imports:
+    - { resource: ./config.yml }
+
+framework:
+    validation: { enabled: true, enable_annotations: true }
+    router:
+        resource: %kernel.root_dir%/config/common/logiin_routing.yml
+    assets: ~
+    csrf_protection: true
+    form: true
+    default_locale: en
+    profiler: { only_exceptions: false }
+    templating:    { engines: ['twig'] }
+
+# Twig Configuration
+twig:
+    debug:            '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+
+security:
+    firewalls:
+        login_form:
+                pattern: ^/login$
+                security: false
+        main:
+            form_login:
+                check_path: /login_check
+                default_target_path: /some-secure-url/simple.event
+            logout: ~
+            anonymous: ~
+            switch_user: true
+
+
