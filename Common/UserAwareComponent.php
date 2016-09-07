@@ -55,7 +55,7 @@ class UserAwareComponent implements ContainerAwareInterface
     /**
      * @return mixed
      */
-    protected final function getImpersonatingUser()
+    final protected function getImpersonatingUser()
     {
         if (null === $token = $this->getContainer()->get('security.token_storage')->getToken()) {
             return null;
