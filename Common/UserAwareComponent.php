@@ -62,11 +62,7 @@ class UserAwareComponent implements ContainerAwareInterface
         }
 
         if ($this->getContainer()->get('security.authorization_checker')->isGranted('ROLE_PREVIOUS_ADMIN')) {
-            foreach ($token->getRoles() as $role) {
-                if ($role instanceof SwitchUserRole) {
-                    return $role->getSource()->getUser();
-                }
-            }
+            return $this->getImpersonatingUserFromRole($token);
         }
 
         return null;
@@ -98,5 +94,22 @@ class UserAwareComponent implements ContainerAwareInterface
         }
 
         return "By Command";
+    }
+
+    /**
+     * @param $token
+     * @param null $user
+     * @return mixed
+     */
+    protected function getImpersonatingUserFromRole($token, $user = null)
+    {
+        foreach ($token->getRoles() as $role) {
+            if ($role instanceof SwitchUserRole) {
+                $user = $role->getSource()->getUser();
+                break;
+            }
+        }
+
+        return $user;
     }
 }
