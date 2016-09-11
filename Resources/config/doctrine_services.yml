@@ -2,6 +2,7 @@
 services:
   xiidea.easy_audit.doctrine_subscriber:
           class: Xiidea\EasyAuditBundle\Subscriber\DoctrineSubscriber
+          arguments: [%xiidea.easy_audit.doctrine_entities%]
           calls:
               - [ setContainer,[ '@service_container' ] ]
           tags:
