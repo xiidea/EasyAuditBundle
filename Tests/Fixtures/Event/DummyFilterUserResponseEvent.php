@@ -17,11 +17,11 @@ use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
 
 class DummyFilterUserResponseEvent extends FilterUserResponseEvent
 {
-    private $user;
+    private $_user;
 
     public function __construct(UserEntity $user)
     {
-        $this->user = $user;
+        $this->_user = $user;
     }
 
     /**
@@ -29,7 +29,7 @@ class DummyFilterUserResponseEvent extends FilterUserResponseEvent
      */
     public function getUser()
     {
-        return $this->user;
+        return $this->_user;
     }
 
 }

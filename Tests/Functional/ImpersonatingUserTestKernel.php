@@ -38,9 +38,7 @@ class ImpersonatingUserTestKernel extends Kernel
             throw new \RuntimeException(sprintf('The config file "%s" does not exist.', $config));
         }
 
-
         $this->config = $config;
-        file_put_contents('/tmp/log.f', $this->getCacheDir().PHP_EOL, FILE_APPEND);
     }
 
     public function registerBundles()
