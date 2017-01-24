@@ -30,7 +30,7 @@ Add EasyAuditBundle in your composer.json:
 ```js
 {
     "require": {
-        "xiidea/easy-audit": "1.4.*@dev"
+        "xiidea/easy-audit": "^1.4"
     }
 }
 ```
