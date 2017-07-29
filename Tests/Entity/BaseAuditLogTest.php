@@ -12,9 +12,10 @@
 namespace Xiidea\EasyAuditBundle\Tests\Entity;
 
 
+use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog;
 
-class BaseAuditLogTest extends \PHPUnit_Framework_TestCase
+class BaseAuditLogTest extends TestCase
 {
 
     /**

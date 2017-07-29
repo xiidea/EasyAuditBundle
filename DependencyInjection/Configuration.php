@@ -47,7 +47,7 @@ class Configuration implements ConfigurationInterface
     {
         $rootNode
             ->children()
-                ->scalarNode('user_property')->isRequired()->defaultValue(null)->end()
+                ->scalarNode('user_property')->isRequired()->end()
                 ->scalarNode('entity_class')->cannotBeOverwritten()->isRequired()->cannotBeEmpty()->end()
             ->end();
     }

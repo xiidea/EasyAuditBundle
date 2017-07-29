@@ -11,14 +11,15 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\DependencyInjection\Compiler;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Reference;
 use Xiidea\EasyAuditBundle\DependencyInjection\Compiler\LoggerFactoryPass;
 
-class LoggerFactoryPassTest extends \PHPUnit_Framework_TestCase {
+class LoggerFactoryPassTest extends TestCase {
 
     public function testProcessWithoutLoggerFactoryDefinition()
     {
-        $containerBuilder = $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder');
+        $containerBuilder = $this->createMock('Symfony\Component\DependencyInjection\ContainerBuilder');
 
         $containerBuilder->expects($this->once())
             ->method('hasDefinition')
@@ -92,7 +93,7 @@ class LoggerFactoryPassTest extends \PHPUnit_Framework_TestCase {
      */
     protected function getContainerBuilderMock()
     {
-        $containerBuilderMock = $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder');
+        $containerBuilderMock = $this->createMock('Symfony\Component\DependencyInjection\ContainerBuilder');
 
         $containerBuilderMock->expects($this->once())
             ->method('hasDefinition')

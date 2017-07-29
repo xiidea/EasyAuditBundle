@@ -11,12 +11,13 @@ namespace Xiidea\EasyAuditBundle\Tests\Common;
  * with this source code in the file LICENSE.
  */
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Role\SwitchUserRole;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\DummyToken;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\DummyUserAwareComponent;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
 
-class UserAwareComponentTest extends \PHPUnit_Framework_TestCase
+class UserAwareComponentTest extends TestCase
 {
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
     private $container;
@@ -30,7 +31,7 @@ class UserAwareComponentTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $this->container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
         $this->userAwareComponent = new DummyUserAwareComponent();
         $this->userAwareComponent->setContainer($this->container);
     }
@@ -131,7 +132,7 @@ class UserAwareComponentTest extends \PHPUnit_Framework_TestCase
     }
 
     private function mockSecurityAuthChecker($callIndex, $isGranted = false) {
-        $authChecker = $this->getMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
+        $authChecker = $this->createMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
 
         $this->container->expects($this->at($callIndex))
             ->method('get')

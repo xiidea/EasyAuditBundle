@@ -11,15 +11,16 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\DependencyInjection\Compiler;
 
+use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\DependencyInjection\Compiler\SubscriberPass;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\EasySubscriberOne;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\EasySubscriberTwo;
 
-class SubscriberPassTest extends \PHPUnit_Framework_TestCase {
+class SubscriberPassTest extends TestCase {
 
     public function testProcessWithoutEventListenerDefinition()
     {
-        $containerBuilder = $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder');
+        $containerBuilder = $this->createMock('Symfony\Component\DependencyInjection\ContainerBuilder');
 
         $containerBuilder->expects($this->once())
             ->method('hasDefinition')
@@ -271,7 +272,7 @@ class SubscriberPassTest extends \PHPUnit_Framework_TestCase {
      */
     protected function getContainerBuilderMock()
     {
-        $containerBuilder = $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder');
+        $containerBuilder = $this->createMock('Symfony\Component\DependencyInjection\ContainerBuilder');
 
         $containerBuilder->expects($this->once())
             ->method('hasDefinition')

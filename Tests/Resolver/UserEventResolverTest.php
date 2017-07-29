@@ -11,6 +11,7 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Resolver;
 
+use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\Resolver\UserEventResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\DummyToken;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
@@ -19,7 +20,7 @@ use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\DummyFilterUserResponseEvent;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\DummyUserEvent;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
 
-class UserEventResolverTest extends \PHPUnit_Framework_TestCase
+class UserEventResolverTest extends TestCase
 {
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
     private $container;
@@ -32,7 +33,7 @@ class UserEventResolverTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $this->container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
         $this->eventResolver = new UserEventResolver();
         $this->eventResolver->setContainer($this->container);
 

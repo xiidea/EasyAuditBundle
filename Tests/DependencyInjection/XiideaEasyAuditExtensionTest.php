@@ -11,11 +11,12 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\DependencyInjection;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Yaml\Parser;
 use Xiidea\EasyAuditBundle\DependencyInjection\XiideaEasyAuditExtension;
 
-class XiideaEasyAuditExtensionTest extends \PHPUnit_Framework_TestCase {
+class XiideaEasyAuditExtensionTest extends TestCase {
 
     /** @var ContainerBuilder */
     protected $container;
@@ -83,6 +84,23 @@ class XiideaEasyAuditExtensionTest extends \PHPUnit_Framework_TestCase {
 
         $loader->load(array($config), $this->container);
         $this->assertHasDefinition('xiidea.easy_audit.doctrine_subscriber');
+    }
+
+    public function testLoggerChanelProvidedAsString()
+    {
+        $loader = new XiideaEasyAuditExtension();
+        $config = $this->getRequiredConfig();
+        $config['logger_channel']  = array('foo.logger' => "!info");
+
+        $channel = array(
+            'foo.logger' => array(
+                'type' => 'exclusive',
+                'elements' => array('info')
+            ),
+        );
+
+        $loader->load(array($config), $this->container);
+        $this->assertEquals($channel, $this->container->getParameter('xiidea.easy_audit.logger_channel'));
     }
 
     public function testDisableDoctrineEvents()

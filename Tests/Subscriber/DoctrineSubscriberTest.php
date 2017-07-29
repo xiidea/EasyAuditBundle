@@ -12,19 +12,20 @@
 namespace Xiidea\EasyAuditBundle\Tests\Subscriber;
 
 
+use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\DummyLifecycleEventArgs as LifecycleEventArgs;
 use Xiidea\EasyAuditBundle\Annotation\ORMSubscribedEvents;
 use Xiidea\EasyAuditBundle\Subscriber\DoctrineSubscriber;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie;
 
-class DoctrineSubscriberTest extends \PHPUnit_Framework_TestCase
+class DoctrineSubscriberTest extends TestCase
 {
     /** @var  \PHPUnit_Framework_MockObject_MockObject  */
     private $container;
 
     public function setUp()
     {
-        $this->container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $this->container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
     }
 
     public function testInstanceOnSubscriber()
@@ -121,7 +122,7 @@ class DoctrineSubscriberTest extends \PHPUnit_Framework_TestCase
 
     private function initializeDispatcher()
     {
-        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
 
         $this->container->expects($this->at(1))
             ->method('get')

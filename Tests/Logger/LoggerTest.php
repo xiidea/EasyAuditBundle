@@ -11,10 +11,11 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Logger;
 
+use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\Logger\Logger;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog;
 
-class LoggerTest extends \PHPUnit_Framework_TestCase {
+class LoggerTest extends TestCase {
 
     /** @var Logger */
     protected $logger;

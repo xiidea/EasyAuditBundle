@@ -11,9 +11,10 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Annotation;
 
+use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\Annotation\ORMSubscribedEvents;
 
-class ORMSubscribedEventsTest extends \PHPUnit_Framework_TestCase {
+class ORMSubscribedEventsTest extends TestCase {
 
     public function testConstructWithoutData()
     {

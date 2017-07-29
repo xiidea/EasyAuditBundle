@@ -13,6 +13,7 @@ namespace Xiidea\EasyAuditBundle\Tests\Resolver;
 
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\Events\DoctrineEntityEvent;
 use Xiidea\EasyAuditBundle\Resolver\EntityEventResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
@@ -21,7 +22,7 @@ use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\EntityWithoutGetMethod;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
 
-class EntityEventResolverTest extends \PHPUnit_Framework_TestCase {
+class EntityEventResolverTest extends TestCase {
 
     /** @var  \PHPUnit_Framework_MockObject_MockObject  */
     private $container;
@@ -49,8 +50,8 @@ class EntityEventResolverTest extends \PHPUnit_Framework_TestCase {
 
     public function setUp()
     {
-        $this->container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $this->kernel = $this->getMock('Symfony\Component\HttpKernel\KernelInterface');
+        $this->container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $this->kernel = $this->createMock('Symfony\Component\HttpKernel\KernelInterface');
         $this->eventResolver =  new EntityEventResolver();
         $this->eventResolver->setContainer($this->container);
 

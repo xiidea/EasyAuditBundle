@@ -12,6 +12,7 @@
 namespace Xiidea\EasyAuditBundle\Tests\Functional;
 
 use Symfony\Component\DomCrawler\Crawler;
+use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\WithEmbeddedResolver;
 use Xiidea\EasyAuditBundle\Tests\Functional\Bundle\TestBundle\Controller\DefaultController;
@@ -20,25 +21,27 @@ class CommonTest extends BaseTestCase
 {
     /**
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function testEntityClassShouldBeAnInstanceOfBaseAuditLog()
     {
-        $kernel = self::createKernel();
+        $kernel = static::createKernel();
         $kernel->boot();
 
         $container = $kernel->getContainer();
 
         $entityClass = $container->getParameter('xiidea.easy_audit.entity_class');
 
-        $this->assertInstanceOf('\Xiidea\EasyAuditBundle\Entity\BaseAuditLog', (new $entityClass));
+        $this->assertInstanceOf(BaseAuditLog::class, (new $entityClass));
     }
 
     /**
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function testDispatch()
     {
-        $kernel = self::createKernel();
+        $kernel = static::createKernel();
         $kernel->boot();
 
         $container = $kernel->getContainer();
@@ -61,10 +64,11 @@ class CommonTest extends BaseTestCase
 
     /**
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function testMultipleChannel()
     {
-        $kernel = self::createKernel();
+        $kernel = static::createKernel();
         $kernel->boot();
 
         $container = $kernel->getContainer();
@@ -100,6 +104,7 @@ class CommonTest extends BaseTestCase
 
     /**
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function testSecuredEventWithUserLogin()
     {
@@ -119,6 +124,7 @@ class CommonTest extends BaseTestCase
 
     /**
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function testEventOnPublicUrlWithUserLogin()
     {
@@ -141,6 +147,7 @@ class CommonTest extends BaseTestCase
 
     /**
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function testEventOnPublicUrlWithoutUserLogin()
     {

@@ -12,10 +12,12 @@
 namespace Xiidea\EasyAuditBundle\Tests\Logger;
 
 
+use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\Logger\LoggerFactory;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\InvalidLogger;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog;
 
-class LoggerFactoryTest extends \PHPUnit_Framework_TestCase
+class LoggerFactoryTest extends TestCase
 {
 
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
@@ -40,8 +42,8 @@ class LoggerFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $this->kernel = $this->getMock('Symfony\Component\HttpKernel\KernelInterface');
+        $this->container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $this->kernel = $this->createMock('Symfony\Component\HttpKernel\KernelInterface');
         $this->loggerFactory = new LoggerFactory();
         $this->loggerFactory->setContainer($this->container);
     }
@@ -53,19 +55,19 @@ class LoggerFactoryTest extends \PHPUnit_Framework_TestCase
     public function testThrowsExceptionOnAddInvalidLoggerWithDebugModeOn()
     {
         $this->initiateContainerWithDebugMode(true);
-        $this->loggerFactory->addLogger("invalid", new AuditLog());
+        $this->loggerFactory->addLogger("invalid", new InvalidLogger());
     }
 
     public function testDoNotThrowsExceptionOnAddInvalidLoggerWithDebugModeDisable()
     {
         $this->initiateContainerWithDebugMode(false);
-        $this->loggerFactory->addLogger("invalid", new AuditLog());
+        $this->loggerFactory->addLogger("invalid", new InvalidLogger());
         $this->assertAttributeEquals(array(), 'loggers', $this->loggerFactory);
     }
 
     public function testLoggerFactoryThrowsNoExceptionOnAddValidLogger()
     {
-        $logger1 = $this->getMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
+        $logger1 = $this->createMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
 
         $this->loggerFactory->addLogger("valid", $logger1);
 
@@ -74,8 +76,8 @@ class LoggerFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteAllLoggers()
     {
-        $logger1 = $this->getMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
-        $logger2 = $this->getMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
+        $logger1 = $this->createMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
+        $logger2 = $this->createMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
 
         $eventInfo = new AuditLog();
 
@@ -99,8 +101,8 @@ class LoggerFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->initiateContainerWithDebugMode(false);
 
-        $validLogger = $this->getMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
-        $inValidLogger = $this->getMock('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog');
+        $validLogger = $this->createMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
+        $inValidLogger = $this->createMock(InvalidLogger::class);
 
         $eventInfo = new AuditLog();
 
@@ -119,7 +121,7 @@ class LoggerFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testDoesNotExecuteLogForEmptyEventInfo()
     {
-        $logger1 = $this->getMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
+        $logger1 = $this->createMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
 
         $logger1->expects($this->never())
             ->method('log');
@@ -132,8 +134,8 @@ class LoggerFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testOnlyExecuteLogForRegisteredChannel()
     {
-        $logger1 = $this->getMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
-        $logger2 = $this->getMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
+        $logger1 = $this->createMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
+        $logger2 = $this->createMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
 
         $eventInfo = new AuditLog();
 
@@ -154,8 +156,8 @@ class LoggerFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteLogIfChannelIsNotDefined()
     {
-        $logger1 = $this->getMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
-        $logger2 = $this->getMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
+        $logger1 = $this->createMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
+        $logger2 = $this->createMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
 
         $eventInfo = new AuditLog();
 
@@ -177,7 +179,7 @@ class LoggerFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidChannelType()
     {
-        $logger1 = $this->getMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
+        $logger1 = $this->createMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
 
         $eventInfo = new AuditLog();
 

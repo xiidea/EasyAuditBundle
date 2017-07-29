@@ -12,6 +12,7 @@
 namespace Xiidea\EasyAuditBundle\Tests\Resolver;
 
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Security\Core\Role\SwitchUserRole;
 use Xiidea\EasyAuditBundle\Resolver\DefaultEventResolver;
@@ -28,7 +29,7 @@ use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\WithEmbeddedResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
 
-class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
+class EventResolverFactoryTest extends TestCase {
 
     /** @var  \PHPUnit_Framework_MockObject_MockObject  */
     private $container;
@@ -47,8 +48,8 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
 
     public function setUp()
     {
-        $this->container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $this->kernel = $this->getMock('Symfony\Component\HttpKernel\KernelInterface');
+        $this->container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $this->kernel = $this->createMock('Symfony\Component\HttpKernel\KernelInterface');
         $this->resolverFactory =  new EventResolverFactory();
         $this->resolverFactory->setContainer($this->container);
     }
@@ -776,7 +777,7 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
     }
 
     private function mockSecurityAuthChecker($callIndex, $isGranted = false) {
-        $authChecker = $this->getMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
+        $authChecker = $this->createMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
 
         $this->container->expects($this->at($callIndex))
             ->method('get')
@@ -791,8 +792,8 @@ class EventResolverFactoryTest extends \PHPUnit_Framework_TestCase {
 
     private function mockClientIpResolverForBrowserRequest($callIndex)
     {
-        $requestStack = $this->getMock('Symfony\Component\HttpFoundation\RequestStack');
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $requestStack = $this->createMock('Symfony\Component\HttpFoundation\RequestStack');
+        $request = $this->createMock('Symfony\Component\HttpFoundation\Request');
 
         $request->expects($this->once())
             ->method('getClientIp')

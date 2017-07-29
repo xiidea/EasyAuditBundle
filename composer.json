@@ -17,17 +17,16 @@
         "source": "https://github.com/xiidea/EasyAuditBundle"
     },
     "require": {
-        "php": ">=5.5.9",
+        "php": "^5.6 || ^7.0",
         "psr/log": "^1",
         "symfony/symfony": "^2.7||^3.0 !=3.0.4"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.8.*",
-        "mockery/mockery": ">=0.7.2",
+        "phpunit/phpunit": ">=5.0",
         "doctrine/orm": "~2.2,>=2.2.3",
         "doctrine/doctrine-bundle": "~1.2",
         "friendsofsymfony/user-bundle": ">=2.0@dev",
-        "satooshi/php-coveralls": "~0.6"
+        "satooshi/php-coveralls": "~1.0"
     },
     "autoload": {
       "psr-4": {

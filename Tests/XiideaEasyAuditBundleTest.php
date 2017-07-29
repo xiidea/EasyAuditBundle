@@ -11,9 +11,10 @@
 
 namespace Xiidea\EasyAuditBundle\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\XiideaEasyAuditBundle;
 
-class XiideaEasyAuditBundleTest extends \PHPUnit_Framework_TestCase {
+class XiideaEasyAuditBundleTest extends TestCase {
 
     public function testBuildInitializeBundleAddCompilerPass()
     {

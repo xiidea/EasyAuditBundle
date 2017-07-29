@@ -29,8 +29,8 @@ class ImpersonatingUserTest extends WebTestCase
     }
 
     /**
-     *  @group failing
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function testSecuredEventWithImpersonatingUser()
     {
