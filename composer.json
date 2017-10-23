@@ -1,6 +1,6 @@
 {
     "name": "xiidea/easy-audit",
-    "type": "symfony2-bundle",
+    "type": "symfony-bundle",
     "description": "A Symfony Bundle To Log Selective Events. It is easy to configure and easy to customize for your need",
     "keywords": ["Event Log", "Audit Log", "Symfony2", "Symfony3", "Audit trail"],
     "license": "MIT",
@@ -19,13 +19,14 @@
     "require": {
         "php": "^5.6 || ^7.0",
         "psr/log": "^1",
-        "symfony/symfony": "^2.7||^3.0 !=3.0.4"
+        "symfony/framework-bundle": "^2.7 || ^3.0",
+        "symfony/security-bundle": "^2.7 || ^3.0"
     },
     "require-dev": {
-        "phpunit/phpunit": ">=5.0",
+        "phpunit/phpunit": "^5.0 || ^6.0",
         "doctrine/orm": "~2.2,>=2.2.3",
         "doctrine/doctrine-bundle": "~1.2",
-        "friendsofsymfony/user-bundle": ">=2.0@dev",
+        "friendsofsymfony/user-bundle": "^2.0",
         "satooshi/php-coveralls": "~1.0"
     },
     "autoload": {
