@@ -15,7 +15,7 @@ use Psr\Log\InvalidArgumentException;
 use Psr\Log\LogLevel;
 use Xiidea\EasyAuditBundle\Traits\EntityHydrationMethod;
 
-abstract class BaseAuditLog
+class BaseAuditLog
 {
     use EntityHydrationMethod;
 
