@@ -11,13 +11,16 @@
 
 namespace Xiidea\EasyAuditBundle\Traits;
 
+use Symfony\Component\PropertyAccess\PropertyAccess;
+
 trait EntityHydrationMethod
 {
-    public function fromArray($data = array())
+    final public function fromArray($data = array())
     {
+        $accessor = PropertyAccess::createPropertyAccessor();
+
         foreach ($data as $property => $value) {
-            $method = sprintf('set%s', ucwords($property));
-            $this->$method($value);
+            $accessor->setValue($this, $property, $value);
         }
 
         return $this;
