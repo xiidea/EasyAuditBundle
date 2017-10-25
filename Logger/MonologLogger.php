@@ -62,14 +62,11 @@ class MonologLogger implements LoggerInterface
         $arr = array();
 
         foreach ($this->getAllProperties($refObject) as $property) {
-            if (in_array($property->getName(), self::$ignoreProperties)) {
+            if (!$accessor->isReadable($event, $property->getName()) || in_array($property->getName(), self::$ignoreProperties)) {
                 continue;
             }
-            try {
-                $arr[$property->getName()] = $accessor->getValue($event, $property->getName());
-            } catch (\Exception $exception) {
-                continue;
-            }
+
+            $arr[$property->getName()] = $accessor->getValue($event, $property->getName());
         }
 
         return $arr;
