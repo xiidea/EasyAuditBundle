@@ -17,3 +17,11 @@ services:
   xiidea.easy_audit.event_listener:
           class: Xiidea\EasyAuditBundle\Listener\LogEventsListener
           arguments: ['@xiidea.easy_audit.logger_factory', '@xiidea.easy_audit.event_resolver_factory']
+
+  xiidea.easy_audit.monno_logger.service:
+          class: Xiidea\EasyAuditBundle\Logger\MonologLogger
+          arguments: ['@logger']
+          public: false,
+          tags:
+             - { name: easy_audit.logger }
+             - { name: monolog.logger, channel: easy_audit }
