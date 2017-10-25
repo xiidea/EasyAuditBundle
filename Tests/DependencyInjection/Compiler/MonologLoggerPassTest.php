@@ -14,9 +14,9 @@ namespace Xiidea\EasyAuditBundle\Tests\DependencyInjection\Compiler;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Xiidea\EasyAuditBundle\DependencyInjection\Compiler\MonnologLoggerPass;
+use Xiidea\EasyAuditBundle\DependencyInjection\Compiler\MonologLoggerPass;
 
-class MonnologLoggerPassTest extends TestCase
+class MonologLoggerPassTest extends TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject|ContainerBuilder */
     private $containerBuilder;
@@ -39,7 +39,7 @@ class MonnologLoggerPassTest extends TestCase
         $this->containerBuilder ->expects($this->never())
             ->method('getDefinition');
 
-        $subscriberPass = new MonnologLoggerPass();
+        $subscriberPass = new MonologLoggerPass();
         $subscriberPass->process( $this->containerBuilder);
     }
 
@@ -51,10 +51,10 @@ class MonnologLoggerPassTest extends TestCase
 
         $this->containerBuilder->expects($this->once())
             ->method('getDefinition')
-            ->with($this->equalTo('xiidea.easy_audit.monno_logger.service'))
+            ->with($this->equalTo('xiidea.easy_audit.mono_logger.service'))
             ->will($this->returnValue( $this->definition));
 
-        $loggerFactoryPass = new MonnologLoggerPass();
+        $loggerFactoryPass = new MonologLoggerPass();
         $loggerFactoryPass->process( $this->containerBuilder);
     }
 }

@@ -26,7 +26,7 @@ class XiideaEasyAuditBundleTest extends TestCase {
         $containerBuilder
             ->expects($this->at(0))
             ->method("addCompilerPass")
-            ->with($this->isInstanceOf('Xiidea\EasyAuditBundle\DependencyInjection\Compiler\MonnologLoggerPass'));
+            ->with($this->isInstanceOf('Xiidea\EasyAuditBundle\DependencyInjection\Compiler\MonologLoggerPass'));
         $containerBuilder
             ->expects($this->at(1))
             ->method("addCompilerPass")

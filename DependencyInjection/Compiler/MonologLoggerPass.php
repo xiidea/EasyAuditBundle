@@ -14,16 +14,16 @@ namespace Xiidea\EasyAuditBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 
-class MonnologLoggerPass implements CompilerPassInterface
+class MonologLoggerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
         if (false === $container->hasAlias('logger')) {
-            $container->removeDefinition('xiidea.easy_audit.monno_logger.service');
+            $container->removeDefinition('xiidea.easy_audit.mono_logger.service');
             return;
         }
 
-        $definition = $container->getDefinition('xiidea.easy_audit.monno_logger.service');
+        $definition = $container->getDefinition('xiidea.easy_audit.mono_logger.service');
 
         $definition->setPublic(TRUE);
     }
