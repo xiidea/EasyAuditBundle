@@ -1,13 +1,15 @@
 Pre-Persist Listener
 ========================
 
-When using the default doctrine logger, you may want to add customized data to the AuditLog object. You can do it by defining a doctrine Pre-Persist listener service like bellow:
+When using the default **doctrine logger**, you may want to add customized data to the AuditLog object. You can do it by defining a doctrine Pre-Persist listener service like bellow:
+
+#### Note: This appraoch is sugested only if you are using the doctrine logger. Because the extra data you set here would not be available to other loggers. In that case overriding the resolver should be your choice.
 
 ### 1. Write Your Listener Class
 
 ``` php
 <?php
-src/MyProject/MyBundle/Listener/AuditLogPrePersistListener.php
+//src/MyProject/MyBundle/Listener/AuditLogPrePersistListener.php
 
 namespace  MyProject\MyBundle\Listener;
 
