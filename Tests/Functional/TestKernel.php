@@ -51,12 +51,12 @@ class TestKernel extends Kernel
 
     public function getCacheDir()
     {
-        return sys_get_temp_dir().'/XiideaEasyAuditBundle/cache/'.substr(sha1($this->config), 0, 6);
+        return sys_get_temp_dir() . '/' . substr(sha1($this->config), 0, 6) . '/XiideaEasyAuditBundle/cache';
     }
 
     public function getLogDir()
     {
-        return sys_get_temp_dir().'/XiideaEasyAuditBundle/logs/'.substr(sha1($this->config), 0, 6);
+        return sys_get_temp_dir() . '/' . substr(sha1($this->config), 0, 6) . '/XiideaEasyAuditBundle/logs';
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)

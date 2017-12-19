@@ -35,11 +35,6 @@ class BaseTestCase extends WebTestCase
 
     protected function setUp()
     {
-        if ($this->isHhvm()) {
-            $this->markTestIncomplete('Test is not working on HHVM');
-            return;
-        }
-
         $this->client = static::createClient();
         $this->cleanTmpDir();
     }
@@ -56,10 +51,5 @@ class BaseTestCase extends WebTestCase
             'PHP_AUTH_USER' => 'admin',
             'PHP_AUTH_PW' => 'login',
         ));
-    }
-
-    function isHhvm()
-    {
-        return defined('HHVM_VERSION');
     }
 }
