@@ -23,9 +23,15 @@ class DoctrineSubscriberTest extends TestCase
     /** @var  \PHPUnit_Framework_MockObject_MockObject  */
     private $container;
 
+    /** @var  \PHPUnit_Framework_MockObject_MockObject  */
+    private $annotationReader;
+
     public function setUp()
     {
         $this->container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $this->annotationReader = $this->getMockBuilder('\Doctrine\Common\Annotations\FileCacheReader')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testInstanceOnSubscriber()
@@ -92,7 +98,7 @@ class DoctrineSubscriberTest extends TestCase
 
     public function testUpdateEventForEntityNotConfiguredToTrack()
     {
-        $this->initializeAnnotationReader(null);
+        $this->initializeAnnotationReader();
         $subscriber = new DoctrineSubscriber(array());
         $this->invokeUpdatedEventCall($subscriber);
     }
@@ -106,25 +112,16 @@ class DoctrineSubscriberTest extends TestCase
 
     private function initializeAnnotationReader($metaData = null)
     {
-        $annotationReader = $this->getMockBuilder('\Doctrine\Common\Annotations\FileCacheReader')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $annotationReader->expects($this->once())
+        $this->annotationReader->expects($this->once())
             ->method('getClassAnnotation')
             ->willReturn($metaData);
-
-        $this->container->expects($this->at(0))
-            ->method('get')
-            ->with($this->equalTo('annotation_reader'))
-            ->willReturn($annotationReader);
     }
 
     private function initializeDispatcher()
     {
         $dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
 
-        $this->container->expects($this->at(1))
+        $this->container->expects($this->once())
             ->method('get')
             ->with($this->equalTo('event_dispatcher'))
             ->willReturn($dispatcher);
@@ -136,6 +133,7 @@ class DoctrineSubscriberTest extends TestCase
     private function invokeCreatedEventCall($subscriber)
     {
         $subscriber->setContainer($this->container);
+        $subscriber->setAnnotationReader($this->annotationReader);
 
         $subscriber->postPersist(new LifecycleEventArgs(new Movie()));
     }
@@ -146,6 +144,7 @@ class DoctrineSubscriberTest extends TestCase
     private function invokeUpdatedEventCall($subscriber)
     {
         $subscriber->setContainer($this->container);
+        $subscriber->setAnnotationReader($this->annotationReader);
 
         $subscriber->postUpdate(new LifecycleEventArgs(new Movie()));
     }
@@ -156,6 +155,7 @@ class DoctrineSubscriberTest extends TestCase
     private function invokeDeletedEventCall($subscriber)
     {
         $subscriber->setContainer($this->container);
+        $subscriber->setAnnotationReader($this->annotationReader);
 
         $subscriber->preRemove(new LifecycleEventArgs(new Movie()));
     }

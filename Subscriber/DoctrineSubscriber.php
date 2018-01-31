@@ -21,6 +21,10 @@ use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 class DoctrineSubscriber implements ContainerAwareInterface, EventSubscriber
 {
     use ContainerAwareTrait;
+
+    /** @var \Doctrine\Common\Annotations\Reader */
+    private $annotationReader;
+
     /**
      * @var array
      */
@@ -124,11 +128,11 @@ class DoctrineSubscriber implements ContainerAwareInterface, EventSubscriber
     }
 
     /**
-     * @return \Doctrine\Common\Annotations\FileCacheReader
+     * @return \Doctrine\Common\Annotations\Reader
      */
     protected function getAnnotationReader()
     {
-        return $this->container->get('annotation_reader');
+        return $this->annotationReader;
     }
 
     /**
@@ -168,5 +172,13 @@ class DoctrineSubscriber implements ContainerAwareInterface, EventSubscriber
     protected function isConfigured($class)
     {
         return isset($this->entities[$class]);
+    }
+
+    /**
+     * @param \Doctrine\Common\Annotations\Reader $annotationReader
+     */
+    public function setAnnotationReader($annotationReader = null)
+    {
+        $this->annotationReader = $annotationReader;
     }
 }
