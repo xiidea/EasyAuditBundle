@@ -14,9 +14,11 @@ namespace Xiidea\EasyAuditBundle\Logger;
 use Doctrine\ORM\EntityManager;
 use Xiidea\EasyAuditBundle\Entity\BaseAuditLog as AuditLog;
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 
 class Logger implements LoggerInterface
 {
+    private $entityDeleteLogs = [];
 
     /**
      * @var \Doctrine\Bundle\DoctrineBundle\Registry
@@ -34,8 +36,12 @@ class Logger implements LoggerInterface
             return;
         }
 
-        $this->getEntityManager()->persist($event);
-        $this->getEntityManager()->flush($event);
+        if($event->getTypeId() === DoctrineEvents::ENTITY_DELETED) {
+            $this->entityDeleteLogs[] = $event;
+            return;
+        }
+
+        $this->saveLog($event);
     }
 
     /**
@@ -52,6 +58,26 @@ class Logger implements LoggerInterface
     public function getDoctrine()
     {
         return $this->doctrine;
+    }
+
+    /**
+     * @param AuditLog $event
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    protected function saveLog(AuditLog $event)
+    {
+        $this->getEntityManager()->persist($event);
+        $this->getEntityManager()->flush($event);
+    }
+
+    public function savePendingLogs()
+    {
+        foreach ($this->entityDeleteLogs as $log) {
+            $this->saveLog($log);
+        }
+
+        $this->entityDeleteLogs = [];
     }
 
 }

@@ -14,8 +14,6 @@ namespace Xiidea\EasyAuditBundle\Resolver;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\EventDispatcher\Event;
-use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 use Xiidea\EasyAuditBundle\Events\DoctrineEntityEvent;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 
@@ -23,10 +21,6 @@ use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 class EntityEventResolver implements ContainerAwareInterface, EventResolverInterface
 {
     use ContainerAwareTrait;
-
-    protected $candidateProperties = array('name', 'title');
-
-    protected $propertiesFound = array();
 
     protected $eventShortName;
 
@@ -36,6 +30,8 @@ class EntityEventResolver implements ContainerAwareInterface, EventResolverInter
     protected $entity;
 
     protected $eventName;
+
+    protected $identity = ['', ''];
 
 
     /**
@@ -56,12 +52,22 @@ class EntityEventResolver implements ContainerAwareInterface, EventResolverInter
             return null;
         }
 
-        $entityClass = $this->getReflectionClassFromObject($this->entity);
+        $reflectionClass = $this->getReflectionClassFromObject($this->entity);
 
         return array(
-            'description' => $this->getDescription($entityClass),
-            'type' => $this->getEventType($entityClass->getShortName()),
+            'description' => $this->getDescription($reflectionClass->getShortName()),
+            'type'        => $this->getEventType($reflectionClass->getShortName())
         );
+
+    }
+
+    protected function getSingleIdentity()
+    {
+        foreach ($this->event->getIdentity() as $field => $value) {
+            return [$field, $value];
+        }
+
+        return ['', ''];
 
     }
 
@@ -76,6 +82,17 @@ class EntityEventResolver implements ContainerAwareInterface, EventResolverInter
         $this->eventName = $eventName;
         $this->event = $event;
         $this->entity = $event->getLifecycleEventArgs()->getEntity();
+        $this->identity = $this->getSingleIdentity();
+    }
+
+    private function getIdField()
+    {
+        return $this->identity[0];
+    }
+
+    private function getIdValue()
+    {
+        return $this->identity[1];
     }
 
     protected function getChangeSets($entity)
@@ -86,21 +103,6 @@ class EntityEventResolver implements ContainerAwareInterface, EventResolverInter
     protected function isUpdateEvent()
     {
         return $this->getEventShortName() == 'updated';
-    }
-
-    /**
-     * @param string $name
-     * @return string|mixed
-     */
-    protected function getProperty($name)
-    {
-        $propertyAccessor = PropertyAccess::createPropertyAccessor();
-
-        try {
-            return $propertyAccessor->getValue($this->entity, $this->propertiesFound[$name]);
-        } catch (NoSuchPropertyException $e) {
-            return '{INACCESSIBLE} property! ' . $e->getMessage();
-        }
     }
 
 
@@ -114,23 +116,17 @@ class EntityEventResolver implements ContainerAwareInterface, EventResolverInter
     }
 
     /**
-     * @param \ReflectionClass $reflectionClass
+     * @param string $shortName
      * @return string
      */
-    protected function getDescription(\ReflectionClass $reflectionClass)
+    protected function getDescription($shortName)
     {
-        $property = $this->getBestCandidatePropertyForIdentify($reflectionClass);
-
-        $descriptionTemplate = '%s has been %s';
-
-        if (!empty($property)) {
-            $descriptionTemplate .= sprintf(' with %s = "%s"', $property, $this->getProperty($property));
-        }
-
         return sprintf(
-            $descriptionTemplate,
-            $reflectionClass->getShortName(),
-            $this->getEventShortName()
+            '%s has been %s with %s = "%s"',
+            $shortName,
+            $this->getEventShortName(),
+            $this->getIdField(),
+            $this->getIdValue()
         );
     }
 
@@ -144,38 +140,6 @@ class EntityEventResolver implements ContainerAwareInterface, EventResolverInter
         }
 
         return $this->eventShortName;
-    }
-
-    /**
-     * @param \ReflectionClass $reflectionClass
-     * @return null|string
-     */
-    protected function getBestCandidatePropertyForIdentify(\ReflectionClass $reflectionClass)
-    {
-        $foundPropertyName = $this->getPropertyNameInCandidateList($reflectionClass);
-
-        if ("" !== $foundPropertyName) {
-            return $foundPropertyName;
-        }
-
-        return $this->getNameOrIdPropertyFromPropertyList($reflectionClass,
-            strtolower($reflectionClass->getShortName()) . "id"
-        );
-    }
-
-    /**
-     * @param \ReflectionClass $reflectionClass
-     * @return string
-     */
-    protected function getPropertyNameInCandidateList(\ReflectionClass $reflectionClass)
-    {
-        foreach ($this->candidateProperties as $property) {
-            if($reflectionClass->hasProperty($property)) {
-                return $this->propertiesFound[$property] = $property;
-            }
-        }
-
-        return "";
     }
 
     /**
@@ -201,21 +165,5 @@ class EntityEventResolver implements ContainerAwareInterface, EventResolverInter
     protected function getUnitOfWork()
     {
         return $this->container->get('doctrine')->getManager()->getUnitOfWork();
-    }
-
-    /**
-     * @param \ReflectionClass $reflectionClass
-     * @param $entityIdStr
-     * @return null|string
-     */
-    private function getNameOrIdPropertyFromPropertyList(\ReflectionClass $reflectionClass, $entityIdStr)
-    {
-        foreach (array('id', $entityIdStr) as $field) {
-            if($reflectionClass->hasProperty($field)) {
-                return $this->propertiesFound['id'] = $field;
-            }
-        }
-
-        return "";
     }
 }

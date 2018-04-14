@@ -25,6 +25,8 @@ class DoctrineSubscriber implements ContainerAwareInterface, EventSubscriber
     /** @var \Doctrine\Common\Annotations\Reader */
     private $annotationReader;
 
+    private $toBeDeleted = [];
+
     /**
      * @var array
      */
@@ -41,6 +43,7 @@ class DoctrineSubscriber implements ContainerAwareInterface, EventSubscriber
             'postPersist',
             'postUpdate',
             'preRemove',
+            'postRemove'
         );
     }
 
@@ -56,7 +59,37 @@ class DoctrineSubscriber implements ContainerAwareInterface, EventSubscriber
 
     public function preRemove(LifecycleEventArgs $args)
     {
-        $this->handleEvent(DoctrineEvents::ENTITY_DELETED, $args);
+        if (false === $this->isConfiguredToTrack($args->getEntity(), DoctrineEvents::ENTITY_DELETED)) {
+            return;
+        }
+
+        $className = get_class($args->getEntity());
+
+        if (!isset($this->toBeDeleted[$className])) {
+            $this->toBeDeleted[$className] = [];
+        }
+
+        $this->toBeDeleted[$className][spl_object_hash($args->getEntity())] = $this->getIdentity($args, $className);
+    }
+
+    public function postRemove(LifecycleEventArgs $args)
+    {
+        $identity = $this->getToBeDeletedId($args->getEntity());
+
+        if ($identity) {
+            $this->container->get('event_dispatcher')->dispatch(DoctrineEvents::ENTITY_DELETED,
+                new DoctrineEntityEvent($args, $identity)
+            );
+        }
+    }
+
+    private function getToBeDeletedId($entity)
+    {
+        try{
+            return $this->toBeDeleted[get_class($entity)][spl_object_hash($entity)];
+        }catch (\Exception $exception) {
+            return false;
+        }
     }
 
     /**
@@ -67,7 +100,7 @@ class DoctrineSubscriber implements ContainerAwareInterface, EventSubscriber
     {
         if (true === $this->isConfiguredToTrack($args->getEntity(), $eventName)) {
             $this->container->get('event_dispatcher')->dispatch($eventName,
-                new DoctrineEntityEvent($args)
+                new DoctrineEntityEvent($args, $this->getIdentity($args, get_class($args->getEntity())))
             );
         }
     }
@@ -180,5 +213,15 @@ class DoctrineSubscriber implements ContainerAwareInterface, EventSubscriber
     public function setAnnotationReader($annotationReader = null)
     {
         $this->annotationReader = $annotationReader;
+    }
+
+    /**
+     * @param LifecycleEventArgs $args
+     * @param $className
+     * @return array
+     */
+    protected function getIdentity(LifecycleEventArgs $args, $className)
+    {
+        return $args->getEntityManager()->getClassMetadata($className)->getIdentifierValues($args->getEntity());
     }
 }

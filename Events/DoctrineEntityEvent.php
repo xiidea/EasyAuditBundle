@@ -15,15 +15,17 @@ use Symfony\Component\EventDispatcher\Event;
 
 class DoctrineEntityEvent extends Event
 {
+    private $identity;
 
     /**
      * @var \Doctrine\ORM\Event\LifecycleEventArgs
      */
     private $lifecycleEventArgs;
 
-    public function __construct(LifecycleEventArgs $lifecycleEventArgs)
+    public function __construct(LifecycleEventArgs $lifecycleEventArgs, $identity)
     {
         $this->lifecycleEventArgs = $lifecycleEventArgs;
+        $this->identity = $identity;
     }
 
     /**
@@ -32,5 +34,13 @@ class DoctrineEntityEvent extends Event
     public function getLifecycleEventArgs()
     {
         return $this->lifecycleEventArgs;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIdentity()
+    {
+        return $this->identity;
     }
 }

@@ -13,21 +13,9 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 
 class DummyLifecycleEventArgs extends LifecycleEventArgs
 {
-    /**
-     * @var object
-     */
-    private $entity;
-
-    public function __construct($entity)
+    public function __construct($entity, $manager = null)
     {
-        $this->entity = $entity;
-    }
+        parent::__construct($entity, $manager);
 
-    /**
-     * @return object
-     */
-    public function getEntity()
-    {
-        return $this->entity;
     }
 }

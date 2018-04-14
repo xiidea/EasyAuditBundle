@@ -6,6 +6,7 @@ xiidea_easy_audit:
     entity_class : Xiidea\EasyAuditBundle\Tests\Functional\Bundle\TestBundle\Entity\AuditLog
     user_property : username
     doctrine_entities : false
+    default_logger : false
 
     events :                                                                      #Optional
         - simple.event

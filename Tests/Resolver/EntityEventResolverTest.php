@@ -108,34 +108,14 @@ class EntityEventResolverTest extends TestCase {
         $this->assertEquals($this->getExpectedEventInfo('deleted', 'UserEntity', "id", 1), $eventInfo);
     }
 
-    public function testPropertyNameAutoDetect()
+    public function testGetSingleIdentity()
     {
-        $this->createEventObjectForEntity(new Movie(1, 'Car2'));
-        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.entity.created');
+        $this->createEventObjectForEntity(new UserEntity(), []);
+        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.entity.deleted');
 
         $this->assertNotNull($eventInfo);
-        $this->assertEquals($this->getExpectedEventInfo('created', 'Movie', "name", "Car2"), $eventInfo);
-    }
+        $this->assertEquals($this->getExpectedEventInfo('deleted', 'UserEntity', "", ""), $eventInfo);
 
-    public function testPropertyNameAutoDetectFallback()
-    {
-        $this->createEventObjectForEntity(new DummyEntity());
-        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.entity.created');
-
-        $this->assertNotNull($eventInfo);
-        $this->assertEquals($this->getExpectedEventInfo('created', 'DummyEntity'), $eventInfo);
-    }
-
-    public function testPropertyNameAutoDetectedButInaccessible()
-    {
-        $this->createEventObjectForEntity(new EntityWithoutGetMethod());
-        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.entity.created');
-
-        $this->assertNotNull($eventInfo);
-        $expectedEventInfo = $this->getExpectedEventInfo('created', 'EntityWithoutGetMethod', 'title', "");
-
-        $this->assertEquals($expectedEventInfo['type'], $eventInfo['type']);
-        $this->assertTrue(strpos($eventInfo['description'],'{INACCESSIBLE} property') !== false);
     }
 
     protected function mockMethodCallTree()
@@ -175,27 +155,18 @@ class EntityEventResolverTest extends TestCase {
     private function getExpectedEventInfo($event, $entity, $property = "", $value = "")
     {
         return array(
-            'description'=> "$entity has been $event" . $this->getExpectedEventDescription($property, $value),
+            'description'=> "$entity has been $event" . sprintf(' with %s = "%s"', $property, $value),
             'type'=> "$entity $event",
         );
     }
 
-    private function getExpectedEventDescription($property = "", $value = "")
-    {
-
-        if (empty($property)) {
-            return "";
-        }
-
-        return sprintf(' with %s = "%s"', $property, $value);
-    }
-
     /**
      * @param $entity
+     * @param array $identity
      */
-    private function createEventObjectForEntity($entity)
+    private function createEventObjectForEntity($entity, $identity = ['id' => 1])
     {
-        $this->event = new DoctrineEntityEvent(new LifecycleEventArgs($entity, $this->entityManager));
+        $this->event = new DoctrineEntityEvent(new LifecycleEventArgs($entity, $this->entityManager), $identity);
     }
 
 }

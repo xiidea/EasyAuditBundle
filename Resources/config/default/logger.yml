@@ -5,3 +5,10 @@ services:
           arguments: ['@doctrine']
           tags:
              - { name: easy_audit.logger }
+
+  xiidea.easy_audit.entity_delete_event.subscriber:
+          class: Xiidea\EasyAuditBundle\Subscriber\DoctrineDeleteEventLogger
+          arguments: ['@xiidea.easy_audit.logger.service']
+          public: false
+          tags:
+              - { name: kernel.event_subscriber }
