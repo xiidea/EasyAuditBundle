@@ -13,7 +13,7 @@ When using the default **doctrine logger**, you may want to add customized data 
 
 namespace  MyProject\MyBundle\Listener;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 
 class AuditLogPrePersistListener
 {
