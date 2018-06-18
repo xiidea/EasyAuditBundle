@@ -14,6 +14,7 @@ namespace Xiidea\EasyAuditBundle\Subscriber;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use \Doctrine\Common\Util\ClassUtils;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Xiidea\EasyAuditBundle\Events\DoctrineEntityEvent;
