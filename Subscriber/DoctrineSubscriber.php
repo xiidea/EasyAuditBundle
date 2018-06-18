@@ -12,6 +12,7 @@
 namespace Xiidea\EasyAuditBundle\Subscriber;
 
 use Doctrine\Common\EventSubscriber;
+use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -63,7 +64,7 @@ class DoctrineSubscriber implements ContainerAwareInterface, EventSubscriber
             return;
         }
 
-        $className = get_class($args->getEntity());
+        $className = ClassUtils::getClass($args->getEntity());
 
         if (!isset($this->toBeDeleted[$className])) {
             $this->toBeDeleted[$className] = [];
@@ -86,7 +87,7 @@ class DoctrineSubscriber implements ContainerAwareInterface, EventSubscriber
     private function getToBeDeletedId($entity)
     {
         try{
-            return $this->toBeDeleted[get_class($entity)][spl_object_hash($entity)];
+            return $this->toBeDeleted[ClassUtils::getClass($entity)][spl_object_hash($entity)];
         }catch (\Exception $exception) {
             return false;
         }
@@ -100,7 +101,7 @@ class DoctrineSubscriber implements ContainerAwareInterface, EventSubscriber
     {
         if (true === $this->isConfiguredToTrack($args->getEntity(), $eventName)) {
             $this->container->get('event_dispatcher')->dispatch($eventName,
-                new DoctrineEntityEvent($args, $this->getIdentity($args, get_class($args->getEntity())))
+                new DoctrineEntityEvent($args, $this->getIdentity($args, ClassUtils::getClass($args->getEntity())))
             );
         }
     }
@@ -112,7 +113,7 @@ class DoctrineSubscriber implements ContainerAwareInterface, EventSubscriber
      */
     private function isConfiguredToTrack($entity, $eventName = '')
     {
-        $class = get_class($entity);
+        $class = ClassUtils::getClass($entity);
         $eventType = DoctrineEvents::getShortEventType($eventName);
 
         if (null !== $track = $this->isAnnotatedEvent($entity, $eventType)) {
@@ -174,7 +175,7 @@ class DoctrineSubscriber implements ContainerAwareInterface, EventSubscriber
      */
     protected function getReflectionClassFromObject($object)
     {
-        $class = get_class($object);
+        $class = ClassUtils::getClass($object);
 
         return new \ReflectionClass($class);
     }
