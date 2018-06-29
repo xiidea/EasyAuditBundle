@@ -14,6 +14,7 @@ namespace Xiidea\EasyAuditBundle\Tests\Subscriber;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Xiidea\EasyAuditBundle\Subscriber\DoctrineDeleteEventLogger;
+use Symfony\Component\Console\ConsoleEvents;
 
 class DoctrineDeleteEventLoggerTest extends TestCase
 {
@@ -44,7 +45,8 @@ class DoctrineDeleteEventLoggerTest extends TestCase
     {
         $subscriber = new DoctrineDeleteEventLogger($this->logger);
         $this->assertEquals([
-            KernelEvents::RESPONSE => 'onKernelResponse'
+            ConsoleEvents::TERMINATE => 'savePendingLogs',
+            KernelEvents::TERMINATE => 'savePendingLogs'
         ], $subscriber->getSubscribedEvents());
     }
 
@@ -54,7 +56,7 @@ class DoctrineDeleteEventLoggerTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('savePendingLogs');
         $subscriber = new DoctrineDeleteEventLogger($this->logger);
-        $subscriber->onKernelResponse($this->responseevent);
+        $subscriber->savePendingLogs($this->responseevent);
 
     }
 }

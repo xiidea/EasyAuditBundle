@@ -15,6 +15,7 @@ namespace Xiidea\EasyAuditBundle\Subscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Xiidea\EasyAuditBundle\Logger\Logger;
+use Symfony\Component\Console\ConsoleEvents;
 
 class DoctrineDeleteEventLogger implements EventSubscriberInterface
 {
@@ -32,7 +33,7 @@ class DoctrineDeleteEventLogger implements EventSubscriberInterface
         $this->logger = $logger;
     }
 
-    public function onKernelResponse()
+    public function savePendingLogs()
     {
         $this->logger->savePendingLogs();
     }
@@ -43,7 +44,8 @@ class DoctrineDeleteEventLogger implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::RESPONSE => 'onKernelResponse'
+            ConsoleEvents::TERMINATE => 'savePendingLogs',
+            KernelEvents::TERMINATE => 'savePendingLogs'
         ];
     }
 }
