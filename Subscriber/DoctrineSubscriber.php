@@ -77,7 +77,7 @@ class DoctrineSubscriber implements ContainerAwareInterface, EventSubscriber
     {
         $identity = $this->getToBeDeletedId($args->getEntity());
 
-        if ($identity) {
+        if (null !== $identity) {
             $this->container->get('event_dispatcher')->dispatch(DoctrineEvents::ENTITY_DELETED,
                 new DoctrineEntityEvent($args, $identity)
             );
@@ -86,11 +86,11 @@ class DoctrineSubscriber implements ContainerAwareInterface, EventSubscriber
 
     private function getToBeDeletedId($entity)
     {
-        try{
+        if($this->isScheduledForDelete($entity)) {
             return $this->toBeDeleted[ClassUtils::getClass($entity)][spl_object_hash($entity)];
-        }catch (\Exception $exception) {
-            return false;
         }
+
+        return null;
     }
 
     /**
@@ -224,5 +224,16 @@ class DoctrineSubscriber implements ContainerAwareInterface, EventSubscriber
     protected function getIdentity(LifecycleEventArgs $args, $className)
     {
         return $args->getEntityManager()->getClassMetadata($className)->getIdentifierValues($args->getEntity());
+    }
+
+    /**
+     * @param $entity
+     * @return boolean
+     */
+    private function isScheduledForDelete($entity)
+    {
+        $originalClassName = ClassUtils::getClass($entity);
+
+        return isset($this->toBeDeleted[$originalClassName]) && isset($this->toBeDeleted[$originalClassName][spl_object_hash($entity)]);
     }
 }
