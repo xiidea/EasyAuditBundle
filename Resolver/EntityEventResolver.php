@@ -11,6 +11,7 @@
 
 namespace Xiidea\EasyAuditBundle\Resolver;
 
+use Doctrine\Common\Util\ClassUtils;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\EventDispatcher\Event;
@@ -39,6 +40,7 @@ class EntityEventResolver implements ContainerAwareInterface, EventResolverInter
      * @param $eventName
      *
      * @return array
+     * @throws \ReflectionException
      */
     public function getEventLogInfo(Event $event, $eventName)
     {
@@ -152,10 +154,11 @@ class EntityEventResolver implements ContainerAwareInterface, EventResolverInter
     /**
      * @param $object
      * @return \ReflectionClass
+     * @throws \ReflectionException
      */
     protected function getReflectionClassFromObject($object)
     {
-        return new \ReflectionClass(get_class($object));
+        return new \ReflectionClass(ClassUtils::getClass($object));
     }
 
     /**
