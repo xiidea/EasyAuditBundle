@@ -11,23 +11,37 @@
 
 namespace Xiidea\EasyAuditBundle\Common;
 
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Role\SwitchUserRole;
-use Xiidea\EasyAuditBundle\Traits\ServiceContainerGetterMethods;
+use \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-class UserAwareComponent implements ContainerAwareInterface
+class UserAwareComponent
 {
-    use ServiceContainerGetterMethods;
-    use ContainerAwareTrait;
+    /**
+     * @var TokenStorageInterface
+     */
+    private $tokenStorage;
 
     /**
-     * @return \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var AuthorizationCheckerInterface
      */
-    protected function getContainer()
+    private $authChecker;
+
+    /**
+     * @var RequestStack
+     */
+    private $requestStack;
+
+    /**
+     * @param TokenStorageInterface $tokenStorage
+     */
+    public function setTokenStorage($tokenStorage)
     {
-        return $this->container;
+        $this->tokenStorage = $tokenStorage;
     }
+
 
     /**
      * Get a user from the Security Context
@@ -37,11 +51,8 @@ class UserAwareComponent implements ContainerAwareInterface
      */
     public function getUser()
     {
-        if (!$this->getContainer()->has('security.token_storage')) {
-            throw new \LogicException('The SecurityBundle is not registered in your application.');
-        }
 
-        if (null === $token = $this->getContainer()->get('security.token_storage')->getToken()) {
+        if (null === $token = $this->tokenStorage->getToken()) {
             return null;
         }
 
@@ -53,15 +64,31 @@ class UserAwareComponent implements ContainerAwareInterface
     }
 
     /**
+     * @param AuthorizationCheckerInterface $authChecker
+     */
+    public function setAuthChecker($authChecker)
+    {
+        $this->authChecker = $authChecker;
+    }
+
+    /**
+     * @param RequestStack $requestStack
+     */
+    public function setRequestStack($requestStack)
+    {
+        $this->requestStack = $requestStack;
+    }
+
+    /**
      * @return mixed
      */
     final protected function getImpersonatingUser()
     {
-        if (null === $token = $this->getContainer()->get('security.token_storage')->getToken()) {
+        if (null === $token = $this->tokenStorage->getToken()) {
             return null;
         }
 
-        if ($this->getContainer()->get('security.authorization_checker')->isGranted('ROLE_PREVIOUS_ADMIN')) {
+        if ($this->authChecker->isGranted('ROLE_PREVIOUS_ADMIN')) {
             return $this->getImpersonatingUserFromRole($token);
         }
 
@@ -97,7 +124,7 @@ class UserAwareComponent implements ContainerAwareInterface
     }
 
     /**
-     * @param $token
+     * @param TokenInterface $token
      * @param null $user
      * @return mixed
      */
@@ -111,5 +138,14 @@ class UserAwareComponent implements ContainerAwareInterface
         }
 
         return $user;
+    }
+
+    protected function getRequest()
+    {
+        if($this->requestStack === null) {
+            return false;
+        }
+
+        return $this->requestStack->getCurrentRequest();
     }
 }

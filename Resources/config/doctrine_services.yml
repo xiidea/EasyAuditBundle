@@ -4,7 +4,7 @@ services:
           class: Xiidea\EasyAuditBundle\Subscriber\DoctrineSubscriber
           arguments: ['%xiidea.easy_audit.doctrine_entities%']
           calls:
-              - [ setContainer,[ '@service_container' ] ]
+              - [ setDispatcher,[ '@event_dispatcher' ] ]
               - [ setAnnotationReader,[ '@annotation_reader' ] ]
           tags:
               - { name: doctrine.event_subscriber }

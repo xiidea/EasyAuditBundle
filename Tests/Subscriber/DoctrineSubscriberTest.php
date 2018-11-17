@@ -21,7 +21,7 @@ use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie;
 class DoctrineSubscriberTest extends TestCase
 {
     /** @var  \PHPUnit_Framework_MockObject_MockObject  */
-    private $container;
+    private $dispatcher;
 
     /** @var  \PHPUnit_Framework_MockObject_MockObject  */
     private $annotationReader;
@@ -35,7 +35,7 @@ class DoctrineSubscriberTest extends TestCase
     public function setUp()
     {
 
-        $this->container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $this->dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $this->entityManager = $this->createMock('Doctrine\ORM\EntityManagerInterface');
         $this->metaData = $this->createMock('Doctrine\ORM\Mapping\ClassMetadataInfo');
 
@@ -78,7 +78,6 @@ class DoctrineSubscriberTest extends TestCase
         $annotation = new ORMSubscribedEvents(array('events'=>'created'));
 
         $this->initializeAnnotationReader($annotation);
-        $this->initializeDispatcher();
 
         $subscriber = new DoctrineSubscriber(array());
 
@@ -96,7 +95,7 @@ class DoctrineSubscriberTest extends TestCase
     public function testCreateEventForEntityConfiguredToTrack()
     {
         $this->initializeAnnotationReader();
-        $this->initializeDispatcher();
+
         $subscriber = new DoctrineSubscriber(array('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie'=>array('created')));
 
         $this->invokeCreatedEventCall($subscriber);
@@ -105,7 +104,7 @@ class DoctrineSubscriberTest extends TestCase
     public function testCreateEventForEntityConfiguredToTrackAllEvents()
     {
         $this->initializeAnnotationReader();
-        $this->initializeDispatcher();
+
         $subscriber = new DoctrineSubscriber(array('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie'=>array()));
 
         $this->invokeCreatedEventCall($subscriber);
@@ -128,7 +127,7 @@ class DoctrineSubscriberTest extends TestCase
     public function testRemovedEventForEntityConfiguredToTrackAllEvent()
     {
         $this->initializeAnnotationReader(null);
-        $this->initializeDispatcher();
+
         $this->mockMetaData();
         $subscriber = new DoctrineSubscriber(array('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie'=>array()));
         $this->invokeDeletedEventCall($subscriber);
@@ -142,22 +141,12 @@ class DoctrineSubscriberTest extends TestCase
             ->willReturn($metaData);
     }
 
-    private function initializeDispatcher()
-    {
-        $dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
-
-        $this->container
-            ->method('get')
-            ->with($this->equalTo('event_dispatcher'))
-            ->willReturn($dispatcher);
-    }
-
     /**
      * @param DoctrineSubscriber $subscriber
      */
     private function invokeCreatedEventCall($subscriber)
     {
-        $subscriber->setContainer($this->container);
+        $subscriber->setDispatcher($this->dispatcher);
         $subscriber->setAnnotationReader($this->annotationReader);
 
         $subscriber->postPersist(new LifecycleEventArgs(new Movie(), $this->entityManager));
@@ -168,7 +157,7 @@ class DoctrineSubscriberTest extends TestCase
      */
     private function invokeUpdatedEventCall($subscriber)
     {
-        $subscriber->setContainer($this->container);
+        $subscriber->setDispatcher($this->dispatcher);;
         $subscriber->setAnnotationReader($this->annotationReader);
 
         $subscriber->postUpdate(new LifecycleEventArgs(new Movie(), $this->entityManager));
@@ -179,7 +168,7 @@ class DoctrineSubscriberTest extends TestCase
      */
     private function invokeDeletedEventCall($subscriber)
     {
-        $subscriber->setContainer($this->container);
+        $subscriber->setDispatcher($this->dispatcher);;
         $subscriber->setAnnotationReader($this->annotationReader);
 
         $movie = new Movie();

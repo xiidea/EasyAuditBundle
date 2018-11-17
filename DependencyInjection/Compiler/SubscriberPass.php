@@ -13,6 +13,7 @@ namespace Xiidea\EasyAuditBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 
 class SubscriberPass implements CompilerPassInterface
 {
@@ -46,15 +47,9 @@ class SubscriberPass implements CompilerPassInterface
             return;
         }
 
-        foreach ($this->getDoctrineEventsList() as $constant) {
+        foreach (DoctrineEvents::getConstants() as $constant) {
             array_push($events, $constant);
         }
-    }
-
-    private function getDoctrineEventsList()
-    {
-        $reflectionClass = new \ReflectionClass('Xiidea\EasyAuditBundle\Events\DoctrineEvents');
-        return $reflectionClass->getConstants();
     }
 
     /**

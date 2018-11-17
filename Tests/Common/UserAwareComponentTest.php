@@ -12,6 +12,7 @@ namespace Xiidea\EasyAuditBundle\Tests\Common;
  */
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Role\SwitchUserRole;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\DummyToken;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\DummyUserAwareComponent;
@@ -20,10 +21,13 @@ use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
 class UserAwareComponentTest extends TestCase
 {
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
-    private $container;
+    private $tokenStorage;
 
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
-    private $securityContext;
+    private $requestStack;
+
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    private $authChecker;
 
 
     /** @var  DummyUserAwareComponent */
@@ -31,30 +35,17 @@ class UserAwareComponentTest extends TestCase
 
     public function setUp()
     {
-        $this->container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
+//        $this->requestStack = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $this->authChecker = $this->createMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
         $this->userAwareComponent = new DummyUserAwareComponent();
-        $this->userAwareComponent->setContainer($this->container);
-    }
-
-    /**
-     * @expectedException \LogicException
-     */
-    public function testShouldThrowLogicExceptionWithoutSecurityBundle()
-    {
-        $this->container->expects($this->at(0))
-            ->method('has')
-            ->with($this->equalTo('security.token_storage'))
-            ->willReturn(false);
-
-        $user = $this->userAwareComponent->getUser();
-
-        $this->assertNull($user);
+        $this->userAwareComponent->setTokenStorage($this->tokenStorage);
+//        $this->userAwareComponent->setRequestStack($this->requestStack);
+        $this->userAwareComponent->setAuthChecker($this->authChecker);
     }
 
     public function testShouldReturnNullUserIfUserNotLoggedIn()
     {
-        $this->initiateContainerWithSecurityContextCheck();
-
         $user = $this->userAwareComponent->getUser();
 
         $this->assertNull($user);
@@ -62,9 +53,7 @@ class UserAwareComponentTest extends TestCase
 
     public function testShouldReturnUserObjectOnLoggedInState()
     {
-        $this->initiateContainerWithSecurityContextCheck();
-
-        $this->securityContext->expects($this->any())
+        $this->tokenStorage->expects($this->any())
             ->method('getToken')
             ->willReturn(new DummyToken(new UserEntity(1, 'admin')));
 
@@ -77,9 +66,7 @@ class UserAwareComponentTest extends TestCase
 
     public function testShouldReturnNullIfAuthenticatedAnonymously()
     {
-        $this->initiateContainerWithSecurityContextCheck();
-
-        $this->securityContext->expects($this->any())
+        $this->tokenStorage->expects($this->any())
             ->method('getToken')
             ->willReturn(new DummyToken(""));
 
@@ -90,9 +77,7 @@ class UserAwareComponentTest extends TestCase
 
     public function testShouldReturnNullImpersonatingUserWhenSecurityTokenNotExists() {
 
-        $this->initiateContainerWithOutSecurityContextCheck();
-
-        $this->securityContext->expects($this->any())
+        $this->tokenStorage->expects($this->any())
             ->method('getToken')
             ->willReturn(null);
 
@@ -102,10 +87,9 @@ class UserAwareComponentTest extends TestCase
     }
 
     public function testShouldReturnNullImpersonatingUserIfUserDoNotHavePreviousAdminRole() {
-        $this->initiateContainerWithOutSecurityContextCheck();
-        $this->mockSecurityAuthChecker(1);
+        $this->mockSecurityAuthChecker();
 
-        $this->securityContext->expects($this->any())
+        $this->tokenStorage->expects($this->any())
             ->method('getToken')
             ->willReturn(new DummyToken(new UserEntity(1, 'a')));
 
@@ -115,12 +99,11 @@ class UserAwareComponentTest extends TestCase
     }
 
     public function testShouldReturnImpersonatingUserIfUserHavePreviousAdminRole() {
-        $this->initiateContainerWithOutSecurityContextCheck();
-        $this->mockSecurityAuthChecker(1, true);
+        $this->mockSecurityAuthChecker(true);
 
         $userToken = new DummyToken(new UserEntity(1, 'admin'));
 
-        $this->securityContext->expects($this->any())
+        $this->tokenStorage->expects($this->any())
             ->method('getToken')
             ->willReturn(new DummyToken(new UserEntity(1, 'a', array(new SwitchUserRole('', $userToken)))));
 
@@ -131,49 +114,10 @@ class UserAwareComponentTest extends TestCase
         $this->assertEquals(1, $user->getId());
     }
 
-    private function mockSecurityAuthChecker($callIndex, $isGranted = false) {
-        $authChecker = $this->createMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
-
-        $this->container->expects($this->at($callIndex))
-            ->method('get')
-            ->with($this->equalTo('security.authorization_checker'))
-            ->willReturn($authChecker);
-
-        $authChecker->expects($this->once())
+    private function mockSecurityAuthChecker($isGranted = false) {
+        $this->authChecker->expects($this->once())
             ->method('isGranted')
             ->with('ROLE_PREVIOUS_ADMIN')
             ->willReturn($isGranted);
-    }
-
-
-    protected function initiateContainerWithSecurityContextCheck($callIndex = 0)
-    {
-        $this->securityContext = $this
-            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->container->expects($this->at($callIndex))
-            ->method('has')
-            ->with($this->equalTo('security.token_storage'))
-            ->willReturn(true);
-
-        $this->container->expects($this->at($callIndex + 1))
-            ->method('get')
-            ->with($this->equalTo('security.token_storage'))
-            ->willReturn($this->securityContext);
-    }
-
-    protected function initiateContainerWithOutSecurityContextCheck($callIndex = 0)
-    {
-        $this->securityContext = $this
-            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->container->expects($this->at($callIndex))
-            ->method('get')
-            ->with($this->equalTo('security.token_storage'))
-            ->willReturn($this->securityContext);
     }
 }

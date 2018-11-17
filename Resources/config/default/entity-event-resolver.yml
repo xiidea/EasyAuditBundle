@@ -4,4 +4,4 @@ services:
           class: Xiidea\EasyAuditBundle\Resolver\EntityEventResolver
           public: true
           calls:
-              - [ setContainer,[ '@service_container' ] ]
+              - [ setDoctrine,[ '@doctrine' ] ]

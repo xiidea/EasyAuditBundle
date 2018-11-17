@@ -16,12 +16,41 @@ use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Xiidea\EasyAuditBundle\Common\UserAwareComponent;
 use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
+use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 use Xiidea\EasyAuditBundle\Exception\InvalidServiceException;
 use Xiidea\EasyAuditBundle\Exception\UnrecognizedEntityException;
 use Xiidea\EasyAuditBundle\Exception\UnrecognizedEventInfoException;
 
 class EventResolverFactory extends UserAwareComponent
 {
+    private $customResolvers = array();
+    private $commonResolver;
+
+    /**
+     * @var EventResolverInterface
+     */
+    private $entityEventResolver;
+
+    private $resolverEventMap = array();
+
+    private $debug = false;
+    private $userProperty;
+    private $entityClass;
+
+    /**
+     * EventResolverFactory constructor.
+     *
+     * @param array $resolverEventMap
+     * @param $userProperty
+     * @param $entityClass
+     */
+    public function __construct(array $resolverEventMap = array(), $userProperty = 'username', $entityClass = BaseAuditLog::class)
+    {
+        $this->resolverEventMap = $resolverEventMap;
+        $this->userProperty = $userProperty;
+        $this->entityClass = $entityClass;
+    }
+
     /**
      * @param Event $event
      * @param string $eventName
@@ -50,6 +79,7 @@ class EventResolverFactory extends UserAwareComponent
      *
      * @return null|BaseAuditLog
      * @throws UnrecognizedEventInfoException
+     * @throws \Exception
      */
     protected function getEventLogObject($eventInfo)
     {
@@ -67,23 +97,21 @@ class EventResolverFactory extends UserAwareComponent
     /**
      * @param string $eventName
      *
-     * @throws \Exception
      * @return EventResolverInterface
      */
     protected function getResolver($eventName)
     {
 
         if ($this->isEntityEvent($eventName)) {
-            return $this->getEntityEventResolver();
+            return $this->entityEventResolver;
         }
 
-        $customResolvers = $this->getParameter('custom_resolvers');
 
-        if (isset($customResolvers[$eventName])) {
-            return $this->getCustomResolver($customResolvers[$eventName]);
+        if (isset($this->resolverEventMap[$eventName]) && isset($this->customResolvers[$this->resolverEventMap[$eventName]])) {
+            return $this->customResolvers[$this->resolverEventMap[$eventName]];
         }
 
-        return $this->getCommonResolver();
+        return $this->commonResolver;
     }
 
     /**
@@ -92,7 +120,7 @@ class EventResolverFactory extends UserAwareComponent
      */
     protected function isEntityEvent($eventName)
     {
-        return in_array($eventName, $this->getDoctrineEventsList());
+        return in_array($eventName, DoctrineEvents::getConstants());
     }
 
     /**
@@ -120,16 +148,14 @@ class EventResolverFactory extends UserAwareComponent
      */
     protected function setUser(BaseAuditLog $entity)
     {
-        $userProperty = $this->container->getParameter('xiidea.easy_audit.user_property');
-
         if (null === $user = $this->getUser()) {
             $entity->setUser($this->getAnonymousUserName());
             return;
         }
 
-        $entity->setUser($this->getSettablePropertyValue($userProperty, $user));
+        $entity->setUser($this->getSettablePropertyValue($this->userProperty, $user));
 
-        $this->setImpersonatingUser($entity, $userProperty);
+        $this->setImpersonatingUser($entity, $this->userProperty);
     }
 
 
@@ -139,7 +165,7 @@ class EventResolverFactory extends UserAwareComponent
     protected function getClientIp()
     {
         $request = $this->getRequest();
-        
+
         if ($request) {
             return $request->getClientIp();
         }
@@ -148,43 +174,42 @@ class EventResolverFactory extends UserAwareComponent
     }
 
     /**
-     * @return \Symfony\Component\DependencyInjection\ContainerInterface
+     * @param $id
+     * @param EventResolverInterface $resolver
+     *
+     * @throws \Exception|InvalidServiceException
      */
-    protected function getContainer()
+    public function addCustomResolver($id, $resolver)
     {
-        return $this->container;
-    }
-
-    /**
-     * @return null
-     * @throws InvalidServiceException
-     */
-    protected function handleInvalidResolverConfiguration()
-    {
-        if ($this->isDebug()) {
-            throw new InvalidServiceException(
-                'Resolver Service must implement' . __NAMESPACE__ . "EventResolverInterface"
-            );
-        }
-
-        return null;
-    }
-
-    /**
-     * @param $serviceName
-     * @return null|EventResolverInterface
-     * @throws InvalidServiceException
-     */
-    protected function getCustomResolver($serviceName)
-    {
-        $resolver = $this->getService($serviceName);
-
         if (!$resolver instanceof EventResolverInterface) {
-            return $this->handleInvalidResolverConfiguration();
+            $this->handleException(new InvalidServiceException(
+                'Resolver Service must implement' . EventResolverInterface::class
+            ));
+
+            return;
         }
 
-        return $resolver;
+        $this->customResolvers[$id] = $resolver;
     }
+
+    /**
+     * @param mixed $resolver
+     *
+     * @throws \Exception
+     */
+    public function setCommonResolver($resolver)
+    {
+        if (!$resolver instanceof EventResolverInterface) {
+            $this->commonResolver = $this->handleException(new InvalidServiceException(
+                'Resolver Service must implement' . EventResolverInterface::class
+            ));
+
+            return;
+        }
+
+        $this->commonResolver = $resolver;
+    }
+
 
     /**
      * @param \Exception $e
@@ -211,7 +236,7 @@ class EventResolverFactory extends UserAwareComponent
             return $this->handleException(new UnrecognizedEventInfoException());
         }
 
-        $auditLogClass = $this->getParameter('entity_class');
+        $auditLogClass = $this->entityClass;
         $eventObject = new $auditLogClass();
 
         if (!$eventObject instanceof BaseAuditLog) {
@@ -249,5 +274,26 @@ class EventResolverFactory extends UserAwareComponent
         if (null !== $user = $this->getImpersonatingUser()) {
             $entity->setImpersonatingUser($this->getSettablePropertyValue($userProperty, $user));
         }
+    }
+
+    /**
+     * @param mixed $debug
+     */
+    public function setDebug($debug)
+    {
+        $this->debug = $debug;
+    }
+
+    /**
+     * @param EventResolverInterface $entityEventResolver
+     */
+    public function setEntityEventResolver($entityEventResolver)
+    {
+        $this->entityEventResolver = $entityEventResolver;
+    }
+
+    private function isDebug()
+    {
+        return $this->debug;
     }
 }

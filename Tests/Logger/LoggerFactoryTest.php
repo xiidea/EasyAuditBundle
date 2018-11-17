@@ -19,13 +19,6 @@ use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog;
 
 class LoggerFactoryTest extends TestCase
 {
-
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
-    private $container;
-
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
-    private $kernel;
-
     /** @var  LoggerFactory */
     private $loggerFactory;
 
@@ -42,10 +35,7 @@ class LoggerFactoryTest extends TestCase
 
     public function setUp()
     {
-        $this->container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $this->kernel = $this->createMock('Symfony\Component\HttpKernel\KernelInterface');
         $this->loggerFactory = new LoggerFactory();
-        $this->loggerFactory->setContainer($this->container);
     }
 
 
@@ -200,18 +190,10 @@ class LoggerFactoryTest extends TestCase
 
     /**
      * @param bool $on
-     * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function initiateContainerWithDebugMode($on = true)
     {
-        $this->kernel->expects($this->once())
-            ->method('isDebug')
-            ->will($this->returnValue($on));
-
-        $this->container->expects($this->once())
-            ->method('get')
-            ->with($this->equalTo('kernel'))
-            ->will($this->returnValue($this->kernel));
+        $this->loggerFactory->setDebug($on);
     }
 }
  

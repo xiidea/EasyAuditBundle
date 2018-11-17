@@ -28,4 +28,14 @@ class DoctrineEvents
     {
         return str_replace(self::$prefix, '', $eventName);
     }
+
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
+    public static function getConstants()
+    {
+        $oClass = new \ReflectionClass(__CLASS__);
+        return $oClass->getConstants();
+    }
 }

@@ -80,7 +80,7 @@ class CommonTest extends BaseTestCase
         );
 
         $container->get('event_dispatcher')->dispatch($name."2",
-            new WithEmbeddedResolver($name."2")
+            new WithEmbeddedResolver()
         );
 
         $logFile = realpath($container->getParameter('kernel.cache_dir') . DIRECTORY_SEPARATOR . "audit.log");

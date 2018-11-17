@@ -24,12 +24,6 @@ use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
 
 class EntityEventResolverTest extends TestCase {
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject  */
-    private $container;
-
-    /** @var  \PHPUnit_Framework_MockObject_MockObject  */
-    private $kernel;
-
     /** @var  EntityEventResolver */
     private $eventResolver;
 
@@ -50,10 +44,9 @@ class EntityEventResolverTest extends TestCase {
 
     public function setUp()
     {
-        $this->container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $this->kernel = $this->createMock('Symfony\Component\HttpKernel\KernelInterface');
+        $this->doctrine = $this->createMock('Doctrine\Bundle\DoctrineBundle\Registry');
         $this->eventResolver =  new EntityEventResolver();
-        $this->eventResolver->setContainer($this->container);
+        $this->eventResolver->setDoctrine($this->doctrine);
 
         $this->mockMethodCallTree();
     }
@@ -128,15 +121,6 @@ class EntityEventResolverTest extends TestCase {
             ->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->doctrine = $this
-            ->getMockBuilder('Doctrine\Bundle\DoctrineBundle\Registry')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->container->expects($this->any())
-            ->method('get')
-            ->with($this->equalTo('doctrine'))
-            ->willReturn($this->doctrine);
 
         $this->doctrine->expects($this->any())
             ->method('getManager')

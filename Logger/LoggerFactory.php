@@ -11,21 +11,17 @@
 
 namespace Xiidea\EasyAuditBundle\Logger;
 
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
 use Xiidea\EasyAuditBundle\Exception\InvalidServiceException;
-use Xiidea\EasyAuditBundle\Traits\ServiceContainerGetterMethods;
 
-class LoggerFactory implements ContainerAwareInterface
+class LoggerFactory
 {
-    use ServiceContainerGetterMethods;
-    use ContainerAwareTrait;
-
     /** @var LoggerInterface[] */
     static private $loggers = array();
 
     private $loggersChannel;
+
+    private $debug = false;
 
     public function __construct(array $channel = array())
     {
@@ -57,17 +53,9 @@ class LoggerFactory implements ContainerAwareInterface
     {
         if ($logger instanceof LoggerInterface) {
             self::$loggers[$loggerName] = $logger;
-        } elseif ($this->isDebug()) {
+        } elseif ($this->debug) {
             throw new InvalidServiceException('Logger Service must implement' . __NAMESPACE__ . "LoggerInterface");
         }
-    }
-
-    /**
-     * @return \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    protected function getContainer()
-    {
-        return $this->container;
     }
 
     /**
@@ -121,5 +109,13 @@ class LoggerFactory implements ContainerAwareInterface
     protected function isValidLoggerForThisEvent(BaseAuditLog $eventInfo, $logger, $id)
     {
         return $logger instanceof LoggerInterface && $this->isChannelRegisterWithLogger($id, $eventInfo->getLevel());
+    }
+
+    /**
+     * @param mixed $debug
+     */
+    public function setDebug($debug)
+    {
+        $this->debug = $debug;
     }
 }

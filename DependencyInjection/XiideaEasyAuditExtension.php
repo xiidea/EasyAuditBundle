@@ -39,6 +39,10 @@ class XiideaEasyAuditExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
 
+        if(!$container->hasAlias('doctrine')) {
+            $config['entity_event_resolver'] = 'none';
+        }
+
         $this->loadDefaultResolverServices($config, $loader);
 
         if ($config['doctrine_entities'] !== false) {

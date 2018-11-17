@@ -12,6 +12,7 @@
 namespace Xiidea\EasyAuditBundle\Tests\Resolver;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Xiidea\EasyAuditBundle\Resolver\UserEventResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\DummyToken;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
@@ -22,41 +23,24 @@ use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
 
 class UserEventResolverTest extends TestCase
 {
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
-    private $container;
 
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
-    private $securityContext;
+    private $tokenStorage;
 
     /** @var  UserEventResolver */
     private $eventResolver;
 
     public function setUp()
     {
-        $this->container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
         $this->eventResolver = new UserEventResolver();
-        $this->eventResolver->setContainer($this->container);
+        $this->eventResolver->setTokenStorage($this->tokenStorage);
 
     }
 
     public function testIsAnInstanceOfEventResolverInterface()
     {
         $this->assertInstanceOf('Xiidea\EasyAuditBundle\Resolver\EventResolverInterface', $this->eventResolver);
-    }
-
-    /**
-     * @expectedException \LogicException
-     */
-    public function testWithoutSecurityBundle()
-    {
-        $this->container->expects($this->at(0))
-            ->method('has')
-            ->with($this->equalTo('security.token_storage'))
-            ->willReturn(false);
-
-        $auditLog = $this->eventResolver->getEventLogInfo(new Basic(), 'security.interactive_login');
-
-        $this->assertNull($auditLog);
     }
 
     public function testUnlistedEvent()
@@ -82,10 +66,9 @@ class UserEventResolverTest extends TestCase
 
     public function testLoginEvent()
     {
-        $this->initiateContainerWithSecurityContext();
         $event = new DummyFilterUserResponseEvent(new UserEntity());
 
-        $this->securityContext->expects($this->once())
+        $this->tokenStorage->expects($this->once())
             ->method('getToken')
             ->willReturn(new DummyToken(new UserEntity()));
 
@@ -141,25 +124,6 @@ class UserEventResolverTest extends TestCase
     public function testPasswordChangedCommandWithIncompatibleEventObject()
     {
         $this->assertIncompatibleEventObject('fos_user.change_password.edit.completed');
-    }
-
-
-    protected function initiateContainerWithSecurityContext()
-    {
-        $this->securityContext = $this
-            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->container->expects($this->at(0))
-            ->method('has')
-            ->with($this->equalTo('security.token_storage'))
-            ->willReturn(true);
-
-        $this->container->expects($this->at(1))
-            ->method('get')
-            ->with($this->equalTo('security.token_storage'))
-            ->willReturn($this->securityContext);
     }
 
     /**

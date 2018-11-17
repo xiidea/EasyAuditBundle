@@ -14,12 +14,12 @@ namespace Xiidea\EasyAuditBundle\Subscriber;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Xiidea\EasyAuditBundle\Events\DoctrineEntityEvent;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 
-class DoctrineSubscriber implements ContainerAwareInterface, EventSubscriber
+class DoctrineSubscriber implements EventSubscriber
 {
     use ContainerAwareTrait;
 
@@ -27,6 +27,11 @@ class DoctrineSubscriber implements ContainerAwareInterface, EventSubscriber
     private $annotationReader;
 
     private $toBeDeleted = [];
+
+    /**
+     * @var EventDispatcher
+     */
+    private $dispatcher;
 
     /**
      * @var array
@@ -78,7 +83,7 @@ class DoctrineSubscriber implements ContainerAwareInterface, EventSubscriber
         $identity = $this->getToBeDeletedId($args->getEntity());
 
         if (null !== $identity) {
-            $this->container->get('event_dispatcher')->dispatch(DoctrineEvents::ENTITY_DELETED,
+            $this->dispatcher->dispatch(DoctrineEvents::ENTITY_DELETED,
                 new DoctrineEntityEvent($args, $identity)
             );
         }
@@ -100,7 +105,7 @@ class DoctrineSubscriber implements ContainerAwareInterface, EventSubscriber
     private function handleEvent($eventName, LifecycleEventArgs $args)
     {
         if (true === $this->isConfiguredToTrack($args->getEntity(), $eventName)) {
-            $this->container->get('event_dispatcher')->dispatch($eventName,
+            $this->dispatcher->dispatch($eventName,
                 new DoctrineEntityEvent($args, $this->getIdentity($args, ClassUtils::getClass($args->getEntity())))
             );
         }
@@ -235,5 +240,13 @@ class DoctrineSubscriber implements ContainerAwareInterface, EventSubscriber
         $originalClassName = ClassUtils::getClass($entity);
 
         return isset($this->toBeDeleted[$originalClassName]) && isset($this->toBeDeleted[$originalClassName][spl_object_hash($entity)]);
+    }
+
+    /**
+     * @param EventDispatcher $dispatcher
+     */
+    public function setDispatcher($dispatcher)
+    {
+        $this->dispatcher = $dispatcher;
     }
 }

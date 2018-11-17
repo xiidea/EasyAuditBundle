@@ -6,13 +6,17 @@ services:
           public: false
           arguments : [ '%xiidea.easy_audit.logger_channel%' ]
           calls:
-              - [ setContainer,[ '@service_container' ] ]
+              - [ setDebug,[ '%kernel.debug%' ] ]
 
   xiidea.easy_audit.event_resolver_factory:
           class: Xiidea\EasyAuditBundle\Resolver\EventResolverFactory
           public: false
+          arguments : [ '%xiidea.easy_audit.custom_resolvers%', '%xiidea.easy_audit.user_property%', '%xiidea.easy_audit.entity_class%' ]
           calls:
-              - [ setContainer,[ '@service_container' ] ]
+            - [ setAuthChecker,[ '@security.authorization_checker' ] ]
+            - [ setRequestStack,[ '@request_stack' ] ]
+            - [ setTokenStorage,[ '@security.token_storage' ] ]
+            - [ setDebug,[ '%kernel.debug%' ] ]
 
   xiidea.easy_audit.event_listener:
           class: Xiidea\EasyAuditBundle\Listener\LogEventsListener

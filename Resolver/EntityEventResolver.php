@@ -11,18 +11,15 @@
 
 namespace Xiidea\EasyAuditBundle\Resolver;
 
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Util\ClassUtils;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\EventDispatcher\Event;
 use Xiidea\EasyAuditBundle\Events\DoctrineEntityEvent;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 
 /** Custom Event Resolver Example Class */
-class EntityEventResolver implements ContainerAwareInterface, EventResolverInterface
+class EntityEventResolver implements EventResolverInterface
 {
-    use ContainerAwareTrait;
-
     protected $eventShortName;
 
     /** @var  $event DoctrineEntityEvent */
@@ -33,6 +30,11 @@ class EntityEventResolver implements ContainerAwareInterface, EventResolverInter
     protected $eventName;
 
     protected $identity = ['', ''];
+
+    /**
+     * @var Registry
+     */
+    protected $doctrine;
 
 
     /**
@@ -166,6 +168,22 @@ class EntityEventResolver implements ContainerAwareInterface, EventResolverInter
      */
     protected function getUnitOfWork()
     {
-        return $this->container->get('doctrine')->getManager()->getUnitOfWork();
+        return $this->getDoctrine()->getManager()->getUnitOfWork();
+    }
+
+    /**
+     * @return \Doctrine\Bundle\DoctrineBundle\Registry|object
+     */
+    protected function getDoctrine()
+    {
+        return $this->doctrine;
+    }
+
+    /**
+     * @param Registry $doctrine
+     */
+    public function setDoctrine($doctrine)
+    {
+        $this->doctrine = $doctrine;
     }
 }

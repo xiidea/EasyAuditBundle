@@ -30,4 +30,6 @@ xiidea_easy_audit:
     #user.event_resolver:
          #class: Xiidea\EasyAuditBundle\Resolver\UserEventResolver
          #calls:
-         #   - [ setContainer,[ @service_container ] ]
+            #- [ setAuthChecker,[ '@security.authorization_checker' ] ]
+            #- [ setRequestStack,[ '@request_stack' ] ]
+            #- [ setRequestStack,[ '@security.token_storage' ] ]
