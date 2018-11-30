@@ -37,11 +37,11 @@ class DoctrineSubscriber implements EventSubscriber
     /**
      * @var array
      */
-    private $entities;
+    private $documents;
 
-    public function __construct($entities = [])
+    public function __construct($documents = [])
     {
-        $this->entities = $entities;
+        $this->documents = $documents;
     }
 
     public function getSubscribedEvents()
@@ -56,17 +56,17 @@ class DoctrineSubscriber implements EventSubscriber
 
     public function postPersist(LifecycleEventArgs $args)
     {
-        $this->handleEvent(DoctrineEvents::ENTITY_CREATED, $args);
+        $this->handleEvent(DoctrineEvents::DOCUMENT_CREATED, $args);
     }
 
     public function postUpdate(LifecycleEventArgs $args)
     {
-        $this->handleEvent(DoctrineEvents::ENTITY_UPDATED, $args);
+        $this->handleEvent(DoctrineEvents::DOCUMENT_UPDATED, $args);
     }
 
     public function preRemove(LifecycleEventArgs $args)
     {
-        if (false === $this->isConfiguredToTrack($args->getDocument(), DoctrineEvents::ENTITY_DELETED)) {
+        if (false === $this->isConfiguredToTrack($args->getDocument(), DoctrineEvents::DOCUMENT_DELETED)) {
             return;
         }
 
@@ -85,7 +85,7 @@ class DoctrineSubscriber implements EventSubscriber
 
         if (null !== $identity) {
             $this->dispatcher->dispatch(
-                DoctrineEvents::ENTITY_DELETED,
+                DoctrineEvents::DOCUMENT_DELETED,
                 new DoctrineDocumentEvent($args, $identity)
             );
         }
@@ -196,7 +196,7 @@ class DoctrineSubscriber implements EventSubscriber
      */
     private function shouldTrackEventType($eventType, $class)
     {
-        return (is_array($this->entities[$class]) && in_array($eventType, $this->entities[$class], true));
+        return (is_array($this->documents[$class]) && in_array($eventType, $this->documents[$class], true));
     }
 
     /**
@@ -205,7 +205,7 @@ class DoctrineSubscriber implements EventSubscriber
      */
     private function shouldTrackAllEventType($class)
     {
-        return empty($this->entities[$class]);
+        return empty($this->documents[$class]);
     }
 
     /**
@@ -214,7 +214,7 @@ class DoctrineSubscriber implements EventSubscriber
      */
     protected function isConfigured($class)
     {
-        return isset($this->entities[$class]);
+        return isset($this->documents[$class]);
     }
 
     /**

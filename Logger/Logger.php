@@ -40,7 +40,7 @@ class Logger implements LoggerInterface
             return;
         }
 
-        if ($event->getTypeId() === DoctrineEvents::ENTITY_DELETED) {
+        if ($event->getTypeId() === DoctrineEvents::DOCUMENT_DELETED) {
             $this->documentDeleteLogs[] = $event;
 
             return;

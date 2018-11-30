@@ -78,7 +78,7 @@ class ResolverFactoryPassTest extends TestCase
             ->will($this->returnValue($definitionObject));
 
         $containerBuilderMock->expects($this->once())
-            ->method('hasAlias')
+            ->method('has')
             ->with($this->equalTo('doctrine_mongodb'))
             ->will($this->returnValue(true));
 
@@ -130,7 +130,7 @@ class ResolverFactoryPassTest extends TestCase
             ->will($this->returnValue($definitionObject));
 
         $containerBuilderMock->expects($this->once())
-            ->method('hasAlias')
+            ->method('has')
             ->with($this->equalTo('doctrine_mongodb'))
             ->will($this->returnValue(false));
 

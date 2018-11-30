@@ -57,11 +57,11 @@ class DoctrineSubscriberTest extends TestCase
 
     public function testConstructor()
     {
-        $entities = ['document1', 'document2'];
-        $subscriber = new DoctrineSubscriber($entities);
-        $this->assertAttributeEquals($entities, 'entities', $subscriber);
+        $documents = ['document1', 'document2'];
+        $subscriber = new DoctrineSubscriber($documents);
+        $this->assertAttributeEquals($documents, 'documents', $subscriber);
         $subscriber = new DoctrineSubscriber([]);
-        $this->assertAttributeEquals([], 'entities', $subscriber);
+        $this->assertAttributeEquals([], 'documents', $subscriber);
     }
 
     public function testSubscribedEvents()

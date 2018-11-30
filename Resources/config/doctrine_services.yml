@@ -7,4 +7,4 @@ services:
               - [ setDispatcher,[ '@event_dispatcher' ] ]
               - [ setAnnotationReader,[ '@annotation_reader' ] ]
           tags:
-              - { name: doctrine.event_subscriber }
+              - { name: doctrine_mongodb.odm.event_subscriber }

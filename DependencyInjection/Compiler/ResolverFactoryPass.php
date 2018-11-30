@@ -41,7 +41,7 @@ class ResolverFactoryPass implements CompilerPassInterface
             ]
         );
 
-        if ($container->hasAlias('doctrine_mongodb')) {
+        if ($container->has('doctrine_mongodb')) {
             $definition->addMethodCall(
                 'setDocumentEventResolver',
                 [

@@ -39,7 +39,7 @@ class XiideaEasyAuditExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
 
-        if (!$container->hasAlias('doctrine_mongodb')) {
+        if (!$container->has('doctrine_mongodb')) {
             $config['document_event_resolver'] = 'none';
         }
 

@@ -76,7 +76,7 @@ class LoggerTest extends TestCase
             ->method('flush');
 
         $event = new AuditLog();
-        $event->setTypeId(DoctrineEvents::ENTITY_DELETED);
+        $event->setTypeId(DoctrineEvents::DOCUMENT_DELETED);
         $this->logger->log($event);
         $this->assertAttributeEquals([$event], 'documentDeleteLogs', $this->logger);
     }
@@ -93,7 +93,7 @@ class LoggerTest extends TestCase
             ->with($this->isInstanceOf(BaseAuditLog::class));
 
         $event = new AuditLog();
-        $event->setTypeId(DoctrineEvents::ENTITY_DELETED);
+        $event->setTypeId(DoctrineEvents::DOCUMENT_DELETED);
         $this->logger->log($event);
         $this->assertAttributeEquals([$event], 'documentDeleteLogs', $this->logger);
         $this->logger->savePendingLogs();

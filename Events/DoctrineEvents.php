@@ -15,9 +15,9 @@ class DoctrineEvents
 {
     private static $prefix = 'easy_audit.doctrine.document.';
 
-    const ENTITY_UPDATED = 'easy_audit.doctrine.document.updated';
-    const ENTITY_CREATED = 'easy_audit.doctrine.document.created';
-    const ENTITY_DELETED = 'easy_audit.doctrine.document.deleted';
+    const DOCUMENT_UPDATED = 'easy_audit.doctrine.document.updated';
+    const DOCUMENT_CREATED = 'easy_audit.doctrine.document.created';
+    const DOCUMENT_DELETED = 'easy_audit.doctrine.document.deleted';
 
     /**
      * @param string $eventName
