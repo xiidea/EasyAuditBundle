@@ -29,7 +29,7 @@ Add EasyAuditBundle in your composer.json:
 ```js
 {
     "require": {
-        "wh1pp3rz/easy-audit": "dev-master"
+        "xiidea/easy-audit": "dev-poc/odm-compatible"
     }
 }
 ```
