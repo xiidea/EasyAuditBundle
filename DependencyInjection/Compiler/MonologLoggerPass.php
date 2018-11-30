@@ -20,11 +20,12 @@ class MonologLoggerPass implements CompilerPassInterface
     {
         if (false === $container->hasAlias('logger')) {
             $container->removeDefinition('xiidea.easy_audit.mono_logger.service');
+
             return;
         }
 
         $definition = $container->getDefinition('xiidea.easy_audit.mono_logger.service');
 
-        $definition->setPublic(TRUE);
+        $definition->setPublic(true);
     }
 }

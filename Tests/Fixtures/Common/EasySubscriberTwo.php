@@ -23,8 +23,8 @@ class EasySubscriberTwo implements EasyAuditEventSubscriberInterface{
     public function getSubscribedEvents()
     {
         return array(
-            "common_event1",
-            "common_event2"
+            'common_event1',
+            'common_event2'
         );
     }
 }

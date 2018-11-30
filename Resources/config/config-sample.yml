@@ -2,18 +2,18 @@
 
 xiidea_easy_audit:
     #resolver: xiidea.easy_audit.default_event_resolver                           #Optional
-    #entity_class : MyProject\Bundle\MyBundle\Entity\AuditLog                     #Required
-    #entity_event_resolver : xiidea.easy_audit.default_entity_event_resolver      #Optional
+    #document_class : MyProject\Bundle\MyBundle\Document\AuditLog                     #Required
+    #document_event_resolver : xiidea.easy_audit.default_document_event_resolver      #Optional
     #default_logger : true                                                        #Optional
 
     #user property to use as actor of an event
     #valid value will be any valid property of your user class ~
     user_property : ~ # or username                                               #Required
 
-    #List of doctrine entity:event you wish to track or set to false to disable logs for doctrine events
-    #doctrine_entities :                                                          #Optional
-    #     MyProject\Bundle\MyBundle\Entity\MyEntity : [created, updated, deleted]
-    #     MyProject\Bundle\MyBundle\Entity\MyEntity2 : []
+    #List of doctrine document:event you wish to track or set to false to disable logs for doctrine events
+    #doctrine_documents :                                                          #Optional
+    #     MyProject\Bundle\MyBundle\Document\MyDocument : [created, updated, deleted]
+    #     MyProject\Bundle\MyBundle\Document\MyDocument2 : []
 
     #List all events you want to track  (Optional from v1.2.1 you can now use subscriber to define it)
     events :                                                                      #Optional

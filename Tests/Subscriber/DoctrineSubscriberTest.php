@@ -11,128 +11,131 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Subscriber;
 
-
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ODM\MongoDB\Event\LifecycleEventArgs;
 use PHPUnit\Framework\TestCase;
-use Xiidea\EasyAuditBundle\Annotation\ORMSubscribedEvents;
+use Xiidea\EasyAuditBundle\Annotation\ODMSubscribedEvents;
 use Xiidea\EasyAuditBundle\Subscriber\DoctrineSubscriber;
-use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\ODM\Movie;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Doctrine\Common\Annotations\FileCacheReader;
+use Doctrine\Common\EventSubscriber;
+use Doctrine\ODM\MongoDB\Mapping\ClassMetadataInfo;
 
 class DoctrineSubscriberTest extends TestCase
 {
-    /** @var  \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
     private $dispatcher;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
     private $annotationReader;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject  */
-    private $entityManager;
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    private $documentManager;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
     private $metaData;
 
     public function setUp()
     {
+        $this->dispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->documentManager = $this->createMock(ObjectManager::class);
+        $this->metaData = $this->createMock(ClassMetadataInfo::class);
 
-        $this->dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
-        $this->entityManager = $this->createMock('Doctrine\ORM\EntityManagerInterface');
-        $this->metaData = $this->createMock('Doctrine\ORM\Mapping\ClassMetadataInfo');
-
-        $this->entityManager->method('getClassMetadata')
+        $this->documentManager->method('getClassMetadata')
             ->willReturn($this->metaData);
 
-
-        $this->annotationReader = $this->getMockBuilder('\Doctrine\Common\Annotations\FileCacheReader')
+        $this->annotationReader = $this->getMockBuilder(FileCacheReader::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     public function testInstanceOnSubscriber()
     {
-        $this->assertInstanceOf('Doctrine\Common\EventSubscriber', new DoctrineSubscriber());
+        $this->assertInstanceOf(EventSubscriber::class, new DoctrineSubscriber());
     }
 
     public function testConstructor()
     {
-        $entities = array('entity1', 'entity2');
+        $entities = ['document1', 'document2'];
         $subscriber = new DoctrineSubscriber($entities);
         $this->assertAttributeEquals($entities, 'entities', $subscriber);
-        $subscriber = new DoctrineSubscriber(array());
-        $this->assertAttributeEquals(array(), 'entities', $subscriber);
+        $subscriber = new DoctrineSubscriber([]);
+        $this->assertAttributeEquals([], 'entities', $subscriber);
     }
 
     public function testSubscribedEvents()
     {
         $subscriber = new DoctrineSubscriber();
-        $this->assertEquals(array(
-            'postPersist',
-            'postUpdate',
-            'preRemove',
-            'postRemove',
-        ),$subscriber->getSubscribedEvents());
+        $this->assertEquals(
+            [
+                'postPersist',
+                'postUpdate',
+                'preRemove',
+                'postRemove',
+            ],
+            $subscriber->getSubscribedEvents()
+        );
     }
 
-    public function testCreateEventForAnnotatedEntity()
+    public function testCreateEventForAnnotatedDocument()
     {
-        $annotation = new ORMSubscribedEvents(array('events'=>'created'));
+        $annotation = new ODMSubscribedEvents(['events' => 'created']);
 
         $this->initializeAnnotationReader($annotation);
 
-        $subscriber = new DoctrineSubscriber(array());
+        $subscriber = new DoctrineSubscriber([]);
 
         $this->invokeCreatedEventCall($subscriber);
-
     }
 
-    public function testCreateEventForEntityNotConfiguredToTrack()
+    public function testCreateEventForDocumentNotConfiguredToTrack()
     {
         $this->initializeAnnotationReader(null);
-        $subscriber = new DoctrineSubscriber(array());
+        $subscriber = new DoctrineSubscriber([]);
         $this->invokeCreatedEventCall($subscriber);
     }
 
-    public function testCreateEventForEntityConfiguredToTrack()
+    public function testCreateEventForDocumentConfiguredToTrack()
     {
         $this->initializeAnnotationReader();
 
-        $subscriber = new DoctrineSubscriber(array('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie'=>array('created')));
-
-        $this->invokeCreatedEventCall($subscriber);
-    }
-
-    public function testCreateEventForEntityConfiguredToTrackAllEvents()
-    {
-        $this->initializeAnnotationReader();
-
-        $subscriber = new DoctrineSubscriber(array('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie'=>array()));
+        $subscriber = new DoctrineSubscriber([Movie::class => ['created']]);
 
         $this->invokeCreatedEventCall($subscriber);
     }
 
-    public function testUpdateEventForEntityNotConfiguredToTrack()
+    public function testCreateEventForDocumentConfiguredToTrackAllEvents()
     {
         $this->initializeAnnotationReader();
-        $subscriber = new DoctrineSubscriber(array());
+
+        $subscriber = new DoctrineSubscriber([Movie::class => []]);
+
+        $this->invokeCreatedEventCall($subscriber);
+    }
+
+    public function testUpdateEventForDocumentNotConfiguredToTrack()
+    {
+        $this->initializeAnnotationReader();
+        $subscriber = new DoctrineSubscriber([]);
         $this->invokeUpdatedEventCall($subscriber);
     }
 
-    public function testRemovedEventForEntityNotConfiguredToTrack()
+    public function testRemovedEventForDocumentNotConfiguredToTrack()
     {
         $this->initializeAnnotationReader(null);
-        $subscriber = new DoctrineSubscriber(array());
+        $subscriber = new DoctrineSubscriber([]);
         $this->invokeDeletedEventCall($subscriber);
     }
 
-    public function testRemovedEventForEntityConfiguredToTrackAllEvent()
+    public function testRemovedEventForDocumentConfiguredToTrackAllEvent()
     {
         $this->initializeAnnotationReader(null);
 
         $this->mockMetaData();
-        $subscriber = new DoctrineSubscriber(array('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie'=>array()));
+        $subscriber = new DoctrineSubscriber([Movie::class => []]);
         $this->invokeDeletedEventCall($subscriber);
     }
-
 
     private function initializeAnnotationReader($metaData = null)
     {
@@ -149,7 +152,7 @@ class DoctrineSubscriberTest extends TestCase
         $subscriber->setDispatcher($this->dispatcher);
         $subscriber->setAnnotationReader($this->annotationReader);
 
-        $subscriber->postPersist(new LifecycleEventArgs(new Movie(), $this->entityManager));
+        $subscriber->postPersist(new LifecycleEventArgs(new Movie(), $this->documentManager));
     }
 
     /**
@@ -160,7 +163,7 @@ class DoctrineSubscriberTest extends TestCase
         $subscriber->setDispatcher($this->dispatcher);;
         $subscriber->setAnnotationReader($this->annotationReader);
 
-        $subscriber->postUpdate(new LifecycleEventArgs(new Movie(), $this->entityManager));
+        $subscriber->postUpdate(new LifecycleEventArgs(new Movie(), $this->documentManager));
     }
 
     /**
@@ -172,8 +175,8 @@ class DoctrineSubscriberTest extends TestCase
         $subscriber->setAnnotationReader($this->annotationReader);
 
         $movie = new Movie();
-        $subscriber->preRemove(new LifecycleEventArgs($movie, $this->entityManager));
-        $subscriber->postRemove(new LifecycleEventArgs($movie, $this->entityManager));
+        $subscriber->preRemove(new LifecycleEventArgs($movie, $this->documentManager));
+        $subscriber->postRemove(new LifecycleEventArgs($movie, $this->documentManager));
     }
 
     private function mockMetaData($data = ['id' => 1])

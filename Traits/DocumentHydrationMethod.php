@@ -13,7 +13,7 @@ namespace Xiidea\EasyAuditBundle\Traits;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-trait EntityHydrationMethod
+trait DocumentHydrationMethod
 {
     final public function fromArray($data = array())
     {

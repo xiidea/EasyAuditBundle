@@ -11,33 +11,38 @@
 
 namespace Xiidea\EasyAuditBundle\Logger;
 
-use Doctrine\ORM\EntityManager;
-use Xiidea\EasyAuditBundle\Entity\BaseAuditLog as AuditLog;
-use Doctrine\Bundle\DoctrineBundle\Registry;
+use Xiidea\EasyAuditBundle\Document\BaseAuditLog as AuditLog;
+use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
+use Doctrine\Common\Persistence\ObjectManager;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 
 class Logger implements LoggerInterface
 {
-    private $entityDeleteLogs = [];
+    private $documentDeleteLogs = [];
 
     /**
-     * @var \Doctrine\Bundle\DoctrineBundle\Registry
+     * @var ManagerRegistry
      */
     private $doctrine;
 
-    public function __construct(Registry $doctrine)
+    /**
+     * Logger constructor.
+     * @param ManagerRegistry $doctrine
+     */
+    public function __construct(ManagerRegistry $doctrine)
     {
         $this->doctrine = $doctrine;
     }
 
     public function log(AuditLog $event = null)
     {
-        if(empty($event)) {
+        if ($event === null) {
             return;
         }
 
-        if($event->getTypeId() === DoctrineEvents::ENTITY_DELETED) {
-            $this->entityDeleteLogs[] = $event;
+        if ($event->getTypeId() === DoctrineEvents::ENTITY_DELETED) {
+            $this->documentDeleteLogs[] = $event;
+
             return;
         }
 
@@ -45,15 +50,15 @@ class Logger implements LoggerInterface
     }
 
     /**
-     * @return EntityManager
+     * @return ObjectManager
      */
-    protected function getEntityManager()
+    protected function getDocumentManager()
     {
-         return $this->getDoctrine()->getManager();
+        return $this->getDoctrine()->getManager();
     }
 
     /**
-     * @return \Doctrine\Bundle\DoctrineBundle\Registry
+     * @return ManagerRegistry
      */
     public function getDoctrine()
     {
@@ -62,22 +67,19 @@ class Logger implements LoggerInterface
 
     /**
      * @param AuditLog $event
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     protected function saveLog(AuditLog $event)
     {
-        $this->getEntityManager()->persist($event);
-        $this->getEntityManager()->flush($event);
+        $this->getDocumentManager()->persist($event);
+        $this->getDocumentManager()->flush($event);
     }
 
     public function savePendingLogs()
     {
-        foreach ($this->entityDeleteLogs as $log) {
+        foreach ($this->documentDeleteLogs as $log) {
             $this->saveLog($log);
         }
 
-        $this->entityDeleteLogs = [];
+        $this->documentDeleteLogs = [];
     }
-
 }

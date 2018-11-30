@@ -11,8 +11,7 @@
 
 namespace Xiidea\EasyAuditBundle\Exception;
 
-
-class UnrecognizedEventInfoException extends \Exception {
-
-    protected $message = "Unrecognized Event info";
+class UnrecognizedEventInfoException extends \Exception
+{
+    protected $message = 'Unrecognized Event info';
 }

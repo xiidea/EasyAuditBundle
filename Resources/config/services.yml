@@ -11,7 +11,7 @@ services:
   xiidea.easy_audit.event_resolver_factory:
           class: Xiidea\EasyAuditBundle\Resolver\EventResolverFactory
           public: false
-          arguments : [ '%xiidea.easy_audit.custom_resolvers%', '%xiidea.easy_audit.user_property%', '%xiidea.easy_audit.entity_class%' ]
+          arguments : [ '%xiidea.easy_audit.custom_resolvers%', '%xiidea.easy_audit.user_property%', '%xiidea.easy_audit.document_class%' ]
           calls:
             - [ setAuthChecker,[ '@security.authorization_checker' ] ]
             - [ setRequestStack,[ '@request_stack' ] ]

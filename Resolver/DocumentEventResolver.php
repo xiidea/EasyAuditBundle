@@ -11,34 +11,35 @@
 
 namespace Xiidea\EasyAuditBundle\Resolver;
 
-use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
 use Doctrine\Common\Util\ClassUtils;
 use Symfony\Component\EventDispatcher\Event;
-use Xiidea\EasyAuditBundle\Events\DoctrineEntityEvent;
+use Xiidea\EasyAuditBundle\Events\DoctrineDocumentEvent;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 
 /** Custom Event Resolver Example Class */
-class EntityEventResolver implements EventResolverInterface
+class DocumentEventResolver implements EventResolverInterface
 {
     protected $eventShortName;
 
-    /** @var  $event DoctrineEntityEvent */
+    /**
+     * @var  $event DoctrineDocumentEvent
+     */
     protected $event;
 
-    protected $entity;
+    protected $document;
 
     protected $eventName;
 
-    protected $identity = ['', ''];
+    private $identity = ['', ''];
 
     /**
-     * @var Registry
+     * @var ManagerRegistry
      */
     protected $doctrine;
 
-
     /**
-     * @param Event|DoctrineEntityEvent $event
+     * @param Event|DoctrineDocumentEvent $event
      * @param $eventName
      *
      * @return array
@@ -46,23 +47,22 @@ class EntityEventResolver implements EventResolverInterface
      */
     public function getEventLogInfo(Event $event, $eventName)
     {
-        if (!$event instanceof DoctrineEntityEvent) {
+        if (!$event instanceof DoctrineDocumentEvent) {
             return null;
         }
 
         $this->initialize($event, $eventName);
 
-        if ($this->isUpdateEvent() && null === $this->getChangeSets($this->entity)) {
+        if ($this->isUpdateEvent() && null === $this->getChangeSets($this->document)) {
             return null;
         }
 
-        $reflectionClass = $this->getReflectionClassFromObject($this->entity);
+        $reflectionClass = $this->getReflectionClassFromObject($this->document);
 
-        return array(
+        return [
             'description' => $this->getDescription($reflectionClass->getShortName()),
             'type'        => $this->getEventType($reflectionClass->getShortName())
-        );
-
+        ];
     }
 
     protected function getSingleIdentity()
@@ -72,19 +72,18 @@ class EntityEventResolver implements EventResolverInterface
         }
 
         return ['', ''];
-
     }
 
     /**
-     * @param DoctrineEntityEvent $event
+     * @param DoctrineDocumentEvent $event
      * @param string $eventName
      */
-    private function initialize(DoctrineEntityEvent $event, $eventName)
+    private function initialize(DoctrineDocumentEvent $event, $eventName)
     {
         $this->eventShortName = null;
         $this->eventName = $eventName;
         $this->event = $event;
-        $this->entity = $event->getLifecycleEventArgs()->getEntity();
+        $this->document = $event->getLifecycleEventArgs()->getDocument();
         $this->identity = $this->getSingleIdentity();
     }
 
@@ -98,16 +97,15 @@ class EntityEventResolver implements EventResolverInterface
         return $this->identity[1];
     }
 
-    protected function getChangeSets($entity)
+    protected function getChangeSets($document)
     {
-        return $this->isUpdateEvent() ? $this->getUnitOfWork()->getEntityChangeSet($entity) : null;
+        return $this->isUpdateEvent() ? $this->getUnitOfWork()->getDocumentChangeSet($document) : null;
     }
 
     protected function isUpdateEvent()
     {
-        return $this->getEventShortName() == 'updated';
+        return $this->getEventShortName() === 'updated';
     }
-
 
     /**
      * @param string $typeName
@@ -115,7 +113,7 @@ class EntityEventResolver implements EventResolverInterface
      */
     protected function getEventType($typeName)
     {
-        return $typeName . " " . $this->getEventShortName();
+        return $typeName . ' ' . $this->getEventShortName();
     }
 
     /**
@@ -163,16 +161,13 @@ class EntityEventResolver implements EventResolverInterface
         return new \ReflectionClass(ClassUtils::getClass($object));
     }
 
-    /**
-     * @return \Doctrine\ORM\UnitOfWork
-     */
     protected function getUnitOfWork()
     {
         return $this->getDoctrine()->getManager()->getUnitOfWork();
     }
 
     /**
-     * @return \Doctrine\Bundle\DoctrineBundle\Registry|object
+     * @return ManagerRegistry|object
      */
     protected function getDoctrine()
     {
@@ -180,7 +175,7 @@ class EntityEventResolver implements EventResolverInterface
     }
 
     /**
-     * @param Registry $doctrine
+     * @param ManagerRegistry $doctrine
      */
     public function setDoctrine($doctrine)
     {

@@ -14,18 +14,19 @@ namespace Xiidea\EasyAuditBundle\Tests\DependencyInjection\Compiler;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Definition;
 use Xiidea\EasyAuditBundle\DependencyInjection\Compiler\ResolverFactoryPass;
-use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
+use Xiidea\EasyAuditBundle\Document\BaseAuditLog;
 use Xiidea\EasyAuditBundle\Resolver\EventResolverFactory;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class ResolverFactoryPassTest extends TestCase {
-
+class ResolverFactoryPassTest extends TestCase
+{
     public function testProcessWithoutResolverFactoryDefinition()
     {
-        $containerBuilder = $this->createMock('Symfony\Component\DependencyInjection\ContainerBuilder');
+        $containerBuilder = $this->createMock(ContainerBuilder::class);
 
         $containerBuilder->expects($this->once())
             ->method('hasDefinition')
-            ->with($this->equalTo("xiidea.easy_audit.event_resolver_factory"))
+            ->with($this->equalTo('xiidea.easy_audit.event_resolver_factory'))
             ->will($this->returnValue(false));
         $containerBuilder->expects($this->never())
             ->method('getDefinition');
@@ -44,27 +45,29 @@ class ResolverFactoryPassTest extends TestCase {
             ->with($this->equalTo('xiidea.easy_audit.event_resolver_factory'))
             ->will($this->returnValue($definitionObject));
 
-
-        $getParameterCall = array(
-            array('xiidea.easy_audit.custom_resolvers', array()),
-            array('xiidea.easy_audit.resolver', 'default.resolver'),
-        );
+        $getParameterCall = [
+            ['xiidea.easy_audit.custom_resolvers', []],
+            ['xiidea.easy_audit.resolver', 'default.resolver'],
+        ];
 
         $containerBuilderMock->expects($this->any())
             ->method('getParameter')
             ->will($this->returnValueMap($getParameterCall));
 
-
         $resolverFactoryPass = new ResolverFactoryPass();
         $resolverFactoryPass->process($containerBuilderMock);
 
         $methodCalls = $definitionObject->getMethodCalls();
-        $this->assertEquals(5, count($methodCalls), 'Method call count should be updated');
-        $this->assertEquals(array('setCommonResolver', array('default.resolver')), $methodCalls[0], 'Method call count should be updated');
-        $this->assertEquals(array('setDebug', array(false)), $methodCalls[4], 'Method call count should be updated');
+        $this->assertCount(5, $methodCalls, 'Method call count should be updated');
+        $this->assertEquals(
+            ['setCommonResolver', ['default.resolver']],
+            $methodCalls[0],
+            'Method call count should be updated'
+        );
+        $this->assertEquals(['setDebug', [false]], $methodCalls[4], 'Method call count should be updated');
     }
 
-    public function testWithDoctrineEntityResolverShouldRegistered()
+    public function testWithDoctrineDocumentResolverShouldRegistered()
     {
         $definitionObject = $this->getDefinitionObject();
         $containerBuilderMock = $this->getContainerBuilderMock();
@@ -76,45 +79,46 @@ class ResolverFactoryPassTest extends TestCase {
 
         $containerBuilderMock->expects($this->once())
             ->method('hasAlias')
-            ->with($this->equalTo('doctrine'))
+            ->with($this->equalTo('doctrine_mongodb'))
             ->will($this->returnValue(true));
 
-
-
-        $getParameterCall = array(
-            array('xiidea.easy_audit.custom_resolvers', array()),
-            array('xiidea.easy_audit.resolver', 'default.resolver'),
-            array('xiidea.easy_audit.entity_event_resolver', 'entity.resolver'),
-        );
+        $getParameterCall = [
+            ['xiidea.easy_audit.custom_resolvers', []],
+            ['xiidea.easy_audit.resolver', 'default.resolver'],
+            ['xiidea.easy_audit.document_event_resolver', 'document.resolver'],
+        ];
 
         $containerBuilderMock->expects($this->any())
             ->method('getParameter')
             ->will($this->returnValueMap($getParameterCall));
 
-
         $resolverFactoryPass = new ResolverFactoryPass();
         $resolverFactoryPass->process($containerBuilderMock);
 
         $methodCalls = $definitionObject->getMethodCalls();
-        $this->assertEquals(6, count($methodCalls), 'Method call count should be updated');
-        $this->assertEquals(array('setCommonResolver', array('default.resolver')), $methodCalls[0], 'Method call count should be updated');
-        $this->assertEquals(array('setDebug', array(false)), $methodCalls[5], 'Method call count should be updated');
+        $this->assertCount(6, $methodCalls, 'Method call count should be updated');
+        $this->assertEquals(
+            ['setCommonResolver', ['default.resolver']],
+            $methodCalls[0],
+            'Method call count should be updated'
+        );
+        $this->assertEquals(['setDebug', [false]], $methodCalls[5], 'Method call count should be updated');
     }
 
     public function testShouldRegisterCustomResolvers()
     {
-        $hasDefinitionCall = array(
-            array('xiidea.easy_audit.event_resolver_factory', true),
-            array('resolver1', true),
-        );
+        $hasDefinitionCall = [
+            ['xiidea.easy_audit.event_resolver_factory', true],
+            ['resolver1', true],
+        ];
 
-        $getParameterCall = array(
-            array('xiidea.easy_audit.custom_resolvers', array('event1' => 'resolver1')),
-            array('xiidea.easy_audit.resolver', 'default.resolver'),
-        );
+        $getParameterCall = [
+            ['xiidea.easy_audit.custom_resolvers', ['event1' => 'resolver1']],
+            ['xiidea.easy_audit.resolver', 'default.resolver'],
+        ];
 
         $definitionObject = $this->getDefinitionObject();
-        $containerBuilderMock = $this->createMock('Symfony\Component\DependencyInjection\ContainerBuilder');
+        $containerBuilderMock = $this->createMock(ContainerBuilder::class);
 
         $containerBuilderMock->expects($this->any())
             ->method('hasDefinition')
@@ -127,23 +131,29 @@ class ResolverFactoryPassTest extends TestCase {
 
         $containerBuilderMock->expects($this->once())
             ->method('hasAlias')
-            ->with($this->equalTo('doctrine'))
+            ->with($this->equalTo('doctrine_mongodb'))
             ->will($this->returnValue(false));
-
 
         $containerBuilderMock->expects($this->any())
             ->method('getParameter')
             ->will($this->returnValueMap($getParameterCall));
 
-
         $resolverFactoryPass = new ResolverFactoryPass();
         $resolverFactoryPass->process($containerBuilderMock);
 
         $methodCalls = $definitionObject->getMethodCalls();
-        $this->assertEquals(6, count($methodCalls), 'Method call count should be updated');
-        $this->assertEquals(array('addCustomResolver', array('resolver1', $methodCalls[0][1][1])), $methodCalls[0], 'addCustomResolver called');
-        $this->assertEquals(array('setCommonResolver', array('default.resolver')), $methodCalls[1], 'Method setCommonResolver added');
-        $this->assertEquals(array('setDebug', array(false)), $methodCalls[5], 'Method call count should be updated');
+        $this->assertCount(6, $methodCalls, 'Method call count should be updated');
+        $this->assertEquals(
+            ['addCustomResolver', ['resolver1', $methodCalls[0][1][1]]],
+            $methodCalls[0],
+            'addCustomResolver called'
+        );
+        $this->assertEquals(
+            ['setCommonResolver', ['default.resolver']],
+            $methodCalls[1],
+            'Method setCommonResolver added'
+        );
+        $this->assertEquals(['setDebug', [false]], $methodCalls[5], 'Method call count should be updated');
     }
 
     /**
@@ -151,14 +161,13 @@ class ResolverFactoryPassTest extends TestCase {
      */
     protected function getDefinitionObject()
     {
-        $definition = new Definition(EventResolverFactory::class, array(array(), 'username', BaseAuditLog::class));
+        $definition = new Definition(EventResolverFactory::class, [[], 'username', BaseAuditLog::class]);
 
         return $definition
             ->addMethodCall('setAuthChecker', [null])
             ->addMethodCall('setRequestStack', [null])
             ->addMethodCall('setTokenStorage', [null])
-            ->addMethodCall('setDebug', [false])
-        ;
+            ->addMethodCall('setDebug', [false]);
     }
 
     /**
@@ -166,11 +175,11 @@ class ResolverFactoryPassTest extends TestCase {
      */
     protected function getContainerBuilderMock()
     {
-        $containerBuilderMock = $this->createMock('Symfony\Component\DependencyInjection\ContainerBuilder');
+        $containerBuilderMock = $this->createMock(ContainerBuilder::class);
 
         $containerBuilderMock->expects($this->any())
             ->method('hasDefinition')
-            ->with($this->equalTo("xiidea.easy_audit.event_resolver_factory"))
+            ->with($this->equalTo('xiidea.easy_audit.event_resolver_factory'))
             ->will($this->returnValue(true));
 
         return $containerBuilderMock;

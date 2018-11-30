@@ -22,18 +22,18 @@ use Xiidea\EasyAuditBundle\Resolver\UserEventCommand\ResolverCommand;
 /** Custom Event Resolver Example For FosUserBundle  */
 class UserEventResolver extends UserAwareComponent implements EventResolverInterface
 {
-    private $commands = array();
+    private $commands = [];
 
     private $default;
 
     public function __construct()
     {
-        $this->commands = array(
+        $this->commands = [
             'fos_user.change_password.edit.completed' => new PasswordChangedCommand(),
-            'security.interactive_login' => new InteractiveLoginCommand($this),
-            'fos_user.security.implicit_login' => new ImplicitLoginCommand(),
-            'security.authentication.failure' => new AuthenticationFailedCommand(),
-        );
+            'security.interactive_login'              => new InteractiveLoginCommand($this),
+            'fos_user.security.implicit_login'        => new ImplicitLoginCommand(),
+            'security.authentication.failure'         => new AuthenticationFailedCommand(),
+        ];
     }
 
     /**
@@ -44,10 +44,10 @@ class UserEventResolver extends UserAwareComponent implements EventResolverInter
      */
     public function getEventLogInfo(Event $event, $eventName)
     {
-        $this->default = array(
-            'type' => $eventName,
+        $this->default = [
+            'type'        => $eventName,
             'description' => $eventName
-        );
+        ];
 
         if (!isset($this->commands[$eventName])) {
             return $this->default;

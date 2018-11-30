@@ -9,17 +9,17 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Xiidea\EasyAuditBundle\Tests\Fixtures\ORM;
+namespace Xiidea\EasyAuditBundle\Tests\Fixtures\ODM;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
 /**
- * @ORM\Entity
+ * @ODM\Document
  */
-class DummyEntity
+class DummyDocument
 {
     /**
-     * @ORM\Column(type="string")
+     * @ODM\Field(type="string")
      */
     private $random;
 
@@ -38,6 +38,4 @@ class DummyEntity
     {
         $this->random = $random;
     }
-
-
 }

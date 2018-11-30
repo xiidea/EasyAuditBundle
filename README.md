@@ -12,14 +12,13 @@ Easy Audit
 
 A Symfony2 Bundle To Log Selective Events. It is easy to configure and easy to customize for your need.
 
-**Note:** If you are using **Symfony** version **older then 2.4** you need to use [EasyAuditBundle 1.2.x](https://github.com/xiidea/EasyAuditBundle/tree/1.2.x)   
-**Note:** If you are using **Symfony** version **older then 2.6** you need to use [EasyAuditBundle 1.3.x](https://github.com/xiidea/EasyAuditBundle/tree/1.3.x)
+**Note:** This is a fork of the original [EasyAuditBundle](https://github.com/xiidea/EasyAuditBundle) modified to work wth doctrine ODM
 
 Install
 -------
 1. Add EasyAuditBundle in your composer.json
 2. Enable the Bundle
-3. Create audit_log entity class
+3. Create audit_log document class
 4. Configure config.yml
 5. Update Database Schema
 
@@ -30,7 +29,7 @@ Add EasyAuditBundle in your composer.json:
 ```js
 {
     "require": {
-        "xiidea/easy-audit": "^1.4"
+        "wh1pp3rz/easy-audit": "dev-master"
     }
 }
 ```
@@ -58,9 +57,9 @@ public function registerBundles()
 }
 ```
 
-### 3. Create audit_log entity class
+### 3. Create audit_log document class
 
-The XiideaEasyAuditBundle supports Doctrine ORM by default. However, you must provide a concrete AuditLog class. Follow the [instructions](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/audit-log-entity-orm.md) to set up the class:
+The XiideaEasyAuditBundle supports Doctrine ODM by default. However, you must provide a concrete AuditLog class. Follow the [instructions](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/audit-log-document-odm.md) to set up the class:
 
 
 ### 4. Configure config.yml
@@ -71,19 +70,19 @@ You can find sample config data in `Resources/config/config-sample.yml` file
 # app/config/config.yml
 xiidea_easy_audit:
     #resolver: xiidea.easy_audit.default_event_resolver                           #Optional
-    #entity_class : MyProject\Bundle\MyBundle\Entity\AuditLog                     #Required
-    #entity_event_resolver : xiidea.easy_audit.default_entity_event_resolver      #Optional
+    #document_class : MyProject\Bundle\MyBundle\Document\AuditLog                     #Required
+    #document_event_resolver : xiidea.easy_audit.default_document_event_resolver      #Optional
     #default_logger : true                                                        #Optional
     
     #user property to use as actor of an event
     #valid value will be any valid property of your user class
     user_property : ~ # or username                            #Optional
 
-    #List of doctrine entity:event you wish to track or set to false to disable logs for doctrine events
+    #List of doctrine document:event you wish to track or set to false to disable logs for doctrine events
     # valid events are = [created, updated, deleted]
-    #doctrine_entities :                                              #Optional
-    #     MyProject\Bundle\MyBundle\Entity\MyEntity : [created, updated, deleted]
-    #     MyProject\Bundle\MyBundle\Entity\MyEntity2 : []
+    #doctrine_documents :                                              #Optional
+    #     MyProject\Bundle\MyBundle\Document\MyDocument : [created, updated, deleted]
+    #     MyProject\Bundle\MyBundle\Document\MyDocument2 : []
 
     #List all events you want to track  (Optional from v1.2.1 you can now use subscriber to define it)
     events :                                                   #Optional
@@ -123,8 +122,8 @@ EasyAudit Bundled with a logger service `xiidea.easy_audit.logger.service` which
 disable the service by setting `default_logger: false` in configuration.
 
 #### Resolver:
-`Resolver` is like translator for an event. It used to translate an event to AuditLog entity. EasyAudit bundled with two(2)
-resolver services `xiidea.easy_audit.default_event_resolver`, `xiidea.easy_audit.default_entity_event_resolver`. And a
+`Resolver` is like translator for an event. It used to translate an event to AuditLog document. EasyAudit bundled with two(2)
+resolver services `xiidea.easy_audit.default_event_resolver`, `xiidea.easy_audit.default_document_event_resolver`. And a
 custom EventResolver class `UserEventResolver` to illustrate how the transformation works. You can define as many resolver
 service as you want and use them to handle different event. Here is the place you can set the severity level for a event. Default
 level is `Psr\Log\LogLevel::INFO`. Custom severity levels are not available. EasyAudit supports the logging levels
@@ -155,6 +154,6 @@ Look the cookbook for another interesting things.
 - [Override Resolver](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/override-resolver.md)
 - [Custom Logger](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/custom-logger.md)
 - [Custom Resolver](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/custom-resolver.md)
-- [Doctrine Entity Event](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/doctrine-entity-events.md)
+- [Doctrine Document Event](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/doctrine-document-events.md)
 - [Pre-Persist Listener](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/pre-persist-listener.md)
 - [Logger Channel](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/logger-channel.md)

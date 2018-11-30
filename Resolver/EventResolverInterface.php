@@ -15,7 +15,6 @@ use Symfony\Component\EventDispatcher\Event;
 
 interface EventResolverInterface
 {
-
     /**
      * @param Event $event
      * @param string $eventName

@@ -9,30 +9,28 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Xiidea\EasyAuditBundle\Tests\Fixtures\ORM;
+namespace Xiidea\EasyAuditBundle\Tests\Fixtures\ODM;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
 /**
- * @ORM\Entity
+ * @ODM\Document
  */
-class UserEntity
+class UserDocument
 {
     /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ODM\Id(strategy="none")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string")
+     * @ODM\Column(type="string")
      */
     private $username;
 
     private $roles;
 
-    public function __construct($id = 1, $username = "admin", $roles = array())
+    public function __construct($id = 1, $username = 'admin', $roles = [])
     {
         $this->id = $id;
         $this->username = $username;

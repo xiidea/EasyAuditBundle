@@ -13,25 +13,25 @@ namespace Xiidea\EasyAuditBundle\Logger;
 
 use ReflectionProperty;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Xiidea\EasyAuditBundle\Entity\BaseAuditLog as AuditLog;
+use Xiidea\EasyAuditBundle\Document\BaseAuditLog as AuditLog;
 
 class MonologLogger implements LoggerInterface
 {
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
 
-    private static $ignoreProperties = array('description', 'id', 'level');
+    private static $ignoreProperties = ['description', 'id', 'level'];
 
     public function __construct(\Psr\Log\LoggerInterface $logger)
     {
         $this->logger = $logger;
     }
 
-    public function log(AuditLog $event = NULL)
+    public function log(AuditLog $event = null)
     {
-        if ($event === NULL) {
+        if ($event === null) {
             return;
         }
 
@@ -45,7 +45,9 @@ class MonologLogger implements LoggerInterface
      */
     protected function getAllProperties(\ReflectionObject $refObject)
     {
-        return $refObject->getProperties(ReflectionProperty::IS_PUBLIC | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_STATIC);
+        return $refObject->getProperties(
+            ReflectionProperty::IS_PUBLIC | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_STATIC
+        );
     }
 
     /**
@@ -59,14 +61,19 @@ class MonologLogger implements LoggerInterface
 
         $refObject = new \ReflectionObject($event);
 
-        $arr = array();
+        $arr = [];
 
         foreach ($this->getAllProperties($refObject) as $property) {
-            if (!$accessor->isReadable($event, $property->getName()) || in_array($property->getName(), self::$ignoreProperties)) {
+            $propertyName = $property->getName();
+            if (!$accessor->isReadable($event, $propertyName) || \in_array(
+                    $propertyName,
+                    self::$ignoreProperties,
+                    true
+                )) {
                 continue;
             }
 
-            $arr[$property->getName()] = $accessor->getValue($event, $property->getName());
+            $arr[$property->getName()] = $accessor->getValue($event, $propertyName);
         }
 
         return $arr;

@@ -14,7 +14,7 @@ namespace Xiidea\EasyAuditBundle\Tests\Logger;
 use Psr\Log\LoggerInterface;
 use Xiidea\EasyAuditBundle\Logger\MonologLogger;
 use PHPUnit\Framework\TestCase;
-use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\ODM\AuditLog;
 
 class MonologLoggerTest extends TestCase
 {
@@ -28,7 +28,7 @@ class MonologLoggerTest extends TestCase
     {
         $this->symfonyLogger = $this->createMock(LoggerInterface::class);
 
-        $this->logger =  new MonologLogger($this->symfonyLogger);
+        $this->logger = new MonologLogger($this->symfonyLogger);
     }
 
     public function testIsAnInstanceOfLoggerInterface()
@@ -46,14 +46,14 @@ class MonologLoggerTest extends TestCase
             ->with(
                 $this->equalTo('info'),
                 $log->getDescription(),
-                array (
-                    'typeId' => NULL,
-                    'type' => NULL,
-                    'eventTime' => NULL,
-                    'user' => NULL,
-                    'ip' => NULL,
-                    'impersonatingUser' => NULL,
-                )
+                [
+                    'typeId'            => null,
+                    'type'              => null,
+                    'eventTime'         => null,
+                    'user'              => null,
+                    'ip'                => null,
+                    'impersonatingUser' => null,
+                ]
             );
         $this->logger->log($log);
     }
@@ -64,6 +64,6 @@ class MonologLoggerTest extends TestCase
             ->expects($this->never())
             ->method('log');
 
-        $this->logger->log(NULL);
+        $this->logger->log(null);
     }
 }

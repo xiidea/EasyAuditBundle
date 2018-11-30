@@ -15,7 +15,6 @@ use Symfony\Component\EventDispatcher\Event;
 
 class DefaultEventResolver implements EventResolverInterface
 {
-
     /**
      * @param Event $event
      *
@@ -24,9 +23,9 @@ class DefaultEventResolver implements EventResolverInterface
      */
     public function getEventLogInfo(Event $event, $eventName)
     {
-        return array(
+        return [
             'description' => $eventName,
-            'type' => $eventName,
-        );
+            'type'        => $eventName,
+        ];
     }
 }

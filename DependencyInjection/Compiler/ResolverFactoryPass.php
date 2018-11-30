@@ -19,7 +19,6 @@ class ResolverFactoryPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-
         if (false === $container->hasDefinition('xiidea.easy_audit.event_resolver_factory')) {
             return;
         }
@@ -27,21 +26,27 @@ class ResolverFactoryPass implements CompilerPassInterface
         $definition = $container->getDefinition('xiidea.easy_audit.event_resolver_factory');
 
         $calls = $definition->getMethodCalls();
-        $definition->setMethodCalls(array());
+        $definition->setMethodCalls([]);
 
         foreach ($container->getParameter('xiidea.easy_audit.custom_resolvers') as $id) {
             if ($container->hasDefinition($id)) {
-                $definition->addMethodCall('addCustomResolver', array($id, new Reference($id)));
+                $definition->addMethodCall('addCustomResolver', [$id, new Reference($id)]);
             }
         }
 
-        $definition->addMethodCall('setCommonResolver', array(
-            $this->getServiceReferenceByConfigName($container, 'resolver'))
+        $definition->addMethodCall(
+            'setCommonResolver',
+            [
+                $this->getServiceReferenceByConfigName($container, 'resolver')
+            ]
         );
 
-        if($container->hasAlias('doctrine')) {
-            $definition->addMethodCall('setEntityEventResolver', array(
-                    $this->getServiceReferenceByConfigName($container, 'entity_event_resolver'))
+        if ($container->hasAlias('doctrine_mongodb')) {
+            $definition->addMethodCall(
+                'setDocumentEventResolver',
+                [
+                    $this->getServiceReferenceByConfigName($container, 'document_event_resolver')
+                ]
             );
         }
 

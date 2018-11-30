@@ -8,6 +8,6 @@ class DefaultController extends Controller
 {
     public function indexAction($page)
     {
-        return $this->render('XiideaEasyAuditBundle:Default:index.html.twig', array('page' => $page));
+        return $this->render('XiideaEasyAuditBundle:Default:index.html.twig', ['page' => $page]);
     }
 }

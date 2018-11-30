@@ -8,14 +8,12 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Fixtures\Common;
 
-
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ODM\MongoDB\Event\LifecycleEventArgs;
 
 class DummyLifecycleEventArgs extends LifecycleEventArgs
 {
-    public function __construct($entity, $manager = null)
+    public function __construct($document, $manager = null)
     {
-        parent::__construct($entity, $manager);
-
+        parent::__construct($document, $manager);
     }
 }

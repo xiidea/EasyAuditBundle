@@ -12,16 +12,16 @@
 namespace Xiidea\EasyAuditBundle\Annotation;
 
 /**
- * Annotation for ORM Subscribed Event.
+ * Annotation for ODM Subscribed Event.
  *
  * @Annotation
  * @Target({"CLASS"})
  *
  * @author Roni Saha <roni@xiidea.net>
  */
-final class ORMSubscribedEvents
+final class ODMSubscribedEvents
 {
-    public $events = array();
+    public $events = [];
 
     public function __construct(array $values)
     {
@@ -32,7 +32,10 @@ final class ORMSubscribedEvents
             return;
         }
 
-        $this->events = is_array($values['events']) ? $values['events'] : array_map('trim', explode(',', $values['events']));
+        $this->events = is_array($values['events']) ? $values['events'] : array_map(
+            'trim',
+            explode(',', $values['events'])
+        );
 
         $this->events = array_filter($this->events);
     }

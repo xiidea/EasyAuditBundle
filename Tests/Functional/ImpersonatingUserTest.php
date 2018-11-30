@@ -20,7 +20,7 @@ class ImpersonatingUserTest extends WebTestCase
     /** @var null|\Symfony\Bundle\FrameworkBundle\Client */
     protected $client = null;
 
-    static protected function createKernel(array $options = array())
+    static protected function createKernel(array $options = [])
     {
         return new ImpersonatingUserTestKernel(
             isset($options['config']) ? $options['config'] : 'config',
@@ -34,7 +34,7 @@ class ImpersonatingUserTest extends WebTestCase
      */
     public function testSecuredEventWithImpersonatingUser()
     {
-         $this->client = $this->createAuthenticatedClient('admin');
+        $this->client = $this->createAuthenticatedClient('admin');
 
         $name = 'simple.event';
         $crawler = $this->client->request('GET', "/some-secure-url/{$name}?_switch_user=user");
@@ -54,7 +54,7 @@ class ImpersonatingUserTest extends WebTestCase
 
     protected function createAuthenticatedClient($username)
     {
-        $client = $this->createClient(array('config' => 'switchuser'));
+        $client = $this->createClient(['config' => 'switchuser']);
         $client->followRedirects(true);
         $crawler = $client->request('GET', '/login');
         $form = $crawler->selectButton('login')->form();
@@ -75,6 +75,7 @@ class ImpersonatingUserTest extends WebTestCase
         $html = $crawler->html();
         $parts = explode(DefaultController::RESPONSE_BOUNDARY, $html);
         $event = unserialize($parts[1]);
+
         return $event;
     }
 }

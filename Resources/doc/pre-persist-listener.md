@@ -13,17 +13,17 @@ When using the default **doctrine logger**, you may want to add customized data 
 
 namespace  MyProject\MyBundle\Listener;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ODM\Event\LifecycleEventArgs;
 
 class AuditLogPrePersistListener
 {
 
     public function prePersist(LifecycleEventArgs $args)
         {
-    	    /** @var \Xiidea\EasyAuditBundle\Entity\BaseAuditLog $entity */
-            $entity = $args->getEntity();
+    	    /** @var \Xiidea\EasyAuditBundle\Document\BaseAuditLog $document */
+            $document = $args->getDocument();
     
-            if ($entity instanceof BaseAuditLog) {
+            if ($document instanceof BaseAuditLog) {
                 //Do your extra processing 
             }
         }

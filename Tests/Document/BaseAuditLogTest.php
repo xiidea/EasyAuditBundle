@@ -9,15 +9,13 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Xiidea\EasyAuditBundle\Tests\Entity;
-
+namespace Xiidea\EasyAuditBundle\Tests\Document;
 
 use PHPUnit\Framework\TestCase;
-use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\ODM\AuditLog;
 
 class BaseAuditLogTest extends TestCase
 {
-
     /**
      * @expectedException \Psr\Log\InvalidArgumentException
      */
@@ -25,7 +23,6 @@ class BaseAuditLogTest extends TestCase
     {
         $log = new AuditLog();
         $log->setLevel('invalid_level');
-
     }
 
     public function testSettingLevelCase()

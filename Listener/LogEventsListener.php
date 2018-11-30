@@ -21,8 +21,9 @@ class LogEventsListener
      * @var LoggerFactory
      */
     private $loggerFactory;
+
     /**
-     * @var \Xiidea\EasyAuditBundle\Resolver\EventResolverFactory
+     * @var EventResolverFactory
      */
     private $resolverFactory;
 

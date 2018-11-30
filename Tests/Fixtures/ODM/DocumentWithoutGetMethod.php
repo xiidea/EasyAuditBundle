@@ -9,17 +9,17 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Xiidea\EasyAuditBundle\Tests\Fixtures\ORM;
+namespace Xiidea\EasyAuditBundle\Tests\Fixtures\ODM;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
 /**
- * @ORM\Entity
+ * @ODM\Document
  */
-class EntityWithoutGetMethod
+class DocumentWithoutGetMethod
 {
     /**
-     * @ORM\Column(type="string")
+     * @ODM\Column(type="string")
      */
     private $title;
 
@@ -27,5 +27,4 @@ class EntityWithoutGetMethod
     {
         $this->title = $title;
     }
-
 }

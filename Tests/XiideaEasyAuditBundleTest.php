@@ -14,8 +14,8 @@ namespace Xiidea\EasyAuditBundle\Tests;
 use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\XiideaEasyAuditBundle;
 
-class XiideaEasyAuditBundleTest extends TestCase {
-
+class XiideaEasyAuditBundleTest extends TestCase
+{
     public function testBuildInitializeBundleAddCompilerPass()
     {
         $containerBuilder = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerBuilder')
@@ -40,4 +40,3 @@ class XiideaEasyAuditBundleTest extends TestCase {
         $bundle->build($containerBuilder);
     }
 }
- 

@@ -48,7 +48,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('user_property')->isRequired()->end()
-                ->scalarNode('entity_class')->cannotBeOverwritten()->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('document_class')->cannotBeOverwritten()->isRequired()->cannotBeEmpty()->end()
             ->end();
     }
 
@@ -60,8 +60,8 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('resolver')->defaultValue('xiidea.easy_audit.default_event_resolver')->end()
-                ->scalarNode('entity_event_resolver')
-                    ->defaultValue('xiidea.easy_audit.default_entity_event_resolver')
+                ->scalarNode('document_event_resolver')
+                    ->defaultValue('xiidea.easy_audit.default_document_event_resolver')
                 ->end()
                 ->booleanNode('default_logger')->defaultValue(true)->end()
             ->end();
@@ -74,7 +74,7 @@ class Configuration implements ConfigurationInterface
     {
         $rootNode
             ->children()
-                ->variableNode('doctrine_entities')->defaultValue(array())->end()
+                ->variableNode('doctrine_documents')->defaultValue(array())->end()
                 ->variableNode('events')->defaultValue(array())->end()
                 ->variableNode('custom_resolvers')->defaultValue(array())->end()
             ->end();

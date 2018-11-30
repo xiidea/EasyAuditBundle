@@ -19,11 +19,10 @@ use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\DummyAuthenticationFailureEvent;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\DummyFilterUserResponseEvent;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\DummyUserEvent;
-use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\ODM\UserDocument;
 
 class UserEventResolverTest extends TestCase
 {
-
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
     private $tokenStorage;
 
@@ -35,7 +34,6 @@ class UserEventResolverTest extends TestCase
         $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
         $this->eventResolver = new UserEventResolver();
         $this->eventResolver->setTokenStorage($this->tokenStorage);
-
     }
 
     public function testIsAnInstanceOfEventResolverInterface()
@@ -46,49 +44,58 @@ class UserEventResolverTest extends TestCase
     public function testUnlistedEvent()
     {
         $auditLog = $this->eventResolver->getEventLogInfo(new Basic(), 'any_random_event');
-        $this->assertEquals(array('type' => 'any_random_event', 'description' => 'any_random_event'), $auditLog);
+        $this->assertEquals(['type' => 'any_random_event', 'description' => 'any_random_event'], $auditLog);
     }
 
     public function testPasswordChangedEvent()
     {
-        $event = new DummyFilterUserResponseEvent(new UserEntity());
+        $event = new DummyFilterUserResponseEvent(new UserDocument());
 
         $auditLog = $this->eventResolver->getEventLogInfo($event, 'fos_user.change_password.edit.completed');
 
         $this->assertNotNull($auditLog);
 
-        $this->assertEquals(array(
-            'description' => "Password of user 'admin' Changed Successfully",
-            'type' => "Password Changed"
-        ), $auditLog);
-
+        $this->assertEquals(
+            [
+                'description' => "Password of user 'admin' Changed Successfully",
+                'type'        => 'Password Changed'
+            ],
+            $auditLog
+        );
     }
 
     public function testLoginEvent()
     {
-        $event = new DummyFilterUserResponseEvent(new UserEntity());
+        $event = new DummyFilterUserResponseEvent(new UserDocument());
 
         $this->tokenStorage->expects($this->once())
             ->method('getToken')
-            ->willReturn(new DummyToken(new UserEntity()));
+            ->willReturn(new DummyToken(new UserDocument()));
 
         $auditLog = $this->eventResolver->getEventLogInfo($event, 'security.interactive_login');
 
-        $this->assertEquals(array (
-            'description' => "User 'admin' Logged in Successfully",
-            'type' => 'User Logged in',
-        ),$auditLog);
+        $this->assertEquals(
+            [
+                'description' => "User 'admin' Logged in Successfully",
+                'type'        => 'User Logged in',
+            ],
+            $auditLog
+        );
     }
 
-    public function testLoginUsingRememberMeService() {
-        $event = new DummyUserEvent(new UserEntity());
+    public function testLoginUsingRememberMeService()
+    {
+        $event = new DummyUserEvent(new UserDocument());
 
         $auditLog = $this->eventResolver->getEventLogInfo($event, 'fos_user.security.implicit_login');
 
-        $this->assertEquals(array (
-            'description' => "User 'admin' Logged in Successfully using remember me service",
-            'type' => 'User Logged in',
-        ),$auditLog);
+        $this->assertEquals(
+            [
+                'description' => "User 'admin' Logged in Successfully using remember me service",
+                'type'        => 'User Logged in',
+            ],
+            $auditLog
+        );
     }
 
     public function testAuthenticationFailureEvent()
@@ -99,11 +106,13 @@ class UserEventResolverTest extends TestCase
 
         $this->assertNotNull($auditLog);
 
-        $this->assertEquals(array(
-            'description' => "Bad credentials Username: user",
-            'type' => "Authentication Failed"
-        ), $auditLog);
-
+        $this->assertEquals(
+            [
+                'description' => 'Bad credentials Username: user',
+                'type'        => 'Authentication Failed'
+            ],
+            $auditLog
+        );
     }
 
     public function testUnknownUserEvent()
@@ -137,10 +146,10 @@ class UserEventResolverTest extends TestCase
         $this->assertNotNull($auditLog);
 
         $this->assertEquals(
-            array(
+            [
                 'description' => $randomEvent,
-                'type' => $randomEvent
-            ),
+                'type'        => $randomEvent
+            ],
             $auditLog
         );
     }

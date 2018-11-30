@@ -9,15 +9,15 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Xiidea\EasyAuditBundle\Entity;
+namespace Xiidea\EasyAuditBundle\Document;
 
 use Psr\Log\InvalidArgumentException;
 use Psr\Log\LogLevel;
-use Xiidea\EasyAuditBundle\Traits\EntityHydrationMethod;
+use Xiidea\EasyAuditBundle\Traits\DocumentHydrationMethod;
 
 class BaseAuditLog
 {
-    use EntityHydrationMethod;
+    use DocumentHydrationMethod;
 
     /**
      * @var string
@@ -165,7 +165,7 @@ class BaseAuditLog
      */
     final public function setLevel($level)
     {
-        if (!in_array(strtolower($level), $this->getAllowedLevel())) {
+        if (!in_array(strtolower($level), $this->getAllowedLevel(), true)) {
             throw new InvalidArgumentException();
         }
 
@@ -176,7 +176,7 @@ class BaseAuditLog
 
     private function getAllowedLevel()
     {
-        $oClass = new \ReflectionClass ('Psr\Log\LogLevel');
+        $oClass = new \ReflectionClass (LogLevel::class);
 
         return $oClass->getConstants();
     }

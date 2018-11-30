@@ -17,10 +17,10 @@ class WithEmbeddedResolver extends Basic implements EmbeddedEventResolverInterfa
 {
     public function getEventLogInfo($eventName)
     {
-        return array(
+        return [
             'description' => 'It is an embedded event',
-            'type' => $eventName,
-            'level' => 'emergency'
-        );
+            'type'        => $eventName,
+            'level'       => 'emergency'
+        ];
     }
 }

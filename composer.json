@@ -1,10 +1,9 @@
 {
-    "name": "xiidea/easy-audit",
+    "name": "wh1pp3rz/easy-audit",
     "type": "symfony-bundle",
     "description": "A Symfony Bundle To Log Selective Events. It is easy to configure and easy to customize for your need",
     "keywords": ["Event Log", "Audit Log", "Symfony2", "Symfony3", "Symfony4", "Audit trail"],
     "license": "MIT",
-    "homepage": "http://xiidea.github.io/EasyAuditBundle/",
     "authors": [
         {
             "name": "Roni Saha",
@@ -13,21 +12,25 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/xiidea/EasyAuditBundle/issues",
-        "source": "https://github.com/xiidea/EasyAuditBundle"
+        "issues": "https://github.com/wh1pp3rz/EasyAuditBundle/issues",
+        "source": "https://github.com/wh1pp3rz/EasyAuditBundle"
     },
     "require": {
         "php": "^5.6 || ^7.0",
         "psr/log": "^1",
         "symfony/framework-bundle": ">=2.7 <5.0.0",
-        "symfony/security-bundle": ">=2.7 <5.0.0"
+        "symfony/security-bundle": ">=2.7 <5.0.0",
+        "alcaeus/mongo-php-adapter": "^1.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.0 || ^6.0",
-        "doctrine/orm": "~2.2,>=2.2.3",
-        "doctrine/doctrine-bundle": "~1.2",
+        "doctrine/mongodb-odm": "^1.2.3",
+        "doctrine/mongodb-odm-bundle": "^3.2",
         "friendsofsymfony/user-bundle": "^2.0",
-        "satooshi/php-coveralls": "^2.0"
+        "satooshi/php-coveralls": "^2.0",
+        "symfony/browser-kit": "^4.2",
+        "symfony/css-selector": "^4.2",
+        "symfony/var-dumper": "^4.2"
     },
     "autoload": {
       "psr-4": {
@@ -40,6 +43,11 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.4.x-dev"
+        }
+    },
+    "config": {
+        "platform": {
+            "ext-mongo": "1.6.16"
         }
     }
 }

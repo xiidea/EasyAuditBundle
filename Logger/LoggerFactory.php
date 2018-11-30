@@ -11,25 +11,25 @@
 
 namespace Xiidea\EasyAuditBundle\Logger;
 
-use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
+use Xiidea\EasyAuditBundle\Document\BaseAuditLog;
 use Xiidea\EasyAuditBundle\Exception\InvalidServiceException;
 
 class LoggerFactory
 {
     /** @var LoggerInterface[] */
-    static private $loggers = array();
+    static private $loggers = [];
 
     private $loggersChannel;
 
     private $debug = false;
 
-    public function __construct(array $channel = array())
+    public function __construct(array $channel = [])
     {
         $this->loggersChannel = $channel;
     }
 
     /**
-     * @param null|\Xiidea\EasyAuditBundle\Entity\BaseAuditLog $eventInfo
+     * @param null|BaseAuditLog $eventInfo
      */
     public function executeLoggers($eventInfo)
     {
@@ -54,7 +54,7 @@ class LoggerFactory
         if ($logger instanceof LoggerInterface) {
             self::$loggers[$loggerName] = $logger;
         } elseif ($this->debug) {
-            throw new InvalidServiceException('Logger Service must implement' . __NAMESPACE__ . "LoggerInterface");
+            throw new InvalidServiceException('Logger Service must implement' . __NAMESPACE__ . 'LoggerInterface');
         }
     }
 
@@ -87,7 +87,7 @@ class LoggerFactory
      */
     private function isChannelTypeOf($type, $id)
     {
-        return $this->loggersChannel[$id]['type'] == $type;
+        return $this->loggersChannel[$id]['type'] === $type;
     }
 
     /**
@@ -97,7 +97,7 @@ class LoggerFactory
      */
     private function levelExistsInList($level, $id)
     {
-        return in_array($level, $this->loggersChannel[$id]['elements']);
+        return in_array($level, $this->loggersChannel[$id]['elements'], true);
     }
 
     /**

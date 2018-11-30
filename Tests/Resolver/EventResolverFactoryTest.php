@@ -11,7 +11,6 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Resolver;
 
-
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -26,15 +25,14 @@ use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\InvalidEventInfoResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\InvalidEventResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\NullResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
-use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\EntityEvent;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\DocumentEvent;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\WithEmbeddedResolver;
-use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog;
-use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie;
-use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\ODM\AuditLog;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\ODM\Movie;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\ODM\UserDocument;
 
 class EventResolverFactoryTest extends TestCase
 {
-
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
     private $tokenStorage;
 
@@ -47,7 +45,7 @@ class EventResolverFactoryTest extends TestCase
     public function setUp()
     {
         $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
-        $this->resolverFactory = new EventResolverFactory(array(), 'username', AuditLog::class);
+        $this->resolverFactory = new EventResolverFactory([], 'username', AuditLog::class);
         $this->resolverFactory->setTokenStorage($this->tokenStorage);
     }
 
@@ -62,18 +60,20 @@ class EventResolverFactoryTest extends TestCase
 
         $this->tokenStorage->expects($this->any())
             ->method('getToken')
-            ->willReturn(new DummyToken(new UserEntity()));
-
+            ->willReturn(new DummyToken(new UserDocument()));
 
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 
-        $this->assertEventInfo($auditLog, array(
-            'name' => 'basic',
-            'description' => 'basic',
-            'user' => 'admin',
-            'impersonatingUser' => null,
-            'ip' => '127.0.0.1'
-        ));
+        $this->assertEventInfo(
+            $auditLog,
+            [
+                'name'              => 'basic',
+                'description'       => 'basic',
+                'user'              => 'admin',
+                'impersonatingUser' => null,
+                'ip'                => '127.0.0.1'
+            ]
+        );
     }
 
     public function testImpersonatingUser()
@@ -86,21 +86,24 @@ class EventResolverFactoryTest extends TestCase
 
         $this->mockSecurityAuthChecker(true);
 
-        $userToken = new DummyToken(new UserEntity(2, 'admin'));
+        $userToken = new DummyToken(new UserDocument(2, 'admin'));
 
         $this->tokenStorage->expects($this->any())
             ->method('getToken')
-            ->willReturn(new DummyToken(new UserEntity(1, 'a', array(new SwitchUserRole('', $userToken)))));
+            ->willReturn(new DummyToken(new UserDocument(1, 'a', [new SwitchUserRole('', $userToken)])));
 
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 
-        $this->assertEventInfo($auditLog, array(
-            'name' => 'basic',
-            'description' => 'basic',
-            'user' => 'a',
-            'impersonatingUser' => 'admin',
-            'ip' => '127.0.0.1'
-        ));
+        $this->assertEventInfo(
+            $auditLog,
+            [
+                'name'              => 'basic',
+                'description'       => 'basic',
+                'user'              => 'a',
+                'impersonatingUser' => 'admin',
+                'ip'                => '127.0.0.1'
+            ]
+        );
     }
 
     public function testInvalidResolverWithDebugOff()
@@ -116,7 +119,7 @@ class EventResolverFactoryTest extends TestCase
     public function testInvalidCustomResolverWithDebugOff()
     {
         $this->event = new Basic();
-        $this->resolverFactory = new EventResolverFactory(array('custom' => 'r1'), 'username', AuditLog::class);
+        $this->resolverFactory = new EventResolverFactory(['custom' => 'r1'], 'username', AuditLog::class);
         $this->resolverFactory->setTokenStorage($this->tokenStorage);
         $this->initiateContainerWithDebugMode(false);
 
@@ -125,13 +128,16 @@ class EventResolverFactoryTest extends TestCase
 
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'custom');
 
-        $this->assertEventInfo($auditLog, array(
-            'name' => 'custom',
-            'description' => 'custom',
-            'user' => 'By Command',
-            'impersonatingUser' => null,
-            'ip' => ''
-        ));
+        $this->assertEventInfo(
+            $auditLog,
+            [
+                'name'              => 'custom',
+                'description'       => 'custom',
+                'user'              => 'By Command',
+                'impersonatingUser' => null,
+                'ip'                => ''
+            ]
+        );
     }
 
     /**
@@ -154,7 +160,7 @@ class EventResolverFactoryTest extends TestCase
     public function testInvalidCustomResolverWithDebugOn()
     {
         $this->event = new Basic();
-        $this->resolverFactory = new EventResolverFactory(array('custom' => 'r1'), 'username', AuditLog::class);
+        $this->resolverFactory = new EventResolverFactory(['custom' => 'r1'], 'username', AuditLog::class);
         $this->resolverFactory->setTokenStorage($this->tokenStorage);
         $this->initiateContainerWithDebugMode(true);
 
@@ -175,19 +181,20 @@ class EventResolverFactoryTest extends TestCase
 
         $this->tokenStorage->expects($this->any())
             ->method('getToken')
-            ->willReturn(new DummyToken(new UserEntity()));
-
+            ->willReturn(new DummyToken(new UserDocument()));
 
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 
-        $this->assertEventInfo($auditLog, array(
-            'name' => 'basic',
-            'description' => 'basic',
-            'user' => 'admin',
-            'impersonatingUser' => null,
-            'ip' => '127.0.0.1'
-        ));
-
+        $this->assertEventInfo(
+            $auditLog,
+            [
+                'name'              => 'basic',
+                'description'       => 'basic',
+                'user'              => 'admin',
+                'impersonatingUser' => null,
+                'ip'                => '127.0.0.1'
+            ]
+        );
     }
 
     public function testEmbeddedEventResolver()
@@ -200,18 +207,20 @@ class EventResolverFactoryTest extends TestCase
 
         $this->tokenStorage->expects($this->any())
             ->method('getToken')
-            ->willReturn(new DummyToken(new UserEntity()));
-
+            ->willReturn(new DummyToken(new UserDocument()));
 
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'embedded');
 
-        $this->assertEventInfo($auditLog, array(
-            'name' => 'embedded',
-            'description' => 'It is an embedded event',
-            'user' => 'admin',
-            'impersonatingUser' => null,
-            'ip' => '127.0.0.1'
-        ));
+        $this->assertEventInfo(
+            $auditLog,
+            [
+                'name'              => 'embedded',
+                'description'       => 'It is an embedded event',
+                'user'              => 'admin',
+                'impersonatingUser' => null,
+                'ip'                => '127.0.0.1'
+            ]
+        );
     }
 
     public function testNullEventInfo()
@@ -224,30 +233,31 @@ class EventResolverFactoryTest extends TestCase
         $this->assertNull($auditLog);
     }
 
-    public function testEntityEventResolver()
+    public function testDocumentEventResolver()
     {
-        $this->event = new EntityEvent();
+        $this->event = new DocumentEvent();
 
-        $this->resolverFactory->setEntityEventResolver(new DefaultEventResolver());
+        $this->resolverFactory->setDocumentEventResolver(new DefaultEventResolver());
 
         $this->mockClientIpResolverForBrowserRequest();
         $this->mockSecurityAuthChecker();
 
         $this->tokenStorage->expects($this->any())
             ->method('getToken')
-            ->willReturn(new DummyToken(new UserEntity()));
+            ->willReturn(new DummyToken(new UserDocument()));
 
+        $auditLog = $this->resolverFactory->getEventLog($this->event, 'easy_audit.doctrine.document.created');
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event, 'easy_audit.doctrine.entity.created');
-
-        $this->assertEventInfo($auditLog,
-            array(
-                'description' => 'easy_audit.doctrine.entity.created',
-                'name' => 'easy_audit.doctrine.entity.created',
-                'user' => 'admin',
+        $this->assertEventInfo(
+            $auditLog,
+            [
+                'description'       => 'easy_audit.doctrine.document.created',
+                'name'              => 'easy_audit.doctrine.document.created',
+                'user'              => 'admin',
                 'impersonatingUser' => null,
-                'ip' => '127.0.0.1',
-            ));
+                'ip'                => '127.0.0.1',
+            ]
+        );
     }
 
     public function testCustomValidEventResolver()
@@ -256,26 +266,26 @@ class EventResolverFactoryTest extends TestCase
 
         $this->resolverFactory->setCommonResolver(new CustomEventResolver());
 
-
         $this->mockClientIpResolverForBrowserRequest();
 
         $this->mockSecurityAuthChecker();
 
         $this->tokenStorage->expects($this->any())
             ->method('getToken')
-            ->willReturn(new DummyToken(new UserEntity()));
-
+            ->willReturn(new DummyToken(new UserDocument()));
 
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 
-        $this->assertEventInfo($auditLog,
-            array(
-                'description' => 'Custom basic Description',
-                'name' => 'basic',
-                'user' => 'admin',
+        $this->assertEventInfo(
+            $auditLog,
+            [
+                'description'       => 'Custom basic Description',
+                'name'              => 'basic',
+                'user'              => 'admin',
                 'impersonatingUser' => null,
-                'ip' => '127.0.0.1',
-            ));
+                'ip'                => '127.0.0.1',
+            ]
+        );
     }
 
     public function testCustomInValidEventResolverWithDebugOff()
@@ -302,7 +312,6 @@ class EventResolverFactoryTest extends TestCase
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 
         $this->assertNull($auditLog);
-
     }
 
     public function testEventTriggeredFromConsoleCommand()
@@ -319,21 +328,23 @@ class EventResolverFactoryTest extends TestCase
 
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 
-        $this->assertEventInfo($auditLog,
-            array(
-                'description' => 'basic',
-                'name' => 'basic',
-                'user' => 'By Command',
+        $this->assertEventInfo(
+            $auditLog,
+            [
+                'description'       => 'basic',
+                'name'              => 'basic',
+                'user'              => 'By Command',
                 'impersonatingUser' => null,
-                'type' => 'easy_audit.doctrine.entity.created',
-                'ip' => '',
-            ));
+                'type'              => 'easy_audit.doctrine.document.created',
+                'ip'                => '',
+            ]
+        );
     }
 
     public function testEventResolverWhenUserPropertyOptionIsNotGiven()
     {
         $this->event = new Basic();
-        $this->resolverFactory = new EventResolverFactory(array(), null, AuditLog::class);
+        $this->resolverFactory = new EventResolverFactory([], null, AuditLog::class);
         $this->resolverFactory->setTokenStorage($this->tokenStorage);
 
         $this->resolverFactory->setCommonResolver(new DefaultEventResolver());
@@ -344,24 +355,26 @@ class EventResolverFactoryTest extends TestCase
 
         $this->tokenStorage->expects($this->any())
             ->method('getToken')
-            ->willReturn(new DummyToken(new UserEntity()));
-
+            ->willReturn(new DummyToken(new UserDocument()));
 
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 
-        $this->assertEventInfo($auditLog, array(
-            'name' => 'basic',
-            'description' => 'basic',
-            'user' => 'admin',
-            'impersonatingUser' => null,
-            'ip' => '127.0.0.1'
-        ));
+        $this->assertEventInfo(
+            $auditLog,
+            [
+                'name'              => 'basic',
+                'description'       => 'basic',
+                'user'              => 'admin',
+                'impersonatingUser' => null,
+                'ip'                => '127.0.0.1'
+            ]
+        );
     }
 
     public function testShouldHandleCustomResolverList()
     {
         $this->event = new Basic();
-        $this->resolverFactory = new EventResolverFactory(array('custom' => 'r1'), 'username', AuditLog::class);
+        $this->resolverFactory = new EventResolverFactory(['custom' => 'r1'], 'username', AuditLog::class);
         $this->resolverFactory->setTokenStorage($this->tokenStorage);
 
         $this->resolverFactory->setCommonResolver(new DefaultEventResolver());
@@ -374,50 +387,52 @@ class EventResolverFactoryTest extends TestCase
 
         $this->tokenStorage->expects($this->any())
             ->method('getToken')
-            ->willReturn(new DummyToken(new UserEntity()));
-
+            ->willReturn(new DummyToken(new UserDocument()));
 
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'custom');
 
-
-        $this->assertEventInfo($auditLog, array(
-            'name' => 'custom',
-            'description' => 'Custom custom Description',
-            'user' => 'admin',
-            'impersonatingUser' => null,
-            'ip' => '127.0.0.1'
-        ));
+        $this->assertEventInfo(
+            $auditLog,
+            [
+                'name'              => 'custom',
+                'description'       => 'Custom custom Description',
+                'user'              => 'admin',
+                'impersonatingUser' => null,
+                'ip'                => '127.0.0.1'
+            ]
+        );
     }
 
     public function testEventResolverWhenInvalidUserPropertyOptionIsGivenWithDebugOff()
     {
         $this->event = new Basic();
 
-        $this->resolverFactory = new EventResolverFactory(array(), 'invalidProperty', AuditLog::class);
+        $this->resolverFactory = new EventResolverFactory([], 'invalidProperty', AuditLog::class);
         $this->resolverFactory->setTokenStorage($this->tokenStorage);
         $this->initiateContainerWithDebugMode(false);
 
         $this->resolverFactory->setCommonResolver(new DefaultEventResolver());
 
-
         $this->mockClientIpResolverForBrowserRequest();
 
         $this->tokenStorage->expects($this->any())
             ->method('getToken')
-            ->willReturn(new DummyToken(new UserEntity()));
-
+            ->willReturn(new DummyToken(new UserDocument()));
 
         $this->mockSecurityAuthChecker();
 
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 
-        $this->assertEventInfo($auditLog, array(
-            'name' => 'basic',
-            'description' => 'basic',
-            'user' => '',
-            'impersonatingUser' => null,
-            'ip' => '127.0.0.1'
-        ));
+        $this->assertEventInfo(
+            $auditLog,
+            [
+                'name'              => 'basic',
+                'description'       => 'basic',
+                'user'              => '',
+                'impersonatingUser' => null,
+                'ip'                => '127.0.0.1'
+            ]
+        );
     }
 
     /**
@@ -427,7 +442,7 @@ class EventResolverFactoryTest extends TestCase
     {
         $this->event = new Basic();
 
-        $this->resolverFactory = new EventResolverFactory(array(), 'invalidProperty', AuditLog::class);
+        $this->resolverFactory = new EventResolverFactory([], 'invalidProperty', AuditLog::class);
         $this->resolverFactory->setTokenStorage($this->tokenStorage);
         $this->initiateContainerWithDebugMode(true);
 
@@ -435,7 +450,7 @@ class EventResolverFactoryTest extends TestCase
 
         $this->tokenStorage->expects($this->once())
             ->method('getToken')
-            ->willReturn(new DummyToken(new UserEntity()));
+            ->willReturn(new DummyToken(new UserDocument()));
 
         $this->resolverFactory->getEventLog($this->event, 'basic');
     }
@@ -445,7 +460,6 @@ class EventResolverFactoryTest extends TestCase
         $this->event = new Basic();
         $this->resolverFactory->setCommonResolver(new DefaultEventResolver());
 
-
         $this->mockClientIpResolverForBrowserRequest();
 
         $this->tokenStorage->expects($this->once())
@@ -454,15 +468,17 @@ class EventResolverFactoryTest extends TestCase
 
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 
-        $this->assertEventInfo($auditLog,
-            array(
-                'description' => 'basic',
-                'name' => 'basic',
-                'user' => 'Anonymous',
+        $this->assertEventInfo(
+            $auditLog,
+            [
+                'description'       => 'basic',
+                'name'              => 'basic',
+                'user'              => 'Anonymous',
                 'impersonatingUser' => null,
-                'type' => 'easy_audit.doctrine.entity.created',
-                'ip' => '127.0.0.1',
-            ));
+                'type'              => 'easy_audit.doctrine.document.created',
+                'ip'                => '127.0.0.1',
+            ]
+        );
     }
 
     public function testGetUserNameForAnonymousUser()
@@ -473,11 +489,11 @@ class EventResolverFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException \Xiidea\EasyAuditBundle\Exception\UnrecognizedEntityException
+     * @expectedException \Xiidea\EasyAuditBundle\Exception\UnrecognizedDocumentException
      */
-    public function testCreateEventObjectFromArrayThrowsExceptionOnInvalidEntity()
+    public function testCreateEventObjectFromArrayThrowsExceptionOnInvalidDocument()
     {
-        $this->resolverFactory = new EventResolverFactory(array(), 'invalidProperty', Movie::class);
+        $this->resolverFactory = new EventResolverFactory([], 'invalidProperty', Movie::class);
         $this->resolverFactory->setTokenStorage($this->tokenStorage);
 
         $this->event = new WithEmbeddedResolver();
@@ -494,7 +510,6 @@ class EventResolverFactoryTest extends TestCase
     {
         $this->resolverFactory->setDebug($on);
     }
-
 
     private function mockSecurityAuthChecker($isGranted = false)
     {

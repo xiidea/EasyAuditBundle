@@ -29,7 +29,7 @@ class TestKernel extends Kernel
 
         $fs = new Filesystem();
         if (!$fs->isAbsolutePath($config)) {
-            $config = __DIR__ . '/config/' . $config . ".yml";
+            $config = __DIR__ . '/config/' . $config . '.yml';
         }
 
         if (!file_exists($config)) {
@@ -41,12 +41,12 @@ class TestKernel extends Kernel
 
     public function registerBundles()
     {
-        return array(
+        return [
             new FrameworkBundle(),
             new SecurityBundle(),
             new XiideaEasyAuditBundle(),
             new XiideaTestBundle()
-        );
+        ];
     }
 
     public function getCacheDir()

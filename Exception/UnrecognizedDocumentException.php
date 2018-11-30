@@ -9,12 +9,9 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Xiidea\EasyAuditBundle\Tests\Fixtures\Event;
+namespace Xiidea\EasyAuditBundle\Exception;
 
-
-class EntityEvent extends Basic {
-
-    public function __construct($type = "created") {
-        parent::__construct('easy_audit.doctrine.entity.' . $type);
-    }
+class UnrecognizedDocumentException extends \Exception
+{
+    protected $message = "Document must extend Xiidea\\EasyAuditBundle\\Document\\BaseAuditLog";
 }

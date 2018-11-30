@@ -12,38 +12,38 @@
 namespace Xiidea\EasyAuditBundle\Tests\Annotation;
 
 use PHPUnit\Framework\TestCase;
-use Xiidea\EasyAuditBundle\Annotation\ORMSubscribedEvents;
+use Xiidea\EasyAuditBundle\Annotation\ODMSubscribedEvents;
 
-class ORMSubscribedEventsTest extends TestCase {
-
+class ODMSubscribedEventsTest extends TestCase
+{
     public function testConstructWithoutData()
     {
-        $annotation = new ORMSubscribedEvents(array());
+        $annotation = new ODMSubscribedEvents([]);
 
-        $this->assertTrue(is_array($annotation->events));
+        $this->assertInternalType('array', $annotation->events);
         $this->assertEmpty($annotation->events);
     }
 
     public function testConstructWithInvalidData()
     {
-        $data = array(
-            'unknown'   => 'foo',
-            'array'     => array('bar' => 'bar'),
-        );
+        $data = [
+            'unknown' => 'foo',
+            'array'   => ['bar' => 'bar'],
+        ];
 
-        $annotation = new ORMSubscribedEvents($data);
+        $annotation = new ODMSubscribedEvents($data);
 
-        $this->assertTrue(is_array($annotation->events));
+        $this->assertInternalType('array', $annotation->events);
         $this->assertEmpty($annotation->events);
     }
 
     public function testConstructWithValue()
     {
-        $data = array("value" => "updated,created");
+        $data = ['value' => 'updated,created'];
 
-        $annotation = new ORMSubscribedEvents($data);
+        $annotation = new ODMSubscribedEvents($data);
 
-        $this->assertTrue(is_array($annotation->events));
+        $this->assertInternalType('array', $annotation->events);
         $this->assertNotEmpty($annotation->events);
 
         $this->assertEquals(explode(',', $data['value']), $annotation->events);
@@ -51,11 +51,11 @@ class ORMSubscribedEventsTest extends TestCase {
 
     public function testConstructWithEvent()
     {
-        $data = array("events" => "updated,created");
+        $data = ['events' => 'updated,created'];
 
-        $annotation = new ORMSubscribedEvents($data);
+        $annotation = new ODMSubscribedEvents($data);
 
-        $this->assertTrue(is_array($annotation->events));
+        $this->assertInternalType('array', $annotation->events);
         $this->assertNotEmpty($annotation->events);
 
         $this->assertEquals(explode(',', $data['events']), $annotation->events);

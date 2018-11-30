@@ -16,7 +16,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Role\SwitchUserRole;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\DummyToken;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\DummyUserAwareComponent;
-use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\ODM\UserDocument;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class UserAwareComponentTest extends TestCase
 {
@@ -29,18 +30,15 @@ class UserAwareComponentTest extends TestCase
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
     private $authChecker;
 
-
     /** @var  DummyUserAwareComponent */
     private $userAwareComponent;
 
     public function setUp()
     {
         $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
-//        $this->requestStack = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $this->authChecker = $this->createMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
+        $this->authChecker = $this->createMock(AuthorizationCheckerInterface::class);
         $this->userAwareComponent = new DummyUserAwareComponent();
         $this->userAwareComponent->setTokenStorage($this->tokenStorage);
-//        $this->userAwareComponent->setRequestStack($this->requestStack);
         $this->userAwareComponent->setAuthChecker($this->authChecker);
     }
 
@@ -55,7 +53,7 @@ class UserAwareComponentTest extends TestCase
     {
         $this->tokenStorage->expects($this->any())
             ->method('getToken')
-            ->willReturn(new DummyToken(new UserEntity(1, 'admin')));
+            ->willReturn(new DummyToken(new UserDocument(1, 'admin')));
 
         $user = $this->userAwareComponent->getUser();
 
@@ -75,8 +73,8 @@ class UserAwareComponentTest extends TestCase
         $this->assertNull($user);
     }
 
-    public function testShouldReturnNullImpersonatingUserWhenSecurityTokenNotExists() {
-
+    public function testShouldReturnNullImpersonatingUserWhenSecurityTokenNotExists()
+    {
         $this->tokenStorage->expects($this->any())
             ->method('getToken')
             ->willReturn(null);
@@ -86,26 +84,28 @@ class UserAwareComponentTest extends TestCase
         $this->assertNull($user);
     }
 
-    public function testShouldReturnNullImpersonatingUserIfUserDoNotHavePreviousAdminRole() {
+    public function testShouldReturnNullImpersonatingUserIfUserDoNotHavePreviousAdminRole()
+    {
         $this->mockSecurityAuthChecker();
 
         $this->tokenStorage->expects($this->any())
             ->method('getToken')
-            ->willReturn(new DummyToken(new UserEntity(1, 'a')));
+            ->willReturn(new DummyToken(new UserDocument(1, 'a')));
 
         $user = $this->userAwareComponent->getImpersonatingUserForTest();
 
         $this->assertNull($user);
     }
 
-    public function testShouldReturnImpersonatingUserIfUserHavePreviousAdminRole() {
+    public function testShouldReturnImpersonatingUserIfUserHavePreviousAdminRole()
+    {
         $this->mockSecurityAuthChecker(true);
 
-        $userToken = new DummyToken(new UserEntity(1, 'admin'));
+        $userToken = new DummyToken(new UserDocument(1, 'admin'));
 
         $this->tokenStorage->expects($this->any())
             ->method('getToken')
-            ->willReturn(new DummyToken(new UserEntity(1, 'a', array(new SwitchUserRole('', $userToken)))));
+            ->willReturn(new DummyToken(new UserDocument(1, 'a', [new SwitchUserRole('', $userToken)])));
 
         $user = $this->userAwareComponent->getImpersonatingUserForTest();
 
@@ -114,7 +114,8 @@ class UserAwareComponentTest extends TestCase
         $this->assertEquals(1, $user->getId());
     }
 
-    private function mockSecurityAuthChecker($isGranted = false) {
+    private function mockSecurityAuthChecker($isGranted = false)
+    {
         $this->authChecker->expects($this->once())
             ->method('isGranted')
             ->with('ROLE_PREVIOUS_ADMIN')

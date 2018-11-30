@@ -8,14 +8,14 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Xiidea\EasyAuditBundle\Tests\Functional\Bundle\TestBundle\Entity;
+namespace Xiidea\EasyAuditBundle\Tests\Functional\Bundle\TestBundle\Document;
 
-use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
-
+use Xiidea\EasyAuditBundle\Document\BaseAuditLog;
 
 class AuditLog extends BaseAuditLog
 {
-    public function __toString() {
+    public function __toString()
+    {
         return md5($this->getTypeId() . $this->getType() . $this->getIp());
     }
 }

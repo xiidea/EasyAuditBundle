@@ -17,24 +17,27 @@ class DummyToken implements TokenInterface
 {
     private $user;
 
-    public function __construct($user = "user") {
+    public function __construct($user = 'user')
+    {
         $this->user = $user;
     }
 
-    public function getUser() {
+    public function getUser()
+    {
         return $this->user;
     }
 
-    public function getRoles() {
-        if(!is_object($this->user)) {
+    public function getRoles()
+    {
+        if (!is_object($this->user)) {
             return $this->user;
         }
 
-        if(method_exists($this->user, 'getRoles')) {
+        if (method_exists($this->user, 'getRoles')) {
             return $this->user->getRoles();
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -101,11 +104,11 @@ class DummyToken implements TokenInterface
      */
     public function getUsername()
     {
-        if(!is_object($this->user)) {
+        if (!is_object($this->user)) {
             return $this->user;
         }
 
-        if(method_exists($this->user, 'getUsername')) {
+        if (method_exists($this->user, 'getUsername')) {
             return $this->user->getUsername();
         }
 

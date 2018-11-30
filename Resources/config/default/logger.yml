@@ -2,11 +2,11 @@
 services:
   xiidea.easy_audit.logger.service:
           class: Xiidea\EasyAuditBundle\Logger\Logger
-          arguments: ['@doctrine']
+          arguments: ['@doctrine_mongodb']
           tags:
              - { name: easy_audit.logger }
 
-  xiidea.easy_audit.entity_delete_event.subscriber:
+  xiidea.easy_audit.document_delete_event.subscriber:
           class: Xiidea\EasyAuditBundle\Subscriber\DoctrineDeleteEventLogger
           arguments: ['@xiidea.easy_audit.logger.service']
           public: true

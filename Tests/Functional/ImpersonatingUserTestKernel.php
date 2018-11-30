@@ -31,7 +31,7 @@ class ImpersonatingUserTestKernel extends Kernel
 
         $fs = new Filesystem();
         if (!$fs->isAbsolutePath($config)) {
-            $config = __DIR__ . '/config/' . $config . ".yml";
+            $config = __DIR__ . '/config/' . $config . '.yml';
         }
 
         if (!file_exists($config)) {
@@ -43,24 +43,24 @@ class ImpersonatingUserTestKernel extends Kernel
 
     public function registerBundles()
     {
-        return array(
+        return [
             new FrameworkBundle(),
             new TwigBundle(),
             new SecurityBundle(),
             new FormLoginBundle(),
             new XiideaEasyAuditBundle(),
             new XiideaTestBundle()
-        );
+        ];
     }
 
     public function getCacheDir()
     {
-        return sys_get_temp_dir().'/XiideaEasyAuditBundle/cache/'.substr(sha1($this->config), 0, 6);
+        return sys_get_temp_dir() . '/XiideaEasyAuditBundle/cache/' . substr(sha1($this->config), 0, 6);
     }
 
     public function getLogDir()
     {
-        return sys_get_temp_dir().'/XiideaEasyAuditBundle/logs/'.substr(sha1($this->config), 0, 6);
+        return sys_get_temp_dir() . '/XiideaEasyAuditBundle/logs/' . substr(sha1($this->config), 0, 6);
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)

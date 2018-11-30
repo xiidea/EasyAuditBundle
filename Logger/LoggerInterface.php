@@ -11,7 +11,7 @@
 
 namespace Xiidea\EasyAuditBundle\Logger;
 
-use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
+use Xiidea\EasyAuditBundle\Document\BaseAuditLog;
 
 interface LoggerInterface
 {

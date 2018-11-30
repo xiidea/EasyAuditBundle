@@ -9,28 +9,27 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Xiidea\EasyAuditBundle\Tests\Fixtures\ORM;
+namespace Xiidea\EasyAuditBundle\Tests\Fixtures\ODM;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
 /**
- * @ORM\Entity
+ * @ODM\Document
  */
 class Movie
 {
     /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ODM\Id(strategy="auto")
      */
     protected $id;
 
     /**
-     * @ORM\Column(type="string")
+     * @ODM\Column(type="string")
      */
     protected $name;
 
-    public function __construct($id = 1, $name = "car") {
+    public function __construct($id = 1, $name = 'car')
+    {
         $this->id = $id;
         $this->name = $name;
     }

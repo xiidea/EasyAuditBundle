@@ -42,7 +42,6 @@ class UserAwareComponent
         $this->tokenStorage = $tokenStorage;
     }
 
-
     /**
      * Get a user from the Security Context
      *
@@ -51,7 +50,6 @@ class UserAwareComponent
      */
     public function getUser()
     {
-
         if (null === $token = $this->tokenStorage->getToken()) {
             return null;
         }
@@ -102,7 +100,7 @@ class UserAwareComponent
     {
         $user = $this->getUser();
 
-        if(empty($user)) {
+        if (empty($user)) {
             return $this->getAnonymousUserName();
         }
 
@@ -117,10 +115,10 @@ class UserAwareComponent
         $request = $this->getRequest();
 
         if ($request && $request->getClientIp()) {
-            return "Anonymous";
+            return 'Anonymous';
         }
 
-        return "By Command";
+        return 'By Command';
     }
 
     /**
@@ -142,7 +140,7 @@ class UserAwareComponent
 
     protected function getRequest()
     {
-        if($this->requestStack === null) {
+        if ($this->requestStack === null) {
             return false;
         }
 

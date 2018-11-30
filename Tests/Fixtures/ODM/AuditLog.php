@@ -9,17 +9,16 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Xiidea\EasyAuditBundle\Tests\Fixtures\ORM;
+namespace Xiidea\EasyAuditBundle\Tests\Fixtures\ODM;
 
-
-use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
+use Xiidea\EasyAuditBundle\Document\BaseAuditLog;
 
 class AuditLog extends BaseAuditLog
 {
     /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ODM\Id
+     * @ODM\Column(type="integer")
+     * @ODM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
@@ -27,7 +26,7 @@ class AuditLog extends BaseAuditLog
      * Type Of Event(Internal Type ID)
      *
      * @var string
-     * @ORM\Column(name="type_id", type="string", length=200, nullable=false)
+     * @ODM\Column(name="type_id", type="string", length=200, nullable=false)
      */
     protected $typeId;
 
@@ -35,32 +34,32 @@ class AuditLog extends BaseAuditLog
      * Type Of Event
      *
      * @var string
-     * @ORM\Column(name="type", type="string", length=200, nullable=true)
+     * @ODM\Column(name="type", type="string", length=200, nullable=true)
      */
     protected $type;
 
     /**
      * @var string
-     * @ORM\Column(name="description", type="text", length=255, nullable=true)
+     * @ODM\Column(name="description", type="text", length=255, nullable=true)
      */
     protected $description;
 
     /**
      * Time Of Event
      * @var \DateTime
-     * @ORM\Column(name="event_time", type="datetime")
+     * @ODM\Column(name="event_time", type="datetime")
      */
     protected $eventTime;
 
     /**
      * @var string
-     * @ORM\Column(name="user", type="string", length=255)
+     * @ODM\Column(name="user", type="string", length=255)
      */
     protected $user;
 
     /**
      * @var string
-     * @ORM\Column(name="ip", type="string", length=20, nullable=true)
+     * @ODM\Column(name="ip", type="string", length=20, nullable=true)
      */
     protected $ip;
 

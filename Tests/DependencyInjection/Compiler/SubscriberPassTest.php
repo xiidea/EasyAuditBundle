@@ -15,16 +15,18 @@ use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\DependencyInjection\Compiler\SubscriberPass;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\EasySubscriberOne;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\EasySubscriberTwo;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 
 class SubscriberPassTest extends TestCase {
 
     public function testProcessWithoutEventListenerDefinition()
     {
-        $containerBuilder = $this->createMock('Symfony\Component\DependencyInjection\ContainerBuilder');
+        $containerBuilder = $this->createMock(ContainerBuilder::class);
 
         $containerBuilder->expects($this->once())
             ->method('hasDefinition')
-            ->with($this->equalTo("xiidea.easy_audit.event_listener"))
+            ->with($this->equalTo('xiidea.easy_audit.event_listener'))
             ->will($this->returnValue(false));
         $containerBuilder->expects($this->never())
             ->method('findTaggedServiceIds');
@@ -158,15 +160,15 @@ class SubscriberPassTest extends TestCase {
 
         $listenableEventsList =array (
             array (
-                'event' => 'easy_audit.doctrine.entity.updated',
+                'event' => 'easy_audit.doctrine.document.updated',
                 'method' => 'resolveEventHandler',
             ),
             array (
-                'event' => 'easy_audit.doctrine.entity.created',
+                'event' => 'easy_audit.doctrine.document.created',
                 'method' => 'resolveEventHandler',
             ),
             array (
-                'event' => 'easy_audit.doctrine.entity.deleted',
+                'event' => 'easy_audit.doctrine.document.deleted',
                 'method' => 'resolveEventHandler',
             ),
             array (
@@ -210,7 +212,7 @@ class SubscriberPassTest extends TestCase {
         $containerBuilder
             ->expects($this->at(2))
             ->method('getParameter')
-            ->with($this->equalTo('xiidea.easy_audit.doctrine_entities'))
+            ->with($this->equalTo('xiidea.easy_audit.doctrine_documents'))
             ->will($this->returnValue(true));
         $containerBuilder
             ->expects($this->at(3))
@@ -259,7 +261,7 @@ class SubscriberPassTest extends TestCase {
      */
     private function getDefinitionMock()
     {
-        $definitionMock = $this->getMockBuilder('Symfony\Component\DependencyInjection\Definition')
+        $definitionMock = $this->getMockBuilder(Definition::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -272,11 +274,11 @@ class SubscriberPassTest extends TestCase {
      */
     protected function getContainerBuilderMock()
     {
-        $containerBuilder = $this->createMock('Symfony\Component\DependencyInjection\ContainerBuilder');
+        $containerBuilder = $this->createMock(ContainerBuilder::class);
 
         $containerBuilder->expects($this->once())
             ->method('hasDefinition')
-            ->with($this->equalTo("xiidea.easy_audit.event_listener"))
+            ->with($this->equalTo('xiidea.easy_audit.event_listener'))
             ->will($this->returnValue(true));
 
         return $containerBuilder;
@@ -292,15 +294,15 @@ class SubscriberPassTest extends TestCase {
 
         $listenableEventsList = array(
             array(
-                'event' => 'easy_audit.doctrine.entity.updated',
+                'event' => 'easy_audit.doctrine.document.updated',
                 'method' => 'resolveEventHandler',
             ),
             array(
-                'event' => 'easy_audit.doctrine.entity.created',
+                'event' => 'easy_audit.doctrine.document.created',
                 'method' => 'resolveEventHandler',
             ),
             array(
-                'event' => 'easy_audit.doctrine.entity.deleted',
+                'event' => 'easy_audit.doctrine.document.deleted',
                 'method' => 'resolveEventHandler',
             )
         );
@@ -318,7 +320,7 @@ class SubscriberPassTest extends TestCase {
         $containerBuilder
             ->expects($this->at(2))
             ->method('getParameter')
-            ->with($this->equalTo('xiidea.easy_audit.doctrine_entities'))
+            ->with($this->equalTo('xiidea.easy_audit.doctrine_documents'))
             ->will($this->returnValue(true));
         $containerBuilder
             ->expects($this->at(3))
@@ -351,7 +353,7 @@ class SubscriberPassTest extends TestCase {
         $containerBuilder
             ->expects($this->at(2))
             ->method('getParameter')
-            ->with($this->equalTo('xiidea.easy_audit.doctrine_entities'))
+            ->with($this->equalTo('xiidea.easy_audit.doctrine_documents'))
             ->will($this->returnValue(false));
         $containerBuilder
             ->expects($this->at(3))

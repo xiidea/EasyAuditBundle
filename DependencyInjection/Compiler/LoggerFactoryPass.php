@@ -19,7 +19,6 @@ class LoggerFactoryPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-
         if (false === $container->hasDefinition('xiidea.easy_audit.logger_factory')) {
             return;
         }
@@ -27,10 +26,10 @@ class LoggerFactoryPass implements CompilerPassInterface
         $definition = $container->getDefinition('xiidea.easy_audit.logger_factory');
 
         $calls = $definition->getMethodCalls();
-        $definition->setMethodCalls(array());
+        $definition->setMethodCalls([]);
 
         foreach ($container->findTaggedServiceIds('easy_audit.logger') as $id => $attributes) {
-            $definition->addMethodCall('addLogger', array($id, new Reference($id)));
+            $definition->addMethodCall('addLogger', [$id, new Reference($id)]);
         }
 
         $definition->setMethodCalls(array_merge($definition->getMethodCalls(), $calls));

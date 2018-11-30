@@ -13,19 +13,19 @@ namespace Xiidea\EasyAuditBundle\Tests\Fixtures\Event;
 
 
 use FOS\UserBundle\Event\FilterUserResponseEvent;
-use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\ODM\UserDocument;
 
 class DummyFilterUserResponseEvent extends FilterUserResponseEvent
 {
     private $_user;
 
-    public function __construct(UserEntity $user)
+    public function __construct(UserDocument $user)
     {
         $this->_user = $user;
     }
 
     /**
-     * @return UserEntity
+     * @return UserDocument
      */
     public function getUser()
     {

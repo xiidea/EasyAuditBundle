@@ -20,7 +20,7 @@ class BaseTestCase extends WebTestCase
     /** @var null|\Symfony\Bundle\FrameworkBundle\Client */
     protected $client = null;
 
-    static protected function createKernel(array $options = array())
+    protected static function createKernel(array $options = [])
     {
         return new TestKernel(
             isset($options['config']) ? $options['config'] : 'config',
@@ -47,9 +47,12 @@ class BaseTestCase extends WebTestCase
 
     protected function logIn()
     {
-        $this->client = static::createClient(array(), array(
-            'PHP_AUTH_USER' => 'admin',
-            'PHP_AUTH_PW' => 'login',
-        ));
+        $this->client = static::createClient(
+            [],
+            [
+                'PHP_AUTH_USER' => 'admin',
+                'PHP_AUTH_PW'   => 'login',
+            ]
+        );
     }
 }

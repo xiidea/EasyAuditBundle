@@ -13,8 +13,8 @@ namespace Xiidea\EasyAuditBundle\Tests\Fixtures\Common;
 
 use Xiidea\EasyAuditBundle\Subscriber\EasyAuditEventSubscriberInterface;
 
-class EasySubscriberOne implements EasyAuditEventSubscriberInterface{
-
+class EasySubscriberOne implements EasyAuditEventSubscriberInterface
+{
     /**
      * Returns an array of events this subscriber wants to listen to.
      *
@@ -22,13 +22,13 @@ class EasySubscriberOne implements EasyAuditEventSubscriberInterface{
      */
     public function getSubscribedEvents()
     {
-        return array(
-            "custom_resolver1" => "event1",
-            "custom_resolver2" => array(
-                "custom_event1",
-                "custom_event2"
-            ),
-            "common_event"
-        );
+        return [
+            'custom_resolver1' => 'event1',
+            'custom_resolver2' => [
+                'custom_event1',
+                'custom_event2'
+            ],
+            'common_event'
+        ];
     }
 }

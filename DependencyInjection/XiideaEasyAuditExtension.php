@@ -39,13 +39,13 @@ class XiideaEasyAuditExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
 
-        if(!$container->hasAlias('doctrine')) {
-            $config['entity_event_resolver'] = 'none';
+        if (!$container->hasAlias('doctrine_mongodb')) {
+            $config['document_event_resolver'] = 'none';
         }
 
         $this->loadDefaultResolverServices($config, $loader);
 
-        if ($config['doctrine_entities'] !== false) {
+        if ($config['doctrine_documents'] !== false) {
             $loader->load('doctrine_services.yml');
         }
     }
@@ -56,7 +56,7 @@ class XiideaEasyAuditExtension extends Extension
      */
     protected function loadDefaultResolverServices($config, LoaderInterface $loader)
     {
-        if ($config['resolver'] == 'xiidea.easy_audit.default_event_resolver') {
+        if ($config['resolver'] === 'xiidea.easy_audit.default_event_resolver') {
             $loader->load('default/event-resolver.yml');
         }
 
@@ -64,8 +64,8 @@ class XiideaEasyAuditExtension extends Extension
             $loader->load('default/logger.yml');
         }
 
-        if ($config['entity_event_resolver'] == 'xiidea.easy_audit.default_entity_event_resolver') {
-            $loader->load('default/entity-event-resolver.yml');
+        if ($config['document_event_resolver'] === 'xiidea.easy_audit.default_document_event_resolver') {
+            $loader->load('default/document-event-resolver.yml');
         }
     }
 }

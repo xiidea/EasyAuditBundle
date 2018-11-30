@@ -13,12 +13,11 @@ namespace Xiidea\EasyAuditBundle\Events;
 
 class DoctrineEvents
 {
-    private static $prefix = 'easy_audit.doctrine.entity.';
+    private static $prefix = 'easy_audit.doctrine.document.';
 
-    const ENTITY_UPDATED = 'easy_audit.doctrine.entity.updated';
-    const ENTITY_CREATED = 'easy_audit.doctrine.entity.created';
-    const ENTITY_DELETED = 'easy_audit.doctrine.entity.deleted';
-
+    const ENTITY_UPDATED = 'easy_audit.doctrine.document.updated';
+    const ENTITY_CREATED = 'easy_audit.doctrine.document.created';
+    const ENTITY_DELETED = 'easy_audit.doctrine.document.deleted';
 
     /**
      * @param string $eventName
@@ -36,6 +35,7 @@ class DoctrineEvents
     public static function getConstants()
     {
         $oClass = new \ReflectionClass(__CLASS__);
+
         return $oClass->getConstants();
     }
 }
