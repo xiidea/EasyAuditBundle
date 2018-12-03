@@ -12,14 +12,12 @@
 namespace Xiidea\EasyAuditBundle\Tests\Resolver;
 
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\Events\DoctrineEntityEvent;
 use Xiidea\EasyAuditBundle\Resolver\EntityEventResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
-use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\DummyEntity;
-use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\EntityWithoutGetMethod;
-use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
 
 class EntityEventResolverTest extends TestCase {
@@ -114,7 +112,7 @@ class EntityEventResolverTest extends TestCase {
     protected function mockMethodCallTree()
     {
         $this->entityManager = $this
-            ->getMockBuilder('Doctrine\ORM\EntityManager')
+            ->getMockBuilder(EntityManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->dispatcher = $this

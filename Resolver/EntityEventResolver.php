@@ -84,7 +84,7 @@ class EntityEventResolver implements EventResolverInterface
         $this->eventShortName = null;
         $this->eventName = $eventName;
         $this->event = $event;
-        $this->entity = $event->getLifecycleEventArgs()->getEntity();
+        $this->entity = $event->getLifecycleEventArgs()->getObject();
         $this->identity = $this->getSingleIdentity();
     }
 

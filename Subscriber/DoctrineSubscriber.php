@@ -12,8 +12,8 @@
 namespace Xiidea\EasyAuditBundle\Subscriber;
 
 use Doctrine\Common\EventSubscriber;
+use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\Common\Util\ClassUtils;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Xiidea\EasyAuditBundle\Events\DoctrineEntityEvent;
@@ -65,22 +65,22 @@ class DoctrineSubscriber implements EventSubscriber
 
     public function preRemove(LifecycleEventArgs $args)
     {
-        if (false === $this->isConfiguredToTrack($args->getEntity(), DoctrineEvents::ENTITY_DELETED)) {
+        if (false === $this->isConfiguredToTrack($args->getObject(), DoctrineEvents::ENTITY_DELETED)) {
             return;
         }
 
-        $className = ClassUtils::getClass($args->getEntity());
+        $className = ClassUtils::getClass($args->getObject());
 
         if (!isset($this->toBeDeleted[$className])) {
             $this->toBeDeleted[$className] = [];
         }
 
-        $this->toBeDeleted[$className][spl_object_hash($args->getEntity())] = $this->getIdentity($args, $className);
+        $this->toBeDeleted[$className][spl_object_hash($args->getObject())] = $this->getIdentity($args, $className);
     }
 
     public function postRemove(LifecycleEventArgs $args)
     {
-        $identity = $this->getToBeDeletedId($args->getEntity());
+        $identity = $this->getToBeDeletedId($args->getObject());
 
         if (null !== $identity) {
             $this->dispatcher->dispatch(DoctrineEvents::ENTITY_DELETED,
@@ -104,9 +104,9 @@ class DoctrineSubscriber implements EventSubscriber
      */
     private function handleEvent($eventName, LifecycleEventArgs $args)
     {
-        if (true === $this->isConfiguredToTrack($args->getEntity(), $eventName)) {
+        if (true === $this->isConfiguredToTrack($args->getObject(), $eventName)) {
             $this->dispatcher->dispatch($eventName,
-                new DoctrineEntityEvent($args, $this->getIdentity($args, ClassUtils::getClass($args->getEntity())))
+                new DoctrineEntityEvent($args, $this->getIdentity($args, ClassUtils::getClass($args->getObject())))
             );
         }
     }
@@ -228,7 +228,7 @@ class DoctrineSubscriber implements EventSubscriber
      */
     protected function getIdentity(LifecycleEventArgs $args, $className)
     {
-        return $args->getEntityManager()->getClassMetadata($className)->getIdentifierValues($args->getEntity());
+        return $args->getObjectManager()->getClassMetadata($className)->getIdentifierValues($args->getObject());
     }
 
     /**
