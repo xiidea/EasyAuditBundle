@@ -19,7 +19,7 @@ namespace Xiidea\EasyAuditBundle\Annotation;
  *
  * @author Roni Saha <roni@xiidea.net>
  */
-final class ORMSubscribedEvents
+final class SubscribeDoctrineEvents
 {
     public $events = array();
 

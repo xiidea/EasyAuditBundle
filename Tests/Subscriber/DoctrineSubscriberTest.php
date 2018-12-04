@@ -15,7 +15,7 @@ namespace Xiidea\EasyAuditBundle\Tests\Subscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
-use Xiidea\EasyAuditBundle\Annotation\ORMSubscribedEvents;
+use Xiidea\EasyAuditBundle\Annotation\SubscribeDoctrineEvents;
 use Xiidea\EasyAuditBundle\Subscriber\DoctrineSubscriber;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -77,7 +77,7 @@ class DoctrineSubscriberTest extends TestCase
 
     public function testCreateEventForAnnotatedEntity()
     {
-        $annotation = new ORMSubscribedEvents(array('events'=>'created'));
+        $annotation = new SubscribeDoctrineEvents(array('events'=>'created'));
 
         $this->initializeAnnotationReader($annotation);
 

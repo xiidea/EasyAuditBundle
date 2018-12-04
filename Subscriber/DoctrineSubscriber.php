@@ -16,6 +16,7 @@ use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\Common\Util\ClassUtils;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Xiidea\EasyAuditBundle\Annotation\SubscribeDoctrineEvents;
 use Xiidea\EasyAuditBundle\Events\DoctrineEntityEvent;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 
@@ -162,7 +163,7 @@ class DoctrineSubscriber implements EventSubscriber
 
         return $this
             ->getAnnotationReader()
-            ->getClassAnnotation($reflection, 'Xiidea\EasyAuditBundle\Annotation\ORMSubscribedEvents');
+            ->getClassAnnotation($reflection, SubscribeDoctrineEvents::class);
 
     }
 
