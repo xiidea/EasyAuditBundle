@@ -1,7 +1,6 @@
 Easy Audit
 ==========
 [![Build Status](https://travis-ci.org/xiidea/EasyAuditBundle.svg?branch=master)](https://travis-ci.org/xiidea/EasyAuditBundle)
-[![HHVM Status](http://hhvm.h4cc.de/badge/xiidea/easy-audit.svg)](http://hhvm.h4cc.de/package/xiidea/easy-audit)
 [![Coverage Status](https://coveralls.io/repos/xiidea/EasyAuditBundle/badge.svg?branch=master&service=github)](https://coveralls.io/github/xiidea/EasyAuditBundle?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/xiidea/EasyAuditBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/xiidea/EasyAuditBundle/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/xiidea/easy-audit/v/stable.png)](https://packagist.org/packages/xiidea/easy-audit)
@@ -27,7 +26,7 @@ Install
 
 Add EasyAuditBundle in your composer.json:
 
-```js
+```json
 {
     "require": {
         "xiidea/easy-audit": "^1.4"
