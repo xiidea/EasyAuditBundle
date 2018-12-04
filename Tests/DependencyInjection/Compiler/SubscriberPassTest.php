@@ -158,15 +158,15 @@ class SubscriberPassTest extends TestCase {
 
         $listenableEventsList =array (
             array (
-                'event' => 'easy_audit.doctrine.entity.updated',
+                'event' => 'easy_audit.doctrine.object.updated',
                 'method' => 'resolveEventHandler',
             ),
             array (
-                'event' => 'easy_audit.doctrine.entity.created',
+                'event' => 'easy_audit.doctrine.object.created',
                 'method' => 'resolveEventHandler',
             ),
             array (
-                'event' => 'easy_audit.doctrine.entity.deleted',
+                'event' => 'easy_audit.doctrine.object.deleted',
                 'method' => 'resolveEventHandler',
             ),
             array (
@@ -292,15 +292,15 @@ class SubscriberPassTest extends TestCase {
 
         $listenableEventsList = array(
             array(
-                'event' => 'easy_audit.doctrine.entity.updated',
+                'event' => 'easy_audit.doctrine.object.updated',
                 'method' => 'resolveEventHandler',
             ),
             array(
-                'event' => 'easy_audit.doctrine.entity.created',
+                'event' => 'easy_audit.doctrine.object.created',
                 'method' => 'resolveEventHandler',
             ),
             array(
-                'event' => 'easy_audit.doctrine.entity.deleted',
+                'event' => 'easy_audit.doctrine.object.deleted',
                 'method' => 'resolveEventHandler',
             )
         );

@@ -14,15 +14,15 @@ namespace Xiidea\EasyAuditBundle\Resolver;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Util\ClassUtils;
 use Symfony\Component\EventDispatcher\Event;
-use Xiidea\EasyAuditBundle\Events\DoctrineEntityEvent;
+use Xiidea\EasyAuditBundle\Events\DoctrineObjectEvent;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 
 /** Custom Event Resolver Example Class */
-class EntityEventResolver implements EventResolverInterface
+class DoctrineObjectEventResolver implements EventResolverInterface
 {
     protected $eventShortName;
 
-    /** @var  $event DoctrineEntityEvent */
+    /** @var  $event DoctrineObjectEvent */
     protected $event;
 
     protected $entity;
@@ -38,7 +38,7 @@ class EntityEventResolver implements EventResolverInterface
 
 
     /**
-     * @param Event|DoctrineEntityEvent $event
+     * @param Event|DoctrineObjectEvent $event
      * @param $eventName
      *
      * @return array
@@ -46,7 +46,7 @@ class EntityEventResolver implements EventResolverInterface
      */
     public function getEventLogInfo(Event $event, $eventName)
     {
-        if (!$event instanceof DoctrineEntityEvent) {
+        if (!$event instanceof DoctrineObjectEvent) {
             return null;
         }
 
@@ -76,10 +76,10 @@ class EntityEventResolver implements EventResolverInterface
     }
 
     /**
-     * @param DoctrineEntityEvent $event
+     * @param DoctrineObjectEvent $event
      * @param string $eventName
      */
-    private function initialize(DoctrineEntityEvent $event, $eventName)
+    private function initialize(DoctrineObjectEvent $event, $eventName)
     {
         $this->eventShortName = null;
         $this->eventName = $eventName;

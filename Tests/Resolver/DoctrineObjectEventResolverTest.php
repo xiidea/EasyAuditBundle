@@ -15,14 +15,14 @@ namespace Xiidea\EasyAuditBundle\Tests\Resolver;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
-use Xiidea\EasyAuditBundle\Events\DoctrineEntityEvent;
-use Xiidea\EasyAuditBundle\Resolver\EntityEventResolver;
+use Xiidea\EasyAuditBundle\Events\DoctrineObjectEvent;
+use Xiidea\EasyAuditBundle\Resolver\DoctrineObjectEventResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
 
-class EntityEventResolverTest extends TestCase {
+class DoctrineObjectEventResolverTest extends TestCase {
 
-    /** @var  EntityEventResolver */
+    /** @var  DoctrineObjectEventResolver */
     private $eventResolver;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
@@ -37,13 +37,13 @@ class EntityEventResolverTest extends TestCase {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $unitOfWork;
 
-    /** @var  DoctrineEntityEvent */
+    /** @var  DoctrineObjectEvent */
     private $event;
 
     public function setUp()
     {
         $this->doctrine = $this->createMock('Doctrine\Bundle\DoctrineBundle\Registry');
-        $this->eventResolver =  new EntityEventResolver();
+        $this->eventResolver =  new DoctrineObjectEventResolver();
         $this->eventResolver->setDoctrine($this->doctrine);
 
         $this->mockMethodCallTree();
@@ -63,7 +63,7 @@ class EntityEventResolverTest extends TestCase {
     {
         $this->createEventObjectForEntity(new UserEntity());
 
-        $this->assertNull($this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.entity.updated'), "Ignoring unchanged update event");
+        $this->assertNull($this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.object.updated'), "Ignoring unchanged update event");
     }
 
     public function testHandleUpdateEventWithChangeSet()
@@ -75,7 +75,7 @@ class EntityEventResolverTest extends TestCase {
             ->with($this->equalTo($this->event->getLifecycleEventArgs()->getEntity()))
             ->willReturn($this->equalTo(array(array('something'))));
 
-        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.entity.updated');
+        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.object.updated');
 
         $this->assertNotNull($eventInfo);
         $this->assertEquals($this->getExpectedEventInfo('updated', 'UserEntity', "id", 1), $eventInfo);
@@ -84,7 +84,7 @@ class EntityEventResolverTest extends TestCase {
     public function testHandleCreatedEvent()
     {
         $this->createEventObjectForEntity(new UserEntity());
-        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.entity.created');
+        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.object.created');
 
         $this->assertNotNull($eventInfo);
         $this->assertEquals($this->getExpectedEventInfo('created', 'UserEntity', "id", 1), $eventInfo);
@@ -93,7 +93,7 @@ class EntityEventResolverTest extends TestCase {
     public function testHandleDeletedEvent()
     {
         $this->createEventObjectForEntity(new UserEntity());
-        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.entity.deleted');
+        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.object.deleted');
 
         $this->assertNotNull($eventInfo);
         $this->assertEquals($this->getExpectedEventInfo('deleted', 'UserEntity', "id", 1), $eventInfo);
@@ -102,7 +102,7 @@ class EntityEventResolverTest extends TestCase {
     public function testGetSingleIdentity()
     {
         $this->createEventObjectForEntity(new UserEntity(), []);
-        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.entity.deleted');
+        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.object.deleted');
 
         $this->assertNotNull($eventInfo);
         $this->assertEquals($this->getExpectedEventInfo('deleted', 'UserEntity', "", ""), $eventInfo);
@@ -148,7 +148,7 @@ class EntityEventResolverTest extends TestCase {
      */
     private function createEventObjectForEntity($entity, $identity = ['id' => 1])
     {
-        $this->event = new DoctrineEntityEvent(new LifecycleEventArgs($entity, $this->entityManager), $identity);
+        $this->event = new DoctrineObjectEvent(new LifecycleEventArgs($entity, $this->entityManager), $identity);
     }
 
 }

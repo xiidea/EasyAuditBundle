@@ -17,7 +17,7 @@ use Doctrine\Common\Util\ClassUtils;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Xiidea\EasyAuditBundle\Annotation\SubscribeDoctrineEvents;
-use Xiidea\EasyAuditBundle\Events\DoctrineEntityEvent;
+use Xiidea\EasyAuditBundle\Events\DoctrineObjectEvent;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 
 class DoctrineSubscriber implements EventSubscriber
@@ -85,7 +85,7 @@ class DoctrineSubscriber implements EventSubscriber
 
         if (null !== $identity) {
             $this->dispatcher->dispatch(DoctrineEvents::ENTITY_DELETED,
-                new DoctrineEntityEvent($args, $identity)
+                new DoctrineObjectEvent($args, $identity)
             );
         }
     }
@@ -107,7 +107,7 @@ class DoctrineSubscriber implements EventSubscriber
     {
         if (true === $this->isConfiguredToTrack($args->getObject(), $eventName)) {
             $this->dispatcher->dispatch($eventName,
-                new DoctrineEntityEvent($args, $this->getIdentity($args, ClassUtils::getClass($args->getObject())))
+                new DoctrineObjectEvent($args, $this->getIdentity($args, ClassUtils::getClass($args->getObject())))
             );
         }
     }

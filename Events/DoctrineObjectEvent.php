@@ -13,7 +13,7 @@ namespace Xiidea\EasyAuditBundle\Events;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Symfony\Component\EventDispatcher\Event;
 
-class DoctrineEntityEvent extends Event
+class DoctrineObjectEvent extends Event
 {
     private $identity;
 
