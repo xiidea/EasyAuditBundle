@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Xiidea\EasyAuditBundle\Entity;
+namespace Xiidea\EasyAuditBundle\Model;
 
 use Psr\Log\InvalidArgumentException;
 use Psr\Log\LogLevel;

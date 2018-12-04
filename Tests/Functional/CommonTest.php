@@ -12,7 +12,7 @@
 namespace Xiidea\EasyAuditBundle\Tests\Functional;
 
 use Symfony\Component\DomCrawler\Crawler;
-use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
+use Xiidea\EasyAuditBundle\Model\BaseAuditLog;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\WithEmbeddedResolver;
 use Xiidea\EasyAuditBundle\Tests\Functional\Bundle\TestBundle\Controller\DefaultController;

@@ -12,6 +12,7 @@
 namespace Xiidea\EasyAuditBundle\Tests\Annotation;
 
 use PHPUnit\Framework\TestCase;
+use Xiidea\EasyAuditBundle\Annotation\ORMSubscribedEvents;
 use Xiidea\EasyAuditBundle\Annotation\SubscribeDoctrineEvents;
 
 class SubscribeDoctrineEventsTest extends TestCase {
@@ -59,6 +60,14 @@ class SubscribeDoctrineEventsTest extends TestCase {
         $this->assertNotEmpty($annotation->events);
 
         $this->assertEquals(explode(',', $data['events']), $annotation->events);
+    }
+
+    public function testOldAnnotationClass()
+    {
+        $annotation = new ORMSubscribedEvents(array());
+
+        $this->assertTrue(is_array($annotation->events));
+        $this->assertEmpty($annotation->events);
     }
 }
  

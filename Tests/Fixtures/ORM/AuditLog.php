@@ -12,7 +12,7 @@
 namespace Xiidea\EasyAuditBundle\Tests\Fixtures\ORM;
 
 
-use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
+use Xiidea\EasyAuditBundle\Model\BaseAuditLog;
 
 class AuditLog extends BaseAuditLog
 {

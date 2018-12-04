@@ -14,7 +14,7 @@ namespace Xiidea\EasyAuditBundle\Tests\DependencyInjection\Compiler;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Definition;
 use Xiidea\EasyAuditBundle\DependencyInjection\Compiler\ResolverFactoryPass;
-use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
+use Xiidea\EasyAuditBundle\Model\BaseAuditLog;
 use Xiidea\EasyAuditBundle\Resolver\EventResolverFactory;
 
 class ResolverFactoryPassTest extends TestCase {

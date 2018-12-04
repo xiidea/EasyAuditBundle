@@ -20,7 +20,7 @@ class AuditLogPrePersistListener
 
     public function prePersist(LifecycleEventArgs $args)
         {
-    	    /** @var \Xiidea\EasyAuditBundle\Entity\BaseAuditLog $entity */
+    	    /** @var \Xiidea\EasyAuditBundle\Model\BaseAuditLog $entity */
             $entity = $args->getEntity();
     
             if ($entity instanceof BaseAuditLog) {

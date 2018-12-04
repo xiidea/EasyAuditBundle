@@ -10,7 +10,7 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Functional\Bundle\TestBundle\Entity;
 
-use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
+use Xiidea\EasyAuditBundle\Model\BaseAuditLog;
 
 
 class AuditLog extends BaseAuditLog
