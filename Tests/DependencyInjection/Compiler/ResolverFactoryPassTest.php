@@ -48,6 +48,7 @@ class ResolverFactoryPassTest extends TestCase {
         $getParameterCall = array(
             array('xiidea.easy_audit.custom_resolvers', array()),
             array('xiidea.easy_audit.resolver', 'default.resolver'),
+            array('xiidea.easy_audit.entity_event_resolver', null),
         );
 
         $containerBuilderMock->expects($this->any())
@@ -73,12 +74,6 @@ class ResolverFactoryPassTest extends TestCase {
             ->method('getDefinition')
             ->with($this->equalTo('xiidea.easy_audit.event_resolver_factory'))
             ->will($this->returnValue($definitionObject));
-
-        $containerBuilderMock->expects($this->once())
-            ->method('hasAlias')
-            ->with($this->equalTo('doctrine'))
-            ->will($this->returnValue(true));
-
 
 
         $getParameterCall = array(
@@ -111,6 +106,7 @@ class ResolverFactoryPassTest extends TestCase {
         $getParameterCall = array(
             array('xiidea.easy_audit.custom_resolvers', array('event1' => 'resolver1')),
             array('xiidea.easy_audit.resolver', 'default.resolver'),
+            array('xiidea.easy_audit.entity_event_resolver', null),
         );
 
         $definitionObject = $this->getDefinitionObject();
@@ -124,11 +120,6 @@ class ResolverFactoryPassTest extends TestCase {
             ->method('getDefinition')
             ->with($this->equalTo('xiidea.easy_audit.event_resolver_factory'))
             ->will($this->returnValue($definitionObject));
-
-        $containerBuilderMock->expects($this->once())
-            ->method('hasAlias')
-            ->with($this->equalTo('doctrine'))
-            ->will($this->returnValue(false));
 
 
         $containerBuilderMock->expects($this->any())

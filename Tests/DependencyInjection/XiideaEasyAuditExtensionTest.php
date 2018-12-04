@@ -44,8 +44,21 @@ class XiideaEasyAuditExtensionTest extends TestCase {
     {
         $loader = new XiideaEasyAuditExtension();
 
-        $this->container->addAliases(['doctrine' => 'doctrine1']);
-        $loader->load(array($this->getRequiredConfig()), $this->container);
+        $config = $this->getRequiredConfig();
+        $config['entity_event_resolver'] = 'xiidea.easy_audit.default_entity_event_resolver';
+        $loader->load(array($config), $this->container);
+        $this->assertHasDefinition('xiidea.easy_audit.default_entity_event_resolver');
+    }
+
+    public function testPrependEntityEventResolverValueOnlyIfDoctrineLoaded()
+    {
+        $loader = new XiideaEasyAuditExtension();
+        $config = $this->getRequiredConfig();
+        $this->container->prependExtensionConfig('doctrine', []);
+        $this->container->prependExtensionConfig($loader->getAlias(), $config);
+
+        $loader->prepend($this->container);
+        $loader->load($this->container->getExtensionConfig($loader->getAlias()), $this->container);
         $this->assertHasDefinition('xiidea.easy_audit.default_entity_event_resolver');
     }
 
