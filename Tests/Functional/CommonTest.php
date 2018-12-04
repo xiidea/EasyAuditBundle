@@ -30,7 +30,7 @@ class CommonTest extends BaseTestCase
 
         $container = $kernel->getContainer();
 
-        $entityClass = $container->getParameter('xiidea.easy_audit.entity_class');
+        $entityClass = $container->getParameter('xiidea.easy_audit.audit_log_class');
 
         $this->assertInstanceOf(BaseAuditLog::class, (new $entityClass));
     }

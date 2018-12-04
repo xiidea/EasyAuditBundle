@@ -39,9 +39,9 @@ class ResolverFactoryPass implements CompilerPassInterface
             $this->getServiceReferenceByConfigName($container, 'resolver'))
         );
 
-        if ($container->getParameter('xiidea.easy_audit.entity_event_resolver') !== null) {
+        if ($container->getParameter('xiidea.easy_audit.doctrine_event_resolver') !== null) {
             $definition->addMethodCall('setEntityEventResolver', array(
-                    $this->getServiceReferenceByConfigName($container, 'entity_event_resolver'))
+                    $this->getServiceReferenceByConfigName($container, 'doctrine_event_resolver'))
             );
         }
 

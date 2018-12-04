@@ -10,7 +10,7 @@ See the following example configuration value:
 
 ``` yaml
 xiidea_easy_audit:
-     doctrine_entities :                                              #Optional
+     doctrine_objects :                                              #Optional
           MyProject\Bundle\MyBundle\Entity\MyEntity : [updated, deleted]
           MyProject\Bundle\MyBundle\Entity\MyEntity2 : [deleted]
           MyProject\Bundle\MyBundle\Entity\MyEntity3 : ~

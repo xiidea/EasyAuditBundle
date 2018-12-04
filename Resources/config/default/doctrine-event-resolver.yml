@@ -1,6 +1,6 @@
 
 services:
-  xiidea.easy_audit.default_entity_event_resolver:
+  xiidea.easy_audit.default_doctrine_event_resolver:
           class: Xiidea\EasyAuditBundle\Resolver\EntityEventResolver
           public: true
           calls:

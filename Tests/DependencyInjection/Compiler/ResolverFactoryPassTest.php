@@ -48,7 +48,7 @@ class ResolverFactoryPassTest extends TestCase {
         $getParameterCall = array(
             array('xiidea.easy_audit.custom_resolvers', array()),
             array('xiidea.easy_audit.resolver', 'default.resolver'),
-            array('xiidea.easy_audit.entity_event_resolver', null),
+            array('xiidea.easy_audit.doctrine_event_resolver', null),
         );
 
         $containerBuilderMock->expects($this->any())
@@ -79,7 +79,7 @@ class ResolverFactoryPassTest extends TestCase {
         $getParameterCall = array(
             array('xiidea.easy_audit.custom_resolvers', array()),
             array('xiidea.easy_audit.resolver', 'default.resolver'),
-            array('xiidea.easy_audit.entity_event_resolver', 'entity.resolver'),
+            array('xiidea.easy_audit.doctrine_event_resolver', 'entity.resolver'),
         );
 
         $containerBuilderMock->expects($this->any())
@@ -106,7 +106,7 @@ class ResolverFactoryPassTest extends TestCase {
         $getParameterCall = array(
             array('xiidea.easy_audit.custom_resolvers', array('event1' => 'resolver1')),
             array('xiidea.easy_audit.resolver', 'default.resolver'),
-            array('xiidea.easy_audit.entity_event_resolver', null),
+            array('xiidea.easy_audit.doctrine_event_resolver', null),
         );
 
         $definitionObject = $this->getDefinitionObject();

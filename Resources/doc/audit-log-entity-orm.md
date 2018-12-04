@@ -84,6 +84,6 @@ class AuditLog extends BaseAuditLog
 # app/config/config.yml
 
 xiidea_easy_audit:
-    entity_class : MyProject\MyBundle\Entity\AuditLog
+    audit_log_class : MyProject\MyBundle\Entity\AuditLog
 
 ```
