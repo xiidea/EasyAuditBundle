@@ -11,16 +11,16 @@
 
 namespace Xiidea\EasyAuditBundle\Tests;
 
-use PHPUnit\Framework\BaseTestListener;
+use PHPUnit\Framework\TestListener;
 
 if (class_exists('Symfony\Bridge\PhpUnit\SymfonyTestsListener')) {
 
     class_alias('Symfony\Bridge\PhpUnit\SymfonyTestsListener', 'Xiidea\EasyAuditBundle\Tests\XiideaTestListener');
 
 } else {
-    class XiideaTestListener extends BaseTestListener
+    class XiideaTestListener implements TestListener
     {
-
+        use \PHPUnit\Framework\TestListenerDefaultImplementation;
     }
 }
  

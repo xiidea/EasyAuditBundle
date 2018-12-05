@@ -36,6 +36,11 @@ class DoctrineObjectEventResolver implements EventResolverInterface
      */
     protected $doctrine;
 
+    protected $changeSetGetterMethods = [
+        'getEntityChangeSet',
+        'getDocumentChangeSet'
+    ];
+
 
     /**
      * @param Event|DoctrineObjectEvent $event
@@ -100,18 +105,12 @@ class DoctrineObjectEventResolver implements EventResolverInterface
 
     protected function getChangeSets($entity)
     {
-        if (!$this->isUpdateEvent()) {
-            return null;
-        }
-
         $unitOfWork = $this->getUnitOfWork();
-
-        if ($unitOfWork instanceof \Doctrine\ODM\MongoDB\UnitOfWork) {
-            return $unitOfWork->getDocumentChangeSet($entity);
-        }
-
-        if ($unitOfWork instanceof \Doctrine\ORM\UnitOfWork) {
-            return $unitOfWork->getEntityChangeSet($entity);
+        foreach ($this->changeSetGetterMethods as $method) {
+            $getter = [$unitOfWork, $method];
+            if (is_callable($getter)) {
+                return call_user_func($getter, $entity);
+            }
         }
 
         return null;

@@ -13,10 +13,11 @@ namespace Xiidea\EasyAuditBundle\Tests\Resolver;
 
 
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
-use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\CommonDoctrineManager;
 use Xiidea\EasyAuditBundle\Events\DoctrineObjectEvent;
 use Xiidea\EasyAuditBundle\Resolver\DoctrineObjectEventResolver;
+use Xiidea\EasyAuditBundle\Resolver\EntityEventResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
 
@@ -42,11 +43,17 @@ class DoctrineObjectEventResolverTest extends TestCase {
 
     public function setUp()
     {
-        $this->doctrine = $this->createMock('Doctrine\Bundle\DoctrineBundle\Registry');
+        $this->doctrine = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
         $this->eventResolver =  new DoctrineObjectEventResolver();
         $this->eventResolver->setDoctrine($this->doctrine);
 
         $this->mockMethodCallTree();
+    }
+
+    public function testOldEntityEventResolverWorks()
+    {
+        $this->eventResolver =  new EntityEventResolver();
+        $this->assertInstanceOf('Xiidea\EasyAuditBundle\Resolver\EventResolverInterface', $this->eventResolver);
     }
 
     public function testIsAnInstanceOfEventResolverInterface()
@@ -62,23 +69,55 @@ class DoctrineObjectEventResolverTest extends TestCase {
     public function testIgnoreUnchangedUpdateEvent()
     {
         $this->createEventObjectForEntity(new UserEntity());
-
+        $this->defineUnitOfWorkWith('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UnitOfWork');
         $this->assertNull($this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.object.updated'), "Ignoring unchanged update event");
     }
 
-    public function testHandleUpdateEventWithChangeSet()
+    public function testHandleUpdateEventWithEntityChangeSet()
     {
         $this->createEventObjectForEntity(new UserEntity());
 
+        $this->defineUnitOfWorkWith('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UnitOfWork');
+
         $this->unitOfWork->expects($this->once())
             ->method('getEntityChangeSet')
-            ->with($this->equalTo($this->event->getLifecycleEventArgs()->getEntity()))
+            ->with($this->equalTo($this->event->getLifecycleEventArgs()->getObject()))
             ->willReturn($this->equalTo(array(array('something'))));
 
         $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.object.updated');
 
         $this->assertNotNull($eventInfo);
         $this->assertEquals($this->getExpectedEventInfo('updated', 'UserEntity', "id", 1), $eventInfo);
+    }
+
+    public function testHandleUpdateEventWithDocumentChangeSet()
+    {
+        $this->createEventObjectForEntity(new UserEntity());
+
+        $this->defineUnitOfWorkWith('Xiidea\EasyAuditBundle\Tests\Fixtures\ODM\UnitOfWork');
+
+        $this->unitOfWork->expects($this->once())
+            ->method('getDocumentChangeSet')
+            ->with($this->equalTo($this->event->getLifecycleEventArgs()->getObject()))
+            ->willReturn($this->equalTo(array(array('something'))));
+
+        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.object.updated');
+
+        $this->assertNotNull($eventInfo);
+        $this->assertEquals($this->getExpectedEventInfo('updated', 'UserEntity', "id", 1), $eventInfo);
+    }
+
+    public function testHandleUpdateEventWithUnknownUnitOfWork()
+    {
+        $this->createEventObjectForEntity(new UserEntity());
+        $this->defineUnitOfWorkWith('Xiidea\EasyAuditBundle\Tests\Fixtures\Common\UnknownUnitOfWork');
+
+        $this->unitOfWork->expects($this->never())
+            ->method($this->matchesRegularExpression('/get.*ChangeSet/'));
+
+        $eventInfo = $this->eventResolver->getEventLogInfo($this->event, 'easy_audit.doctrine.object.updated');
+
+        $this->assertNull($eventInfo);
     }
 
     public function testHandleCreatedEvent()
@@ -112,7 +151,7 @@ class DoctrineObjectEventResolverTest extends TestCase {
     protected function mockMethodCallTree()
     {
         $this->entityManager = $this
-            ->getMockBuilder(EntityManagerInterface::class)
+            ->getMockBuilder(CommonDoctrineManager::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->dispatcher = $this
@@ -123,9 +162,12 @@ class DoctrineObjectEventResolverTest extends TestCase {
         $this->doctrine->expects($this->any())
             ->method('getManager')
             ->willReturn($this->entityManager);
+    }
 
+    private function defineUnitOfWorkWith($class)
+    {
         $this->unitOfWork = $this
-            ->getMockBuilder('\Doctrine\ORM\UnitOfWork')
+            ->getMockBuilder($class)
             ->disableOriginalConstructor()
             ->getMock();
 

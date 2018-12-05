@@ -29,7 +29,7 @@ class LoggerTest extends TestCase {
     public function setUp()
     {
         $registry = $this
-            ->getMockBuilder('Doctrine\Bundle\DoctrineBundle\Registry')
+            ->getMockBuilder('Doctrine\Common\Persistence\ManagerRegistry')
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -92,14 +92,17 @@ class XiideaEasyAuditExtension extends Extension implements PrependExtensionInte
         $prependConfig = [];
 
         if (isset($configs['entity_class']) && !isset($configs['audit_log_class'])) {
+            @trigger_error('The "entity_class" option is deprecated since 1.4.10. and will not be supported anymore in 2.0. Use "audit_log_class" instead.', E_USER_DEPRECATED);
             $prependConfig['audit_log_class'] = $configs['entity_class'];
         }
 
         if (isset($configs['entity_event_resolver']) && !isset($configs['doctrine_event_resolver'])) {
+            @trigger_error('The "entity_event_resolver" option is deprecated since 1.4.10. and will not be supported anymore in 2.0. Use "doctrine_event_resolver" instead.', E_USER_DEPRECATED);
             $prependConfig['doctrine_event_resolver'] = $configs['entity_event_resolver'];
         }
 
         if (isset($configs['doctrine_entities']) && !isset($configs['doctrine_objects'])) {
+            @trigger_error('The "doctrine_entities" option is deprecated since 1.4.10. and will not be supported anymore in 2.0. Use "doctrine_objects" instead.', E_USER_DEPRECATED);
             $prependConfig['doctrine_objects'] = $configs['doctrine_entities'];
         }
 
