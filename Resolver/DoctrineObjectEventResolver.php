@@ -11,7 +11,7 @@
 
 namespace Xiidea\EasyAuditBundle\Resolver;
 
-use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Util\ClassUtils;
 use Symfony\Component\EventDispatcher\Event;
 use Xiidea\EasyAuditBundle\Events\DoctrineObjectEvent;
@@ -32,7 +32,7 @@ class DoctrineObjectEventResolver implements EventResolverInterface
     protected $identity = ['', ''];
 
     /**
-     * @var Registry
+     * @var ManagerRegistry
      */
     protected $doctrine;
 
@@ -100,12 +100,26 @@ class DoctrineObjectEventResolver implements EventResolverInterface
 
     protected function getChangeSets($entity)
     {
-        return $this->isUpdateEvent() ? $this->getUnitOfWork()->getEntityChangeSet($entity) : null;
+        if (!$this->isUpdateEvent()) {
+            return null;
+        }
+
+        $unitOfWork = $this->getUnitOfWork();
+
+        if ($unitOfWork instanceof \Doctrine\ODM\MongoDB\UnitOfWork) {
+            return $unitOfWork->getDocumentChangeSet($entity);
+        }
+
+        if ($unitOfWork instanceof \Doctrine\ORM\UnitOfWork) {
+            return $unitOfWork->getEntityChangeSet($entity);
+        }
+
+        return null;
     }
 
     protected function isUpdateEvent()
     {
-        return $this->getEventShortName() == 'updated';
+        return $this->getEventShortName() === 'updated';
     }
 
 
@@ -164,7 +178,7 @@ class DoctrineObjectEventResolver implements EventResolverInterface
     }
 
     /**
-     * @return \Doctrine\ORM\UnitOfWork
+     * @return \Doctrine\ODM\MongoDB\UnitOfWork|\Doctrine\ORM\UnitOfWork
      */
     protected function getUnitOfWork()
     {
@@ -172,7 +186,7 @@ class DoctrineObjectEventResolver implements EventResolverInterface
     }
 
     /**
-     * @return \Doctrine\Bundle\DoctrineBundle\Registry|object
+     * @return ManagerRegistry|object
      */
     protected function getDoctrine()
     {
@@ -180,7 +194,7 @@ class DoctrineObjectEventResolver implements EventResolverInterface
     }
 
     /**
-     * @param Registry $doctrine
+     * @param ManagerRegistry $doctrine
      */
     public function setDoctrine($doctrine)
     {
