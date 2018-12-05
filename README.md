@@ -59,7 +59,7 @@ public function registerBundles()
 
 ### 3. Create audit_log entity class
 
-The XiideaEasyAuditBundle supports Doctrine ORM by default. However, you must provide a concrete AuditLog class. Follow the [instructions](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/audit-log-entity-orm.md) to set up the class:
+The XiideaEasyAuditBundle supports Doctrine ORM/MongoDB by default. However, you must provide a concrete AuditLog class. Follow the [instructions](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/audit-log-entity-orm.md) to set up the class:
 
 
 ### 4. Configure config.yml
