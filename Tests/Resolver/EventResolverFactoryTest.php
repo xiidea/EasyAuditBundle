@@ -26,7 +26,7 @@ use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\InvalidEventInfoResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\InvalidEventResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\NullResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
-use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\EntityEvent;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\DoctrineEvent;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\WithEmbeddedResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie;
@@ -226,7 +226,7 @@ class EventResolverFactoryTest extends TestCase
 
     public function testEntityEventResolver()
     {
-        $this->event = new EntityEvent();
+        $this->event = new DoctrineEvent();
 
         $this->resolverFactory->setEntityEventResolver(new DefaultEventResolver());
 
@@ -238,12 +238,12 @@ class EventResolverFactoryTest extends TestCase
             ->willReturn(new DummyToken(new UserEntity()));
 
 
-        $auditLog = $this->resolverFactory->getEventLog($this->event, 'easy_audit.doctrine.entity.created');
+        $auditLog = $this->resolverFactory->getEventLog($this->event, 'easy_audit.doctrine.object.created');
 
         $this->assertEventInfo($auditLog,
             array(
-                'description' => 'easy_audit.doctrine.entity.created',
-                'name' => 'easy_audit.doctrine.entity.created',
+                'description' => 'easy_audit.doctrine.object.created',
+                'name' => 'easy_audit.doctrine.object.created',
                 'user' => 'admin',
                 'impersonatingUser' => null,
                 'ip' => '127.0.0.1',
@@ -325,7 +325,7 @@ class EventResolverFactoryTest extends TestCase
                 'name' => 'basic',
                 'user' => 'By Command',
                 'impersonatingUser' => null,
-                'type' => 'easy_audit.doctrine.entity.created',
+                'type' => 'easy_audit.doctrine.object.created',
                 'ip' => '',
             ));
     }
@@ -460,7 +460,7 @@ class EventResolverFactoryTest extends TestCase
                 'name' => 'basic',
                 'user' => 'Anonymous',
                 'impersonatingUser' => null,
-                'type' => 'easy_audit.doctrine.entity.created',
+                'type' => 'easy_audit.doctrine.object.created',
                 'ip' => '127.0.0.1',
             ));
     }

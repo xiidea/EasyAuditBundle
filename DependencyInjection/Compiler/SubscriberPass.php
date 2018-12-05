@@ -41,9 +41,7 @@ class SubscriberPass implements CompilerPassInterface
 
     private function appendDoctrineEventsToList(ContainerBuilder $container, &$events = array())
     {
-        $doctrine_entities = $container->getParameter('xiidea.easy_audit.doctrine_entities');
-
-        if ($doctrine_entities === false) {
+        if ($container->getParameter('xiidea.easy_audit.doctrine_objects') === false) {
             return;
         }
 

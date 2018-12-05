@@ -13,12 +13,13 @@ namespace Xiidea\EasyAuditBundle\Tests\Annotation;
 
 use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\Annotation\ORMSubscribedEvents;
+use Xiidea\EasyAuditBundle\Annotation\SubscribeDoctrineEvents;
 
-class ORMSubscribedEventsTest extends TestCase {
+class SubscribeDoctrineEventsTest extends TestCase {
 
     public function testConstructWithoutData()
     {
-        $annotation = new ORMSubscribedEvents(array());
+        $annotation = new SubscribeDoctrineEvents(array());
 
         $this->assertTrue(is_array($annotation->events));
         $this->assertEmpty($annotation->events);
@@ -31,7 +32,7 @@ class ORMSubscribedEventsTest extends TestCase {
             'array'     => array('bar' => 'bar'),
         );
 
-        $annotation = new ORMSubscribedEvents($data);
+        $annotation = new SubscribeDoctrineEvents($data);
 
         $this->assertTrue(is_array($annotation->events));
         $this->assertEmpty($annotation->events);
@@ -41,7 +42,7 @@ class ORMSubscribedEventsTest extends TestCase {
     {
         $data = array("value" => "updated,created");
 
-        $annotation = new ORMSubscribedEvents($data);
+        $annotation = new SubscribeDoctrineEvents($data);
 
         $this->assertTrue(is_array($annotation->events));
         $this->assertNotEmpty($annotation->events);
@@ -53,12 +54,20 @@ class ORMSubscribedEventsTest extends TestCase {
     {
         $data = array("events" => "updated,created");
 
-        $annotation = new ORMSubscribedEvents($data);
+        $annotation = new SubscribeDoctrineEvents($data);
 
         $this->assertTrue(is_array($annotation->events));
         $this->assertNotEmpty($annotation->events);
 
         $this->assertEquals(explode(',', $data['events']), $annotation->events);
+    }
+
+    public function testOldAnnotationClass()
+    {
+        $annotation = new ORMSubscribedEvents(array());
+
+        $this->assertTrue(is_array($annotation->events));
+        $this->assertEmpty($annotation->events);
     }
 }
  

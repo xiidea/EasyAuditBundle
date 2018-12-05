@@ -14,7 +14,7 @@ namespace Xiidea\EasyAuditBundle\Tests\DependencyInjection\Compiler;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Definition;
 use Xiidea\EasyAuditBundle\DependencyInjection\Compiler\ResolverFactoryPass;
-use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
+use Xiidea\EasyAuditBundle\Model\BaseAuditLog;
 use Xiidea\EasyAuditBundle\Resolver\EventResolverFactory;
 
 class ResolverFactoryPassTest extends TestCase {
@@ -48,7 +48,7 @@ class ResolverFactoryPassTest extends TestCase {
         $getParameterCall = array(
             array('xiidea.easy_audit.custom_resolvers', array()),
             array('xiidea.easy_audit.resolver', 'default.resolver'),
-            array('xiidea.easy_audit.entity_event_resolver', null),
+            array('xiidea.easy_audit.doctrine_event_resolver', null),
         );
 
         $containerBuilderMock->expects($this->any())
@@ -79,7 +79,7 @@ class ResolverFactoryPassTest extends TestCase {
         $getParameterCall = array(
             array('xiidea.easy_audit.custom_resolvers', array()),
             array('xiidea.easy_audit.resolver', 'default.resolver'),
-            array('xiidea.easy_audit.entity_event_resolver', 'entity.resolver'),
+            array('xiidea.easy_audit.doctrine_event_resolver', 'entity.resolver'),
         );
 
         $containerBuilderMock->expects($this->any())
@@ -106,7 +106,7 @@ class ResolverFactoryPassTest extends TestCase {
         $getParameterCall = array(
             array('xiidea.easy_audit.custom_resolvers', array('event1' => 'resolver1')),
             array('xiidea.easy_audit.resolver', 'default.resolver'),
-            array('xiidea.easy_audit.entity_event_resolver', null),
+            array('xiidea.easy_audit.doctrine_event_resolver', null),
         );
 
         $definitionObject = $this->getDefinitionObject();

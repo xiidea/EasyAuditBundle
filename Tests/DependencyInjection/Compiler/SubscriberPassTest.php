@@ -158,15 +158,15 @@ class SubscriberPassTest extends TestCase {
 
         $listenableEventsList =array (
             array (
-                'event' => 'easy_audit.doctrine.entity.updated',
+                'event' => 'easy_audit.doctrine.object.updated',
                 'method' => 'resolveEventHandler',
             ),
             array (
-                'event' => 'easy_audit.doctrine.entity.created',
+                'event' => 'easy_audit.doctrine.object.created',
                 'method' => 'resolveEventHandler',
             ),
             array (
-                'event' => 'easy_audit.doctrine.entity.deleted',
+                'event' => 'easy_audit.doctrine.object.deleted',
                 'method' => 'resolveEventHandler',
             ),
             array (
@@ -210,7 +210,7 @@ class SubscriberPassTest extends TestCase {
         $containerBuilder
             ->expects($this->at(2))
             ->method('getParameter')
-            ->with($this->equalTo('xiidea.easy_audit.doctrine_entities'))
+            ->with($this->equalTo('xiidea.easy_audit.doctrine_objects'))
             ->will($this->returnValue(true));
         $containerBuilder
             ->expects($this->at(3))
@@ -292,15 +292,15 @@ class SubscriberPassTest extends TestCase {
 
         $listenableEventsList = array(
             array(
-                'event' => 'easy_audit.doctrine.entity.updated',
+                'event' => 'easy_audit.doctrine.object.updated',
                 'method' => 'resolveEventHandler',
             ),
             array(
-                'event' => 'easy_audit.doctrine.entity.created',
+                'event' => 'easy_audit.doctrine.object.created',
                 'method' => 'resolveEventHandler',
             ),
             array(
-                'event' => 'easy_audit.doctrine.entity.deleted',
+                'event' => 'easy_audit.doctrine.object.deleted',
                 'method' => 'resolveEventHandler',
             )
         );
@@ -318,7 +318,7 @@ class SubscriberPassTest extends TestCase {
         $containerBuilder
             ->expects($this->at(2))
             ->method('getParameter')
-            ->with($this->equalTo('xiidea.easy_audit.doctrine_entities'))
+            ->with($this->equalTo('xiidea.easy_audit.doctrine_objects'))
             ->will($this->returnValue(true));
         $containerBuilder
             ->expects($this->at(3))
@@ -351,7 +351,7 @@ class SubscriberPassTest extends TestCase {
         $containerBuilder
             ->expects($this->at(2))
             ->method('getParameter')
-            ->with($this->equalTo('xiidea.easy_audit.doctrine_entities'))
+            ->with($this->equalTo('xiidea.easy_audit.doctrine_objects'))
             ->will($this->returnValue(false));
         $containerBuilder
             ->expects($this->at(3))

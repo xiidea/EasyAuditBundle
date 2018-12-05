@@ -11,9 +11,11 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Logger;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 use Xiidea\EasyAuditBundle\Logger\Logger;
+use Xiidea\EasyAuditBundle\Model\BaseAuditLog;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog;
 
 class LoggerTest extends TestCase {
@@ -32,7 +34,7 @@ class LoggerTest extends TestCase {
             ->getMock();
 
         $this->entityManager = $this
-            ->getMockBuilder('Doctrine\ORM\EntityManager')
+            ->getMockBuilder(ObjectManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -54,11 +56,11 @@ class LoggerTest extends TestCase {
         $this->entityManager
             ->expects($this->at(0))
             ->method("persist")
-            ->with($this->isInstanceOf('Xiidea\EasyAuditBundle\Entity\BaseAuditLog'));
+            ->with($this->isInstanceOf(BaseAuditLog::class));
         $this->entityManager
             ->expects($this->at(1))
             ->method("flush")
-            ->with($this->isInstanceOf('Xiidea\EasyAuditBundle\Entity\BaseAuditLog'));
+            ->with($this->isInstanceOf(BaseAuditLog::class));
 
 
         $this->logger->log(new AuditLog());
@@ -88,11 +90,11 @@ class LoggerTest extends TestCase {
         $this->entityManager
             ->expects($this->at(0))
             ->method("persist")
-            ->with($this->isInstanceOf('Xiidea\EasyAuditBundle\Entity\BaseAuditLog'));
+            ->with($this->isInstanceOf(BaseAuditLog::class));
         $this->entityManager
             ->expects($this->at(1))
             ->method("flush")
-            ->with($this->isInstanceOf('Xiidea\EasyAuditBundle\Entity\BaseAuditLog'));
+            ->with($this->isInstanceOf(BaseAuditLog::class));
 
         $event = new AuditLog();
         $event->setTypeId(DoctrineEvents::ENTITY_DELETED);

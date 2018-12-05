@@ -13,7 +13,7 @@ namespace Xiidea\EasyAuditBundle\Logger;
 
 use ReflectionProperty;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Xiidea\EasyAuditBundle\Entity\BaseAuditLog as AuditLog;
+use Xiidea\EasyAuditBundle\Model\BaseAuditLog as AuditLog;
 
 class MonologLogger implements LoggerInterface
 {

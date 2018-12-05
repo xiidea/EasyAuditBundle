@@ -12,7 +12,7 @@
 namespace Xiidea\EasyAuditBundle\Tests\Functional;
 
 use Symfony\Component\DomCrawler\Crawler;
-use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
+use Xiidea\EasyAuditBundle\Model\BaseAuditLog;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\WithEmbeddedResolver;
 use Xiidea\EasyAuditBundle\Tests\Functional\Bundle\TestBundle\Controller\DefaultController;
@@ -30,7 +30,7 @@ class CommonTest extends BaseTestCase
 
         $container = $kernel->getContainer();
 
-        $entityClass = $container->getParameter('xiidea.easy_audit.entity_class');
+        $entityClass = $container->getParameter('xiidea.easy_audit.audit_log_class');
 
         $this->assertInstanceOf(BaseAuditLog::class, (new $entityClass));
     }

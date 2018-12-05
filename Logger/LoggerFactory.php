@@ -11,7 +11,7 @@
 
 namespace Xiidea\EasyAuditBundle\Logger;
 
-use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
+use Xiidea\EasyAuditBundle\Model\BaseAuditLog;
 use Xiidea\EasyAuditBundle\Exception\InvalidServiceException;
 
 class LoggerFactory
@@ -29,7 +29,7 @@ class LoggerFactory
     }
 
     /**
-     * @param null|\Xiidea\EasyAuditBundle\Entity\BaseAuditLog $eventInfo
+     * @param null|\Xiidea\EasyAuditBundle\Model\BaseAuditLog $eventInfo
      */
     public function executeLoggers($eventInfo)
     {

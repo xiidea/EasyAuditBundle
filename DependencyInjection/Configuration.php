@@ -48,7 +48,8 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('user_property')->isRequired()->end()
-                ->scalarNode('entity_class')->cannotBeOverwritten()->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('audit_log_class')->cannotBeOverwritten()->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('entity_class')->cannotBeOverwritten()->setDeprecated('The "%node%" option is deprecated since 1.4.10. and will not be supported anymore in 2.0. Use "audit_log_class" instead.')->end()
             ->end();
     }
 
@@ -60,8 +61,12 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('resolver')->defaultValue('xiidea.easy_audit.default_event_resolver')->end()
+                ->scalarNode('doctrine_event_resolver')
+                    ->defaultValue(null)
+                ->end()
                 ->scalarNode('entity_event_resolver')
                     ->defaultValue(null)
+                    ->setDeprecated('The "%node%" option is deprecated since 1.4.10. and will not be supported anymore in 2.0. Use "doctrine_event_resolver" instead.')
                 ->end()
                 ->booleanNode('default_logger')->defaultValue(true)->end()
             ->end();
@@ -74,7 +79,13 @@ class Configuration implements ConfigurationInterface
     {
         $rootNode
             ->children()
-                ->variableNode('doctrine_entities')->defaultValue(array())->end()
+                ->variableNode('doctrine_objects')
+                    ->defaultValue(array())
+                ->end()
+                ->variableNode('doctrine_entities')
+                    ->defaultValue(array())
+                    ->setDeprecated('The "%node%" option is deprecated since 1.4.10. and will not be supported anymore in 2.0. Use "doctrine_objects" instead.')
+                ->end()
                 ->variableNode('events')->defaultValue(array())->end()
                 ->variableNode('custom_resolvers')->defaultValue(array())->end()
             ->end();

@@ -12,7 +12,7 @@
 namespace Xiidea\EasyAuditBundle\Tests\Functional\Bundle\TestBundle\Logger;
 
 use Symfony\Component\Filesystem\Filesystem;
-use Xiidea\EasyAuditBundle\Entity\BaseAuditLog as AuditLog;
+use Xiidea\EasyAuditBundle\Model\BaseAuditLog as AuditLog;
 use Xiidea\EasyAuditBundle\Logger\LoggerInterface;
 
 class FileLogger implements LoggerInterface

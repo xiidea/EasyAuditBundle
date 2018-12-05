@@ -11,8 +11,8 @@
 
 namespace Xiidea\EasyAuditBundle\Logger;
 
-use Doctrine\ORM\EntityManager;
-use Xiidea\EasyAuditBundle\Entity\BaseAuditLog as AuditLog;
+use Doctrine\Common\Persistence\ObjectManager;
+use Xiidea\EasyAuditBundle\Model\BaseAuditLog as AuditLog;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 
@@ -45,9 +45,9 @@ class Logger implements LoggerInterface
     }
 
     /**
-     * @return EntityManager
+     * @return ObjectManager
      */
-    protected function getEntityManager()
+    protected function getManager()
     {
          return $this->getDoctrine()->getManager();
     }
@@ -62,13 +62,11 @@ class Logger implements LoggerInterface
 
     /**
      * @param AuditLog $event
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     protected function saveLog(AuditLog $event)
     {
-        $this->getEntityManager()->persist($event);
-        $this->getEntityManager()->flush($event);
+        $this->getManager()->persist($event);
+        $this->getManager()->flush($event);
     }
 
     public function savePendingLogs()

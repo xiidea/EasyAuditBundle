@@ -13,7 +13,7 @@ For example:
 namespace MyProject\MyBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
+use Xiidea\EasyAuditBundle\Model\BaseAuditLog;
 
 /**
  * @ORM\Entity
@@ -84,6 +84,6 @@ class AuditLog extends BaseAuditLog
 # app/config/config.yml
 
 xiidea_easy_audit:
-    entity_class : MyProject\MyBundle\Entity\AuditLog
+    audit_log_class : MyProject\MyBundle\Entity\AuditLog
 
 ```

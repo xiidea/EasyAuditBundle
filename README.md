@@ -70,8 +70,8 @@ You can find sample config data in `Resources/config/config-sample.yml` file
 # app/config/config.yml
 xiidea_easy_audit:
     #resolver: xiidea.easy_audit.default_event_resolver                           #Optional
-    #entity_class : MyProject\Bundle\MyBundle\Entity\AuditLog                     #Required
-    #entity_event_resolver : xiidea.easy_audit.default_entity_event_resolver      #Optional
+    #audit_log_class : MyProject\Bundle\MyBundle\Entity\AuditLog                  #Required
+    #doctrine_event_resolver : xiidea.easy_audit.default_entity_event_resolver    #Optional
     #default_logger : true                                                        #Optional
     
     #user property to use as actor of an event
@@ -80,7 +80,7 @@ xiidea_easy_audit:
 
     #List of doctrine entity:event you wish to track or set to false to disable logs for doctrine events
     # valid events are = [created, updated, deleted]
-    #doctrine_entities :                                              #Optional
+    #doctrine_objects :                                              #Optional
     #     MyProject\Bundle\MyBundle\Entity\MyEntity : [created, updated, deleted]
     #     MyProject\Bundle\MyBundle\Entity\MyEntity2 : []
 
@@ -123,7 +123,7 @@ disable the service by setting `default_logger: false` in configuration.
 
 #### Resolver:
 `Resolver` is like translator for an event. It used to translate an event to AuditLog entity. EasyAudit bundled with two(2)
-resolver services `xiidea.easy_audit.default_event_resolver`, `xiidea.easy_audit.default_entity_event_resolver`. And a
+resolver services `xiidea.easy_audit.default_event_resolver`, `xiidea.easy_audit.default_doctrine_event_resolver`. And a
 custom EventResolver class `UserEventResolver` to illustrate how the transformation works. You can define as many resolver
 service as you want and use them to handle different event. Here is the place you can set the severity level for a event. Default
 level is `Psr\Log\LogLevel::INFO`. Custom severity levels are not available. EasyAudit supports the logging levels

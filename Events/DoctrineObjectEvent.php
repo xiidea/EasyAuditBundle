@@ -10,15 +10,15 @@
 
 namespace Xiidea\EasyAuditBundle\Events;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Symfony\Component\EventDispatcher\Event;
 
-class DoctrineEntityEvent extends Event
+class DoctrineObjectEvent extends Event
 {
     private $identity;
 
     /**
-     * @var \Doctrine\ORM\Event\LifecycleEventArgs
+     * @var LifecycleEventArgs
      */
     private $lifecycleEventArgs;
 
