@@ -11,7 +11,7 @@
 
 namespace Xiidea\EasyAuditBundle\Resolver;
 
-@trigger_error(sprintf('The "%s" is deprecated since version 1.4.10. Use "%s" instead.', EntityEventResolver::class, DoctrineObjectEventResolver::class), E_USER_DEPRECATED);
+@trigger_error(sprintf('The "%s" is deprecated since XiideaEasyAuditBundle 1.4.10. Use "%s" instead.', EntityEventResolver::class, DoctrineObjectEventResolver::class), E_USER_DEPRECATED);
 
 /**
  * Class EntityEventResolver

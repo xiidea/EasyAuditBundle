@@ -13,7 +13,7 @@ namespace Xiidea\EasyAuditBundle\Entity;
 
 use Xiidea\EasyAuditBundle\Model\BaseAuditLog as BaseClass;
 
-@trigger_error(sprintf('The "%s" is deprecated since version 1.4.10. Use "%s" instead.', BaseAuditLog::class, BaseClass::class), E_USER_DEPRECATED);
+@trigger_error(sprintf('The "%s" is deprecated since XiideaEasyAuditBundle 1.4.10. Use "%s" instead.', BaseAuditLog::class, BaseClass::class), E_USER_DEPRECATED);
 
 /**
  * Class BaseAuditLog
