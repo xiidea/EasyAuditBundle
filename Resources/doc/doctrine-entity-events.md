@@ -1,6 +1,6 @@
-Doctrine Entity Events
+Doctrine Object Events
 ========================
-You can track doctrine entity events. Currently Supported Events are [created, updated, deleted]. There are two way to achieve this.
+You can track doctrine object(ORM/MongoDB) events. Currently Supported Events are [created, updated, deleted]. There are two way to achieve this.
 
 ### 1. By Configuration :
 
@@ -44,17 +44,36 @@ An entity example to track updated and created events
 
 ```php
 <?php
-// src/MyProject/MyBundle/Entity/MyEntity.php
+// src/Entity/MyEntity.php
 
 use Xiidea\EasyAuditBundle\Annotation\SubscribeDoctrineEvents;
 
 /**
- * @ORM\Entity
+ * ...
+ * 
  * @SubscribeDoctrineEvents(events = "updated, created")
  */
 class MyEntity
 {
-    ...
+   // ...
+
+}
+```
+
+```php
+<?php
+// src/Document/MyDocument.php
+
+use Xiidea\EasyAuditBundle\Annotation\SubscribeDoctrineEvents;
+
+/**
+ * ...
+ * 
+ * @SubscribeDoctrineEvents(events = "updated, created")
+ */
+class MyDocument
+{
+    //...
 
 }
 ```

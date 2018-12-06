@@ -154,6 +154,6 @@ Look the cookbook for another interesting things.
 - [Override Resolver](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/override-resolver.md)
 - [Custom Logger](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/custom-logger.md)
 - [Custom Resolver](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/custom-resolver.md)
-- [Doctrine Entity Event](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/doctrine-entity-events.md)
+- [Doctrine Object Event](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/doctrine-entity-events.md)
 - [Pre-Persist Listener](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/pre-persist-listener.md)
 - [Logger Channel](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/logger-channel.md)
