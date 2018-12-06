@@ -32,7 +32,7 @@ class CommonTest extends BaseTestCase
 
         $entityClass = $container->getParameter('xiidea.easy_audit.audit_log_class');
 
-        $this->assertInstanceOf(BaseAuditLog::class, (new $entityClass));
+        $this->assertInstanceOf(BaseAuditLog::class, (new $entityClass()));
     }
 
     /**
@@ -52,7 +52,7 @@ class CommonTest extends BaseTestCase
             new Basic()
         );
 
-        $logFile = realpath($container->getParameter('kernel.cache_dir') . DIRECTORY_SEPARATOR . "audit.log");
+        $logFile = realpath($container->getParameter('kernel.cache_dir').DIRECTORY_SEPARATOR.'audit.log');
 
         $event = unserialize(file_get_contents($logFile));
         $this->assertEquals($name, $event['typeId']);
@@ -79,12 +79,12 @@ class CommonTest extends BaseTestCase
             new Basic()
         );
 
-        $container->get('event_dispatcher')->dispatch($name."2",
+        $container->get('event_dispatcher')->dispatch($name.'2',
             new WithEmbeddedResolver()
         );
 
-        $logFile = realpath($container->getParameter('kernel.cache_dir') . DIRECTORY_SEPARATOR . "audit.log");
-        $logFile2 = realpath($container->getParameter('kernel.cache_dir') . "2" . DIRECTORY_SEPARATOR . "audit.log");
+        $logFile = realpath($container->getParameter('kernel.cache_dir').DIRECTORY_SEPARATOR.'audit.log');
+        $logFile2 = realpath($container->getParameter('kernel.cache_dir').'2'.DIRECTORY_SEPARATOR.'audit.log');
 
         $event2 = unserialize(file_get_contents($logFile2));
         $event = unserialize(file_get_contents($logFile));
@@ -95,9 +95,9 @@ class CommonTest extends BaseTestCase
         $this->assertEquals('By Command', $event['user']);
         $this->assertEquals('', $event['ip']);
 
-        $this->assertEquals($name."2", $event2['typeId']);
-        $this->assertEquals($name."2", $event2['type']);
-        $this->assertEquals("It is an embedded event", $event2['description']);
+        $this->assertEquals($name.'2', $event2['typeId']);
+        $this->assertEquals($name.'2', $event2['type']);
+        $this->assertEquals('It is an embedded event', $event2['description']);
         $this->assertEquals('By Command', $event2['user']);
         $this->assertEquals('', $event2['ip']);
     }
@@ -142,7 +142,6 @@ class CommonTest extends BaseTestCase
 
         $this->assertEquals('admin', $event['user']);
         $this->assertEquals('127.0.0.1', $event['ip']);
-
     }
 
     /**
@@ -166,6 +165,7 @@ class CommonTest extends BaseTestCase
 
     /**
      * @param Crawler $crawler
+     *
      * @return mixed
      */
     private function getEventArrayFromResponse(Crawler $crawler)
@@ -175,6 +175,4 @@ class CommonTest extends BaseTestCase
         $event = unserialize($parts[1]);
         return $event;
     }
-
-
 }

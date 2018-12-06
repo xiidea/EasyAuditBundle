@@ -16,8 +16,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Yaml\Parser;
 use Xiidea\EasyAuditBundle\DependencyInjection\XiideaEasyAuditExtension;
 
-class XiideaEasyAuditExtensionTest extends TestCase {
-
+class XiideaEasyAuditExtensionTest extends TestCase
+{
     /** @var ContainerBuilder */
     protected $container;
 
@@ -93,7 +93,7 @@ class XiideaEasyAuditExtensionTest extends TestCase {
     {
         $loader = new XiideaEasyAuditExtension();
         $config = $this->getRequiredConfig();
-        $config['logger_channel']  = array('foo.logger' => array("info", "!debug"));
+        $config['logger_channel'] = array('foo.logger' => array('info', '!debug'));
 
         $loader->load(array($config), new ContainerBuilder());
     }
@@ -112,12 +112,12 @@ class XiideaEasyAuditExtensionTest extends TestCase {
     {
         $loader = new XiideaEasyAuditExtension();
         $config = $this->getRequiredConfig();
-        $config['logger_channel']  = array('foo.logger' => "!info");
+        $config['logger_channel'] = array('foo.logger' => '!info');
 
         $channel = array(
             'foo.logger' => array(
                 'type' => 'exclusive',
-                'elements' => array('info')
+                'elements' => array('info'),
             ),
         );
 
@@ -192,11 +192,11 @@ class XiideaEasyAuditExtensionTest extends TestCase {
         $channel = array(
             'xiidea.easy_audit.logger.service' => array(
                 'type' => 'inclusive',
-                'elements' => array('info', 'debug')
+                'elements' => array('info', 'debug'),
             ),
             'file.logger' => array(
                 'type' => 'exclusive',
-                'elements' => array('info', 'debug')
+                'elements' => array('info', 'debug'),
             ),
         );
 
@@ -225,7 +225,7 @@ class XiideaEasyAuditExtensionTest extends TestCase {
     }
 
     /**
-     * getRequiredConfig
+     * getRequiredConfig.
      *
      * @return array
      */
@@ -239,7 +239,7 @@ EOF;
     }
 
     /**
-     * getRequiredConfig
+     * getRequiredConfig.
      *
      * @return array
      */
@@ -257,7 +257,7 @@ EOF;
     }
 
     /**
-     * getFullConfig
+     * getFullConfig.
      *
      * @return array
      */
@@ -307,6 +307,7 @@ EOF;
 
     /**
      * @param $yaml
+     *
      * @return mixed
      */
     protected function getArrayFromYaml($yaml)
@@ -315,5 +316,4 @@ EOF;
 
         return $parser->parse($yaml);
     }
-
 }

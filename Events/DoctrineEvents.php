@@ -19,9 +19,9 @@ class DoctrineEvents
     const ENTITY_CREATED = 'easy_audit.doctrine.object.created';
     const ENTITY_DELETED = 'easy_audit.doctrine.object.deleted';
 
-
     /**
      * @param string $eventName
+     *
      * @return string
      */
     public static function getShortEventType($eventName)
@@ -31,6 +31,7 @@ class DoctrineEvents
 
     /**
      * @return array
+     *
      * @throws \ReflectionException
      */
     public static function getConstants()

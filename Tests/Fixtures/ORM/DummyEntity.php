@@ -36,6 +36,4 @@ class DummyEntity
     {
         $this->random = $random;
     }
-
-
 }

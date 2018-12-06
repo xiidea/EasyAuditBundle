@@ -29,7 +29,7 @@ class TestKernel extends Kernel
 
         $fs = new Filesystem();
         if (!$fs->isAbsolutePath($config)) {
-            $config = __DIR__ . '/config/' . $config . ".yml";
+            $config = __DIR__.'/config/'.$config.'.yml';
         }
 
         if (!file_exists($config)) {
@@ -45,18 +45,18 @@ class TestKernel extends Kernel
             new FrameworkBundle(),
             new SecurityBundle(),
             new XiideaEasyAuditBundle(),
-            new XiideaTestBundle()
+            new XiideaTestBundle(),
         );
     }
 
     public function getCacheDir()
     {
-        return sys_get_temp_dir() . '/XiideaEasyAuditBundle/' . substr(sha1($this->config), 0, 6) . '/cache';
+        return sys_get_temp_dir().'/XiideaEasyAuditBundle/'.substr(sha1($this->config), 0, 6).'/cache';
     }
 
     public function getLogDir()
     {
-        return sys_get_temp_dir() . '/XiideaEasyAuditBundle/' . substr(sha1($this->config), 0, 6) . '/logs';
+        return sys_get_temp_dir().'/XiideaEasyAuditBundle/'.substr(sha1($this->config), 0, 6).'/logs';
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)

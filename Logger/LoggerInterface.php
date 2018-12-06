@@ -17,7 +17,6 @@ interface LoggerInterface
 {
     /**
      * @param BaseAuditLog $event
-     * @return void
      */
     public function log(BaseAuditLog $event);
 }

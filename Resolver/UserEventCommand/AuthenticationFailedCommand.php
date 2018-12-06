@@ -11,13 +11,13 @@
 
 namespace Xiidea\EasyAuditBundle\Resolver\UserEventCommand;
 
-
 use Symfony\Component\Security\Core\Event\AuthenticationFailureEvent;
 
 class AuthenticationFailedCommand extends ResolverCommand
 {
     /**
      * @param AuthenticationFailureEvent $event
+     *
      * @return null|array
      */
     public function resolve($event)
@@ -31,6 +31,7 @@ class AuthenticationFailedCommand extends ResolverCommand
 
     /**
      * @param AuthenticationFailureEvent $event
+     *
      * @return array
      */
     private function getEventDetails(AuthenticationFailureEvent $event)
@@ -45,7 +46,7 @@ class AuthenticationFailedCommand extends ResolverCommand
      */
     public function getType()
     {
-        return "Authentication Failed";
+        return 'Authentication Failed';
     }
 
     /**

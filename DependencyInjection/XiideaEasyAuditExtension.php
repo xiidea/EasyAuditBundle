@@ -19,14 +19,14 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
 /**
- * This is the class that loads and manages your bundle configuration
+ * This is the class that loads and manages your bundle configuration.
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
 class XiideaEasyAuditExtension extends Extension implements PrependExtensionInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -34,15 +34,15 @@ class XiideaEasyAuditExtension extends Extension implements PrependExtensionInte
         $config = $this->processConfiguration($configuration, $configs);
 
         foreach ($config as $key => $value) {
-            $container->setParameter('xiidea.easy_audit.' . $key, $value);
+            $container->setParameter('xiidea.easy_audit.'.$key, $value);
         }
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
         $this->loadDefaultResolverServices($config, $loader);
 
-        if ($config['doctrine_objects'] !== false) {
+        if (false !== $config['doctrine_objects']) {
             $loader->load('doctrine_services.yml');
         }
     }
@@ -50,11 +50,12 @@ class XiideaEasyAuditExtension extends Extension implements PrependExtensionInte
     /**
      * @param $config
      * @param LoaderInterface $loader
+     *
      * @throws \Exception
      */
     protected function loadDefaultResolverServices($config, LoaderInterface $loader)
     {
-        if ($config['resolver'] == 'xiidea.easy_audit.default_event_resolver') {
+        if ('xiidea.easy_audit.default_event_resolver' === $config['resolver']) {
             $loader->load('default/event-resolver.yml');
         }
 
@@ -62,7 +63,7 @@ class XiideaEasyAuditExtension extends Extension implements PrependExtensionInte
             $loader->load('default/logger.yml');
         }
 
-        if ($config['doctrine_objects'] !== false && $config['doctrine_event_resolver'] == 'xiidea.easy_audit.default_doctrine_event_resolver') {
+        if (false !== $config['doctrine_objects'] && 'xiidea.easy_audit.default_doctrine_event_resolver' === $config['doctrine_event_resolver']) {
             $loader->load('default/doctrine-event-resolver.yml');
         }
     }
@@ -77,11 +78,11 @@ class XiideaEasyAuditExtension extends Extension implements PrependExtensionInte
         if (!empty($prependConfig)) {
             $container->prependExtensionConfig($this->getAlias(), $prependConfig);
         }
-
     }
 
     /**
      * @param ContainerBuilder $container
+     *
      * @return array
      */
     protected function getExtendedConfig(ContainerBuilder $container)

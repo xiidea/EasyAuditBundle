@@ -25,5 +25,4 @@ class EntityWithoutGetMethod
     {
         $this->title = $title;
     }
-
 }

@@ -17,15 +17,15 @@ use Xiidea\EasyAuditBundle\DependencyInjection\Compiler\ResolverFactoryPass;
 use Xiidea\EasyAuditBundle\Model\BaseAuditLog;
 use Xiidea\EasyAuditBundle\Resolver\EventResolverFactory;
 
-class ResolverFactoryPassTest extends TestCase {
-
+class ResolverFactoryPassTest extends TestCase
+{
     public function testProcessWithoutResolverFactoryDefinition()
     {
         $containerBuilder = $this->createMock('Symfony\Component\DependencyInjection\ContainerBuilder');
 
         $containerBuilder->expects($this->once())
             ->method('hasDefinition')
-            ->with($this->equalTo("xiidea.easy_audit.event_resolver_factory"))
+            ->with($this->equalTo('xiidea.easy_audit.event_resolver_factory'))
             ->will($this->returnValue(false));
         $containerBuilder->expects($this->never())
             ->method('getDefinition');
@@ -44,7 +44,6 @@ class ResolverFactoryPassTest extends TestCase {
             ->with($this->equalTo('xiidea.easy_audit.event_resolver_factory'))
             ->will($this->returnValue($definitionObject));
 
-
         $getParameterCall = array(
             array('xiidea.easy_audit.custom_resolvers', array()),
             array('xiidea.easy_audit.resolver', 'default.resolver'),
@@ -54,7 +53,6 @@ class ResolverFactoryPassTest extends TestCase {
         $containerBuilderMock->expects($this->any())
             ->method('getParameter')
             ->will($this->returnValueMap($getParameterCall));
-
 
         $resolverFactoryPass = new ResolverFactoryPass();
         $resolverFactoryPass->process($containerBuilderMock);
@@ -75,7 +73,6 @@ class ResolverFactoryPassTest extends TestCase {
             ->with($this->equalTo('xiidea.easy_audit.event_resolver_factory'))
             ->will($this->returnValue($definitionObject));
 
-
         $getParameterCall = array(
             array('xiidea.easy_audit.custom_resolvers', array()),
             array('xiidea.easy_audit.resolver', 'default.resolver'),
@@ -85,7 +82,6 @@ class ResolverFactoryPassTest extends TestCase {
         $containerBuilderMock->expects($this->any())
             ->method('getParameter')
             ->will($this->returnValueMap($getParameterCall));
-
 
         $resolverFactoryPass = new ResolverFactoryPass();
         $resolverFactoryPass->process($containerBuilderMock);
@@ -121,11 +117,9 @@ class ResolverFactoryPassTest extends TestCase {
             ->with($this->equalTo('xiidea.easy_audit.event_resolver_factory'))
             ->will($this->returnValue($definitionObject));
 
-
         $containerBuilderMock->expects($this->any())
             ->method('getParameter')
             ->will($this->returnValueMap($getParameterCall));
-
 
         $resolverFactoryPass = new ResolverFactoryPass();
         $resolverFactoryPass->process($containerBuilderMock);
@@ -161,7 +155,7 @@ class ResolverFactoryPassTest extends TestCase {
 
         $containerBuilderMock->expects($this->any())
             ->method('hasDefinition')
-            ->with($this->equalTo("xiidea.easy_audit.event_resolver_factory"))
+            ->with($this->equalTo('xiidea.easy_audit.event_resolver_factory'))
             ->will($this->returnValue(true));
 
         return $containerBuilderMock;

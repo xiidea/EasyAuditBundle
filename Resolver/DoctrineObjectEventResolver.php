@@ -22,7 +22,7 @@ class DoctrineObjectEventResolver implements EventResolverInterface
 {
     protected $eventShortName;
 
-    /** @var  $event DoctrineObjectEvent */
+    /** @var $event DoctrineObjectEvent */
     protected $event;
 
     protected $entity;
@@ -38,15 +38,15 @@ class DoctrineObjectEventResolver implements EventResolverInterface
 
     protected $changeSetGetterMethods = [
         'getEntityChangeSet',
-        'getDocumentChangeSet'
+        'getDocumentChangeSet',
     ];
-
 
     /**
      * @param Event|DoctrineObjectEvent $event
      * @param $eventName
      *
      * @return array
+     *
      * @throws \ReflectionException
      */
     public function getEventLogInfo(Event $event, $eventName)
@@ -65,9 +65,8 @@ class DoctrineObjectEventResolver implements EventResolverInterface
 
         return array(
             'description' => $this->getDescription($reflectionClass->getShortName()),
-            'type'        => $this->getEventType($reflectionClass->getShortName())
+            'type' => $this->getEventType($reflectionClass->getShortName()),
         );
-
     }
 
     protected function getSingleIdentity()
@@ -77,12 +76,11 @@ class DoctrineObjectEventResolver implements EventResolverInterface
         }
 
         return ['', ''];
-
     }
 
     /**
      * @param DoctrineObjectEvent $event
-     * @param string $eventName
+     * @param string              $eventName
      */
     private function initialize(DoctrineObjectEvent $event, $eventName)
     {
@@ -118,21 +116,22 @@ class DoctrineObjectEventResolver implements EventResolverInterface
 
     protected function isUpdateEvent()
     {
-        return $this->getEventShortName() === 'updated';
+        return 'updated' === $this->getEventShortName();
     }
-
 
     /**
      * @param string $typeName
+     *
      * @return string
      */
     protected function getEventType($typeName)
     {
-        return $typeName . " " . $this->getEventShortName();
+        return $typeName.' '.$this->getEventShortName();
     }
 
     /**
      * @param string $shortName
+     *
      * @return string
      */
     protected function getDescription($shortName)
@@ -168,7 +167,9 @@ class DoctrineObjectEventResolver implements EventResolverInterface
 
     /**
      * @param $object
+     *
      * @return \ReflectionClass
+     *
      * @throws \ReflectionException
      */
     protected function getReflectionClassFromObject($object)

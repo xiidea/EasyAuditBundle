@@ -11,7 +11,6 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Fixtures\ORM;
 
-
 use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
 
 class AuditLogEntity extends BaseAuditLog
@@ -24,7 +23,7 @@ class AuditLogEntity extends BaseAuditLog
     protected $id;
 
     /**
-     * Type Of Event(Internal Type ID)
+     * Type Of Event(Internal Type ID).
      *
      * @var string
      * @ORM\Column(name="type_id", type="string", length=200, nullable=false)
@@ -32,7 +31,7 @@ class AuditLogEntity extends BaseAuditLog
     protected $typeId;
 
     /**
-     * Type Of Event
+     * Type Of Event.
      *
      * @var string
      * @ORM\Column(name="type", type="string", length=200, nullable=true)
@@ -46,7 +45,8 @@ class AuditLogEntity extends BaseAuditLog
     protected $description;
 
     /**
-     * Time Of Event
+     * Time Of Event.
+     *
      * @var \DateTime
      * @ORM\Column(name="event_time", type="datetime")
      */
@@ -79,4 +79,4 @@ class AuditLogEntity extends BaseAuditLog
     {
         $this->id = $id;
     }
-} 
+}

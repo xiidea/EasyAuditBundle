@@ -29,9 +29,9 @@ class MonologLogger implements LoggerInterface
         $this->logger = $logger;
     }
 
-    public function log(AuditLog $event = NULL)
+    public function log(AuditLog $event = null)
     {
-        if ($event === NULL) {
+        if (null === $event) {
             return;
         }
 

@@ -15,7 +15,8 @@ use Xiidea\EasyAuditBundle\Common\UserAwareComponent;
 
 class DummyUserAwareComponent extends UserAwareComponent
 {
-    public function getImpersonatingUserForTest() {
+    public function getImpersonatingUserForTest()
+    {
         return $this->getImpersonatingUser();
     }
 }

@@ -46,7 +46,7 @@ class UserEventResolver extends UserAwareComponent implements EventResolverInter
     {
         $this->default = array(
             'type' => $eventName,
-            'description' => $eventName
+            'description' => $eventName,
         );
 
         if (!isset($this->commands[$eventName])) {
@@ -57,8 +57,9 @@ class UserEventResolver extends UserAwareComponent implements EventResolverInter
     }
 
     /**
-     * @param Event $event
+     * @param Event           $event
      * @param ResolverCommand $command
+     *
      * @return array
      */
     protected function getEventLogDetails(Event $event, ResolverCommand $command)

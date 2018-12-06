@@ -52,9 +52,11 @@ class EventResolverFactory extends UserAwareComponent
     }
 
     /**
-     * @param Event $event
+     * @param Event  $event
      * @param string $eventName
+     *
      * @return null|BaseAuditLog
+     *
      * @throws UnrecognizedEventInfoException
      * @throws \Exception
      */
@@ -62,7 +64,7 @@ class EventResolverFactory extends UserAwareComponent
     {
         $eventLog = $this->getEventLogObject($this->getEventLogInfo($event, $eventName));
 
-        if ($eventLog === null) {
+        if (null === $eventLog) {
             return null;
         }
 
@@ -78,6 +80,7 @@ class EventResolverFactory extends UserAwareComponent
      * @param $eventInfo
      *
      * @return null|BaseAuditLog
+     *
      * @throws UnrecognizedEventInfoException
      * @throws \Exception
      */
@@ -101,11 +104,9 @@ class EventResolverFactory extends UserAwareComponent
      */
     protected function getResolver($eventName)
     {
-
         if ($this->isEntityEvent($eventName)) {
             return $this->entityEventResolver;
         }
-
 
         if (isset($this->resolverEventMap[$eventName]) && isset($this->customResolvers[$this->resolverEventMap[$eventName]])) {
             return $this->customResolvers[$this->resolverEventMap[$eventName]];
@@ -116,6 +117,7 @@ class EventResolverFactory extends UserAwareComponent
 
     /**
      * @param string $eventName
+     *
      * @return bool
      */
     protected function isEntityEvent($eventName)
@@ -124,9 +126,9 @@ class EventResolverFactory extends UserAwareComponent
     }
 
     /**
-     * @param Event $event
+     * @param Event  $event
      * @param string $eventName
-     * @return null
+     *
      * @throws InvalidServiceException
      */
     protected function getEventLogInfo(Event $event, $eventName)
@@ -144,6 +146,7 @@ class EventResolverFactory extends UserAwareComponent
 
     /**
      * @param BaseAuditLog $entity
+     *
      * @throws \Exception
      */
     protected function setUser(BaseAuditLog $entity)
@@ -158,7 +161,6 @@ class EventResolverFactory extends UserAwareComponent
         $this->setImpersonatingUser($entity, $this->userProperty);
     }
 
-
     /**
      * @return string
      */
@@ -170,7 +172,7 @@ class EventResolverFactory extends UserAwareComponent
             return $request->getClientIp();
         }
 
-        return "";
+        return '';
     }
 
     /**
@@ -183,7 +185,7 @@ class EventResolverFactory extends UserAwareComponent
     {
         if (!$resolver instanceof EventResolverInterface) {
             $this->handleException(new InvalidServiceException(
-                'Resolver Service must implement' . EventResolverInterface::class
+                'Resolver Service must implement'.EventResolverInterface::class
             ));
 
             return;
@@ -201,7 +203,7 @@ class EventResolverFactory extends UserAwareComponent
     {
         if (!$resolver instanceof EventResolverInterface) {
             $this->commonResolver = $this->handleException(new InvalidServiceException(
-                'Resolver Service must implement' . EventResolverInterface::class
+                'Resolver Service must implement'.EventResolverInterface::class
             ));
 
             return;
@@ -210,11 +212,10 @@ class EventResolverFactory extends UserAwareComponent
         $this->commonResolver = $resolver;
     }
 
-
     /**
      * @param \Exception $e
+     *
      * @throws \Exception
-     * @return null
      */
     protected function handleException(\Exception $e)
     {
@@ -227,7 +228,9 @@ class EventResolverFactory extends UserAwareComponent
 
     /**
      * @param $eventInfo
+     *
      * @return null|BaseAuditLog
+     *
      * @throws \Exception
      */
     protected function createEventObjectFromArray($eventInfo)
@@ -249,6 +252,7 @@ class EventResolverFactory extends UserAwareComponent
     /**
      * @param $userProperty
      * @param $user
+     *
      * @return mixed
      */
     protected function getSettablePropertyValue($userProperty, $user)

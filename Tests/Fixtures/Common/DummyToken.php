@@ -17,20 +17,23 @@ class DummyToken implements TokenInterface
 {
     private $user;
 
-    public function __construct($user = "user") {
+    public function __construct($user = 'user')
+    {
         $this->user = $user;
     }
 
-    public function getUser() {
+    public function getUser()
+    {
         return $this->user;
     }
 
-    public function getRoles() {
-        if(!is_object($this->user)) {
+    public function getRoles()
+    {
+        if (!is_object($this->user)) {
             return $this->user;
         }
 
-        if(method_exists($this->user, 'getRoles')) {
+        if (method_exists($this->user, 'getRoles')) {
             return $this->user->getRoles();
         }
 
@@ -38,28 +41,33 @@ class DummyToken implements TokenInterface
     }
 
     /**
-     * String representation of object
-     * @link http://php.net/manual/en/serializable.serialize.php
+     * String representation of object.
+     *
+     * @see http://php.net/manual/en/serializable.serialize.php
+     *
      * @return string the string representation of the object or null
+     *
      * @since 5.1.0
      */
     public function serialize()
     {
-        // TODO: Implement serialize() method.
+        return;
     }
 
     /**
-     * Constructs the object
-     * @link http://php.net/manual/en/serializable.unserialize.php
+     * Constructs the object.
+     *
+     * @see http://php.net/manual/en/serializable.unserialize.php
+     *
      * @param string $serialized <p>
-     * The string representation of the object.
-     * </p>
-     * @return void
+     *                           The string representation of the object.
+     *                           </p>
+     *
      * @since 5.1.0
      */
     public function unserialize($serialized)
     {
-        // TODO: Implement unserialize() method.
+        return;
     }
 
     /**
@@ -71,7 +79,7 @@ class DummyToken implements TokenInterface
      */
     public function __toString()
     {
-        // TODO: Implement __toString() method.
+        return;
     }
 
     /**
@@ -81,7 +89,7 @@ class DummyToken implements TokenInterface
      */
     public function getCredentials()
     {
-        // TODO: Implement getCredentials() method.
+        return;
     }
 
     /**
@@ -91,7 +99,7 @@ class DummyToken implements TokenInterface
      */
     public function setUser($user)
     {
-        // TODO: Implement setUser() method.
+        return;
     }
 
     /**
@@ -101,11 +109,11 @@ class DummyToken implements TokenInterface
      */
     public function getUsername()
     {
-        if(!is_object($this->user)) {
+        if (!is_object($this->user)) {
             return $this->user;
         }
 
-        if(method_exists($this->user, 'getUsername')) {
+        if (method_exists($this->user, 'getUsername')) {
             return $this->user->getUsername();
         }
 
@@ -119,7 +127,7 @@ class DummyToken implements TokenInterface
      */
     public function isAuthenticated()
     {
-        // TODO: Implement isAuthenticated() method.
+        return;
     }
 
     /**
@@ -129,7 +137,7 @@ class DummyToken implements TokenInterface
      */
     public function setAuthenticated($isAuthenticated)
     {
-        // TODO: Implement setAuthenticated() method.
+        return;
     }
 
     /**
@@ -137,7 +145,7 @@ class DummyToken implements TokenInterface
      */
     public function eraseCredentials()
     {
-        // TODO: Implement eraseCredentials() method.
+        return;
     }
 
     /**
@@ -147,7 +155,7 @@ class DummyToken implements TokenInterface
      */
     public function getAttributes()
     {
-        // TODO: Implement getAttributes() method.
+        return;
     }
 
     /**
@@ -157,7 +165,7 @@ class DummyToken implements TokenInterface
      */
     public function setAttributes(array $attributes)
     {
-        // TODO: Implement setAttributes() method.
+        return;
     }
 
     /**
@@ -169,7 +177,7 @@ class DummyToken implements TokenInterface
      */
     public function hasAttribute($name)
     {
-        // TODO: Implement hasAttribute() method.
+        return;
     }
 
     /**
@@ -183,17 +191,17 @@ class DummyToken implements TokenInterface
      */
     public function getAttribute($name)
     {
-        // TODO: Implement getAttribute() method.
+        return;
     }
 
     /**
      * Sets an attribute.
      *
-     * @param string $name The attribute name
-     * @param mixed $value The attribute value
+     * @param string $name  The attribute name
+     * @param mixed  $value The attribute value
      */
     public function setAttribute($name, $value)
     {
-        // TODO: Implement setAttribute() method.
+        return;
     }
 }

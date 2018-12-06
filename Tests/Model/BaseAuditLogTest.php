@@ -11,14 +11,12 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Model;
 
-
 use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLogEntity;
 
 class BaseAuditLogTest extends TestCase
 {
-
     /**
      * @expectedException \Psr\Log\InvalidArgumentException
      */
@@ -26,7 +24,6 @@ class BaseAuditLogTest extends TestCase
     {
         $log = new AuditLog();
         $log->setLevel('invalid_level');
-
     }
 
     public function testSettingLevelCase()

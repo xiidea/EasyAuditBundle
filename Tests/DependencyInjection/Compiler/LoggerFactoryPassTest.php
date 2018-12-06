@@ -15,15 +15,15 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Reference;
 use Xiidea\EasyAuditBundle\DependencyInjection\Compiler\LoggerFactoryPass;
 
-class LoggerFactoryPassTest extends TestCase {
-
+class LoggerFactoryPassTest extends TestCase
+{
     public function testProcessWithoutLoggerFactoryDefinition()
     {
         $containerBuilder = $this->createMock('Symfony\Component\DependencyInjection\ContainerBuilder');
 
         $containerBuilder->expects($this->once())
             ->method('hasDefinition')
-            ->with($this->equalTo("xiidea.easy_audit.logger_factory"))
+            ->with($this->equalTo('xiidea.easy_audit.logger_factory'))
             ->will($this->returnValue(false));
         $containerBuilder->expects($this->never())
             ->method('findTaggedServiceIds');
@@ -59,7 +59,7 @@ class LoggerFactoryPassTest extends TestCase {
 
         $loggers = array(
             array('addLogger', array('id', new Reference('id'))),
-            array('addLogger', array('foo', new Reference('foo')))
+            array('addLogger', array('foo', new Reference('foo'))),
         );
 
         $definitionMock
@@ -97,7 +97,7 @@ class LoggerFactoryPassTest extends TestCase {
 
         $containerBuilderMock->expects($this->once())
             ->method('hasDefinition')
-            ->with($this->equalTo("xiidea.easy_audit.logger_factory"))
+            ->with($this->equalTo('xiidea.easy_audit.logger_factory'))
             ->will($this->returnValue(true));
 
         $containerBuilderMock->expects($this->once())

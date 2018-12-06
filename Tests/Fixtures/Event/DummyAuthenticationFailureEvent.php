@@ -11,21 +11,14 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Fixtures\Event;
 
-
 use Symfony\Component\Security\Core\Event\AuthenticationFailureEvent;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\DummyToken;
 
 class DummyAuthenticationFailureEvent extends AuthenticationFailureEvent
 {
-    private $authenticationToken;
-
-    public function __construct($user = "user")
+    public function __construct($user = 'user')
     {
-        $this->authenticationToken = new DummyToken($user);
-    }
-
-    public function getAuthenticationToken()
-    {
-        return $this->authenticationToken;
+        parent::__construct(new DummyToken($user), new AuthenticationException());
     }
 }

@@ -28,7 +28,7 @@ class MonologLoggerTest extends TestCase
     {
         $this->symfonyLogger = $this->createMock(LoggerInterface::class);
 
-        $this->logger =  new MonologLogger($this->symfonyLogger);
+        $this->logger = new MonologLogger($this->symfonyLogger);
     }
 
     public function testIsAnInstanceOfLoggerInterface()
@@ -42,17 +42,17 @@ class MonologLoggerTest extends TestCase
 
         $this->symfonyLogger
             ->expects($this->at(0))
-            ->method("log")
+            ->method('log')
             ->with(
                 $this->equalTo('info'),
                 $log->getDescription(),
-                array (
-                    'typeId' => NULL,
-                    'type' => NULL,
-                    'eventTime' => NULL,
-                    'user' => NULL,
-                    'ip' => NULL,
-                    'impersonatingUser' => NULL,
+                array(
+                    'typeId' => null,
+                    'type' => null,
+                    'eventTime' => null,
+                    'user' => null,
+                    'ip' => null,
+                    'impersonatingUser' => null,
                 )
             );
         $this->logger->log($log);
@@ -64,6 +64,6 @@ class MonologLoggerTest extends TestCase
             ->expects($this->never())
             ->method('log');
 
-        $this->logger->log(NULL);
+        $this->logger->log(null);
     }
 }

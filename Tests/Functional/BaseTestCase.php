@@ -11,7 +11,6 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Functional;
 
-
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class BaseTestCase extends WebTestCase
@@ -19,11 +18,11 @@ class BaseTestCase extends WebTestCase
     /** @var null|\Symfony\Bundle\FrameworkBundle\Client */
     protected $client = null;
 
-    static protected function createKernel(array $options = array())
+    protected static function createKernel(array $options = array())
     {
         return new TestKernel(
             isset($options['config']) ? $options['config'] : 'config',
-            isset($options['debug']) ? (boolean)$options['debug'] : true
+            isset($options['debug']) ? (bool) $options['debug'] : true
         );
     }
 

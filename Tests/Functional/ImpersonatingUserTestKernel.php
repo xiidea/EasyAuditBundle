@@ -31,7 +31,7 @@ class ImpersonatingUserTestKernel extends Kernel
 
         $fs = new Filesystem();
         if (!$fs->isAbsolutePath($config)) {
-            $config = __DIR__ . '/config/' . $config . ".yml";
+            $config = __DIR__.'/config/'.$config.'.yml';
         }
 
         if (!file_exists($config)) {
@@ -49,7 +49,7 @@ class ImpersonatingUserTestKernel extends Kernel
             new SecurityBundle(),
             new FormLoginBundle(),
             new XiideaEasyAuditBundle(),
-            new XiideaTestBundle()
+            new XiideaTestBundle(),
         );
     }
 

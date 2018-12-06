@@ -19,7 +19,6 @@ class LoggerFactoryPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-
         if (false === $container->hasDefinition('xiidea.easy_audit.logger_factory')) {
             return;
         }

@@ -15,8 +15,8 @@ use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\Annotation\ORMSubscribedEvents;
 use Xiidea\EasyAuditBundle\Annotation\SubscribeDoctrineEvents;
 
-class SubscribeDoctrineEventsTest extends TestCase {
-
+class SubscribeDoctrineEventsTest extends TestCase
+{
     public function testConstructWithoutData()
     {
         $annotation = new SubscribeDoctrineEvents(array());
@@ -28,8 +28,8 @@ class SubscribeDoctrineEventsTest extends TestCase {
     public function testConstructWithInvalidData()
     {
         $data = array(
-            'unknown'   => 'foo',
-            'array'     => array('bar' => 'bar'),
+            'unknown' => 'foo',
+            'array' => array('bar' => 'bar'),
         );
 
         $annotation = new SubscribeDoctrineEvents($data);
@@ -40,7 +40,7 @@ class SubscribeDoctrineEventsTest extends TestCase {
 
     public function testConstructWithValue()
     {
-        $data = array("value" => "updated,created");
+        $data = array('value' => 'updated,created');
 
         $annotation = new SubscribeDoctrineEvents($data);
 
@@ -52,7 +52,7 @@ class SubscribeDoctrineEventsTest extends TestCase {
 
     public function testConstructWithEvent()
     {
-        $data = array("events" => "updated,created");
+        $data = array('events' => 'updated,created');
 
         $annotation = new SubscribeDoctrineEvents($data);
 
@@ -70,4 +70,3 @@ class SubscribeDoctrineEventsTest extends TestCase {
         $this->assertEmpty($annotation->events);
     }
 }
- 

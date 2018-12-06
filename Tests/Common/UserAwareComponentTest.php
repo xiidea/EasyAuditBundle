@@ -20,27 +20,21 @@ use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
 
 class UserAwareComponentTest extends TestCase
 {
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $tokenStorage;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
-    private $requestStack;
-
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $authChecker;
 
-
-    /** @var  DummyUserAwareComponent */
+    /** @var DummyUserAwareComponent */
     private $userAwareComponent;
 
     public function setUp()
     {
         $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
-//        $this->requestStack = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
         $this->authChecker = $this->createMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
         $this->userAwareComponent = new DummyUserAwareComponent();
         $this->userAwareComponent->setTokenStorage($this->tokenStorage);
-//        $this->userAwareComponent->setRequestStack($this->requestStack);
         $this->userAwareComponent->setAuthChecker($this->authChecker);
     }
 
@@ -68,15 +62,15 @@ class UserAwareComponentTest extends TestCase
     {
         $this->tokenStorage->expects($this->any())
             ->method('getToken')
-            ->willReturn(new DummyToken(""));
+            ->willReturn(new DummyToken(''));
 
         $user = $this->userAwareComponent->getUser();
 
         $this->assertNull($user);
     }
 
-    public function testShouldReturnNullImpersonatingUserWhenSecurityTokenNotExists() {
-
+    public function testShouldReturnNullImpersonatingUserWhenSecurityTokenNotExists()
+    {
         $this->tokenStorage->expects($this->any())
             ->method('getToken')
             ->willReturn(null);
@@ -86,7 +80,8 @@ class UserAwareComponentTest extends TestCase
         $this->assertNull($user);
     }
 
-    public function testShouldReturnNullImpersonatingUserIfUserDoNotHavePreviousAdminRole() {
+    public function testShouldReturnNullImpersonatingUserIfUserDoNotHavePreviousAdminRole()
+    {
         $this->mockSecurityAuthChecker();
 
         $this->tokenStorage->expects($this->any())
@@ -98,7 +93,8 @@ class UserAwareComponentTest extends TestCase
         $this->assertNull($user);
     }
 
-    public function testShouldReturnImpersonatingUserIfUserHavePreviousAdminRole() {
+    public function testShouldReturnImpersonatingUserIfUserHavePreviousAdminRole()
+    {
         $this->mockSecurityAuthChecker(true);
 
         $userToken = new DummyToken(new UserEntity(1, 'admin'));
@@ -114,7 +110,8 @@ class UserAwareComponentTest extends TestCase
         $this->assertEquals(1, $user->getId());
     }
 
-    private function mockSecurityAuthChecker($isGranted = false) {
+    private function mockSecurityAuthChecker($isGranted = false)
+    {
         $this->authChecker->expects($this->once())
             ->method('isGranted')
             ->with('ROLE_PREVIOUS_ADMIN')

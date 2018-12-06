@@ -18,8 +18,8 @@ use Xiidea\EasyAuditBundle\Logger\Logger;
 use Xiidea\EasyAuditBundle\Model\BaseAuditLog;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog;
 
-class LoggerTest extends TestCase {
-
+class LoggerTest extends TestCase
+{
     /** @var Logger */
     protected $logger;
 
@@ -42,7 +42,7 @@ class LoggerTest extends TestCase {
             ->method('getManager')
             ->will($this->returnValue($this->entityManager));
 
-        $this->logger =  new Logger($registry);
+        $this->logger = new Logger($registry);
     }
 
     public function testIsAnInstanceOfLoggerInterface()
@@ -52,48 +52,42 @@ class LoggerTest extends TestCase {
 
     public function testLogCallsPersistWithDoctrineForAuditLogObject()
     {
-
         $this->entityManager
             ->expects($this->at(0))
-            ->method("persist")
+            ->method('persist')
             ->with($this->isInstanceOf(BaseAuditLog::class));
         $this->entityManager
             ->expects($this->at(1))
-            ->method("flush")
+            ->method('flush')
             ->with($this->isInstanceOf(BaseAuditLog::class));
 
-
         $this->logger->log(new AuditLog());
-
     }
 
     public function testLogCallsDeferred()
     {
-
         $this->entityManager
             ->expects($this->never())
-            ->method("persist");
+            ->method('persist');
         $this->entityManager
             ->expects($this->never())
-            ->method("flush");
-
+            ->method('flush');
 
         $event = new AuditLog();
         $event->setTypeId(DoctrineEvents::ENTITY_DELETED);
         $this->logger->log($event);
         $this->assertAttributeEquals([$event], 'entityDeleteLogs', $this->logger);
-
     }
 
     public function testSavePendingLogsForDelete()
     {
         $this->entityManager
             ->expects($this->at(0))
-            ->method("persist")
+            ->method('persist')
             ->with($this->isInstanceOf(BaseAuditLog::class));
         $this->entityManager
             ->expects($this->at(1))
-            ->method("flush")
+            ->method('flush')
             ->with($this->isInstanceOf(BaseAuditLog::class));
 
         $event = new AuditLog();
@@ -102,19 +96,17 @@ class LoggerTest extends TestCase {
         $this->assertAttributeEquals([$event], 'entityDeleteLogs', $this->logger);
         $this->logger->savePendingLogs();
         $this->assertAttributeEquals([], 'entityDeleteLogs', $this->logger);
-
     }
 
     public function testLogDoesNotCallToPersist()
     {
         $this->entityManager
             ->expects($this->never())
-            ->method("persist");
+            ->method('persist');
         $this->entityManager
             ->expects($this->never())
-            ->method("flush");
+            ->method('flush');
 
         $this->logger->log(null);
     }
 }
- 

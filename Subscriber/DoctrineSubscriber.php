@@ -47,7 +47,7 @@ class DoctrineSubscriber implements EventSubscriber
             'postPersist',
             'postUpdate',
             'preRemove',
-            'postRemove'
+            'postRemove',
         );
     }
 
@@ -89,7 +89,7 @@ class DoctrineSubscriber implements EventSubscriber
 
     private function getToBeDeletedId($entity)
     {
-        if($this->isScheduledForDelete($entity)) {
+        if ($this->isScheduledForDelete($entity)) {
             return $this->toBeDeleted[ClassUtils::getClass($entity)][spl_object_hash($entity)];
         }
 
@@ -97,7 +97,7 @@ class DoctrineSubscriber implements EventSubscriber
     }
 
     /**
-     * @param string $eventName
+     * @param string             $eventName
      * @param LifecycleEventArgs $args
      */
     private function handleEvent($eventName, LifecycleEventArgs $args)
@@ -112,6 +112,7 @@ class DoctrineSubscriber implements EventSubscriber
     /**
      * @param $entity
      * @param string $eventName
+     *
      * @return bool
      */
     private function isConfiguredToTrack($entity, $eventName = '')
@@ -124,11 +125,11 @@ class DoctrineSubscriber implements EventSubscriber
         }
 
         if (!isset($this->entities[$class])) {
-            return FALSE;
+            return false;
         }
 
         if ($this->shouldTrackAllEventType($class)) {
-            return TRUE;
+            return true;
         }
 
         return $this->shouldTrackEventType($eventType, $class);
@@ -137,6 +138,7 @@ class DoctrineSubscriber implements EventSubscriber
     /**
      * @param $entity
      * @param string $eventType
+     *
      * @return bool|null
      */
     protected function isAnnotatedEvent($entity, $eventType)
@@ -152,6 +154,7 @@ class DoctrineSubscriber implements EventSubscriber
 
     /**
      * @param $entity
+     *
      * @return null|object
      */
     protected function hasAnnotation($entity)
@@ -161,7 +164,6 @@ class DoctrineSubscriber implements EventSubscriber
         return $this
             ->getAnnotationReader()
             ->getClassAnnotation($reflection, SubscribeDoctrineEvents::class);
-
     }
 
     /**
@@ -174,6 +176,7 @@ class DoctrineSubscriber implements EventSubscriber
 
     /**
      * @param $object
+     *
      * @return \ReflectionClass
      */
     protected function getReflectionClassFromObject($object)
@@ -186,22 +189,23 @@ class DoctrineSubscriber implements EventSubscriber
     /**
      * @param string $eventType
      * @param string $class
+     *
      * @return bool
      */
     private function shouldTrackEventType($eventType, $class)
     {
-        return (is_array($this->entities[$class]) && in_array($eventType, $this->entities[$class]));
+        return is_array($this->entities[$class]) && in_array($eventType, $this->entities[$class]);
     }
 
     /**
      * @param string $class
+     *
      * @return bool
      */
     private function shouldTrackAllEventType($class)
     {
         return empty($this->entities[$class]);
     }
-
 
     /**
      * @param \Doctrine\Common\Annotations\Reader $annotationReader
@@ -214,6 +218,7 @@ class DoctrineSubscriber implements EventSubscriber
     /**
      * @param LifecycleEventArgs $args
      * @param $className
+     *
      * @return array
      */
     protected function getIdentity(LifecycleEventArgs $args, $className)
@@ -223,7 +228,8 @@ class DoctrineSubscriber implements EventSubscriber
 
     /**
      * @param $entity
-     * @return boolean
+     *
+     * @return bool
      */
     private function isScheduledForDelete($entity)
     {

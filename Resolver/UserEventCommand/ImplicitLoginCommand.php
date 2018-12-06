@@ -17,6 +17,7 @@ class ImplicitLoginCommand extends UserLoginCommand
 {
     /**
      * @param UserEvent $event
+     *
      * @return mixed
      */
     public function resolve($event)
@@ -30,6 +31,6 @@ class ImplicitLoginCommand extends UserLoginCommand
 
     public function getTemplate()
     {
-        return parent::getTemplate()." using remember me service";
+        return parent::getTemplate().' using remember me service';
     }
 }

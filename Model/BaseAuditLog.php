@@ -44,12 +44,12 @@ class BaseAuditLog
     protected $impersonatingUser;
 
     /**
-     * @var String
+     * @var string
      */
     protected $ip;
 
     /**
-     * @var String
+     * @var string
      */
     protected $level = LogLevel::INFO;
 
@@ -132,7 +132,7 @@ class BaseAuditLog
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getIp()
     {
@@ -140,7 +140,7 @@ class BaseAuditLog
     }
 
     /**
-     * @param String $ip
+     * @param string $ip
      *
      * @return $this
      */
@@ -161,6 +161,7 @@ class BaseAuditLog
 
     /**
      * @param string $level
+     *
      * @return $this
      */
     final public function setLevel($level)
@@ -176,7 +177,7 @@ class BaseAuditLog
 
     private function getAllowedLevel()
     {
-        $oClass = new \ReflectionClass ('Psr\Log\LogLevel');
+        $oClass = new \ReflectionClass('Psr\Log\LogLevel');
 
         return $oClass->getConstants();
     }

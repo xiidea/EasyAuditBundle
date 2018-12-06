@@ -11,6 +11,6 @@
 
 namespace Xiidea\EasyAuditBundle\Exception;
 
-class InvalidServiceException extends \Exception {
-
+class InvalidServiceException extends \Exception
+{
 }

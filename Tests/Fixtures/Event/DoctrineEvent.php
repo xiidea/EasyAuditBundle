@@ -11,10 +11,6 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Fixtures\Event;
 
-
-class DoctrineEvent extends Basic {
-
-    public function __construct($type = "created") {
-        parent::__construct('easy_audit.doctrine.object.' . $type);
-    }
+class DoctrineEvent extends Basic
+{
 }

@@ -11,7 +11,6 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Listener;
 
-
 use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\Listener\LogEventsListener;
 use Xiidea\EasyAuditBundle\Logger\LoggerFactory;
@@ -20,7 +19,6 @@ use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
 
 class LogEventsListenerTest extends TestCase
 {
-
     public function testCheckPropertySetViaConstructor()
     {
         $loggerFactory = new LoggerFactory();
@@ -53,4 +51,3 @@ class LogEventsListenerTest extends TestCase
         $logEventsListener->resolveEventHandler($event, $eventName);
     }
 }
- 

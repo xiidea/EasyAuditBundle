@@ -15,18 +15,20 @@ abstract class ResolverCommand
 {
     /**
      * @param string $username
+     *
      * @return array
      */
     protected function getEventDetailsArray($username)
     {
         return array(
             'type' => $this->getType(),
-            'description' => sprintf($this->getTemplate(), $username)
+            'description' => sprintf($this->getTemplate(), $username),
         );
     }
 
     /**
      * @param \Symfony\Component\EventDispatcher\Event $event
+     *
      * @return mixed
      */
     abstract public function resolve($event);

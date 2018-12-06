@@ -12,10 +12,10 @@ namespace Xiidea\EasyAuditBundle\Tests\Functional\Bundle\TestBundle\Entity;
 
 use Xiidea\EasyAuditBundle\Model\BaseAuditLog;
 
-
 class AuditLog extends BaseAuditLog
 {
-    public function __toString() {
-        return md5($this->getTypeId() . $this->getType() . $this->getIp());
+    public function __toString()
+    {
+        return md5($this->getTypeId().$this->getType().$this->getIp());
     }
 }
