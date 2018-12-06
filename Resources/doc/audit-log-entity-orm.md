@@ -1,5 +1,5 @@
-Step 3:  Create audit_log entity mapping
-======================================================
+# Step 3:  Create audit_log entity mapping
+
 BaseAuditLog class does not provide ODM/ODM Mapping,
 you must create one. This can be done by extending the BaseAuditLog model 
 provided by the bundle and creating the appropriate mappings.
@@ -7,8 +7,8 @@ provided by the bundle and creating the appropriate mappings.
 For example:
 
 ### Doctrine ORM Entity Class
- 
-``` php
+
+```php
 <?php
 // src/Entity/AuditLog.php
 
@@ -82,17 +82,16 @@ class AuditLog extends BaseAuditLog
 
 ##### Configure your application
 
-``` yaml
+```yaml
 # config/packages/xiidea_easy_audit.yaml
 
 xiidea_easy_audit:
     audit_log_class : App\Entity\AuditLog
-
 ```
 
 ### Or, Doctrine ODM Document Class
 
-``` php
+```php
 <?php
 // src/Document/AuditLog.php
 
@@ -163,10 +162,9 @@ class AuditLog extends BaseAuditLog
 
 #### Configure your application
 
-``` yaml
+```yaml
 # config/packages/xiidea_easy_audit.yaml
 
 xiidea_easy_audit:
     audit_log_class : App\Document\AuditLog
-
 ```
