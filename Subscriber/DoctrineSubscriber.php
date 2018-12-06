@@ -14,7 +14,6 @@ namespace Xiidea\EasyAuditBundle\Subscriber;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\Common\Util\ClassUtils;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Xiidea\EasyAuditBundle\Annotation\SubscribeDoctrineEvents;
 use Xiidea\EasyAuditBundle\Events\DoctrineObjectEvent;
@@ -22,8 +21,6 @@ use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 
 class DoctrineSubscriber implements EventSubscriber
 {
-    use ContainerAwareTrait;
-
     /** @var \Doctrine\Common\Annotations\Reader */
     private $annotationReader;
 
@@ -126,7 +123,7 @@ class DoctrineSubscriber implements EventSubscriber
             return $track;
         }
 
-        if (!$this->isConfigured($class)) {
+        if (!isset($this->entities[$class])) {
             return FALSE;
         }
 
@@ -205,14 +202,6 @@ class DoctrineSubscriber implements EventSubscriber
         return empty($this->entities[$class]);
     }
 
-    /**
-     * @param string $class
-     * @return bool
-     */
-    protected function isConfigured($class)
-    {
-        return isset($this->entities[$class]);
-    }
 
     /**
      * @param \Doctrine\Common\Annotations\Reader $annotationReader
