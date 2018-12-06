@@ -11,13 +11,13 @@
 
 namespace Xiidea\EasyAuditBundle\Logger;
 
-use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
+use Xiidea\EasyAuditBundle\Model\BaseAuditLog;
 use Xiidea\EasyAuditBundle\Exception\InvalidServiceException;
 
 class LoggerFactory
 {
     /** @var LoggerInterface[] */
-    static private $loggers = array();
+    private static $loggers = array();
 
     private $loggersChannel;
 
@@ -29,7 +29,7 @@ class LoggerFactory
     }
 
     /**
-     * @param null|\Xiidea\EasyAuditBundle\Entity\BaseAuditLog $eventInfo
+     * @param null|\Xiidea\EasyAuditBundle\Model\BaseAuditLog $eventInfo
      */
     public function executeLoggers($eventInfo)
     {
@@ -45,8 +45,9 @@ class LoggerFactory
     }
 
     /**
-     * @param string $loggerName
+     * @param string          $loggerName
      * @param LoggerInterface $logger
+     *
      * @throws InvalidServiceException
      */
     public function addLogger($loggerName, $logger)
@@ -54,13 +55,14 @@ class LoggerFactory
         if ($logger instanceof LoggerInterface) {
             self::$loggers[$loggerName] = $logger;
         } elseif ($this->debug) {
-            throw new InvalidServiceException('Logger Service must implement' . __NAMESPACE__ . "LoggerInterface");
+            throw new InvalidServiceException('Logger Service must implement'.__NAMESPACE__.'LoggerInterface');
         }
     }
 
     /**
      * @param string $id
      * @param string $level
+     *
      * @return bool
      */
     private function isChannelRegisterWithLogger($id, $level)
@@ -83,16 +85,18 @@ class LoggerFactory
     /**
      * @param string $type
      * @param string $id
+     *
      * @return bool
      */
     private function isChannelTypeOf($type, $id)
     {
-        return $this->loggersChannel[$id]['type'] == $type;
+        return $this->loggersChannel[$id]['type'] === $type;
     }
 
     /**
      * @param string $level
      * @param string $id
+     *
      * @return bool
      */
     private function levelExistsInList($level, $id)
@@ -104,6 +108,7 @@ class LoggerFactory
      * @param BaseAuditLog $eventInfo
      * @param $logger
      * @param $id
+     *
      * @return bool
      */
     protected function isValidLoggerForThisEvent(BaseAuditLog $eventInfo, $logger, $id)

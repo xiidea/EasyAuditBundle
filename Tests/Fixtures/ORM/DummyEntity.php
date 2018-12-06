@@ -11,8 +11,6 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Fixtures\ORM;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * @ORM\Entity
  */
@@ -38,6 +36,4 @@ class DummyEntity
     {
         $this->random = $random;
     }
-
-
 }

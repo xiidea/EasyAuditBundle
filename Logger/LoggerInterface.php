@@ -11,13 +11,12 @@
 
 namespace Xiidea\EasyAuditBundle\Logger;
 
-use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
+use Xiidea\EasyAuditBundle\Model\BaseAuditLog;
 
 interface LoggerInterface
 {
     /**
      * @param BaseAuditLog $event
-     * @return void
      */
     public function log(BaseAuditLog $event);
 }

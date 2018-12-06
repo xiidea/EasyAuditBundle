@@ -9,9 +9,8 @@
  * with this source code in the file LICENSE.
  */
 
-date_default_timezone_set("Asia/Dhaka");
+date_default_timezone_set('Asia/Dhaka');
 
-$vendor = realpath(__DIR__ . '/../vendor');
+$vendor = realpath(__DIR__.'/../vendor');
 
-$loader = require($vendor.'/autoload.php');
-
+$loader = require $vendor.'/autoload.php';

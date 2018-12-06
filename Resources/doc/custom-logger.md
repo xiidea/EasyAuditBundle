@@ -1,17 +1,17 @@
-Custom Logger
-========================
+# Custom Logger
 
 You could easily create your own logger suitable to your needs. The Change Required to use your Logger is very simple. Just follow the steps:
 
 ### 1. Write Your LoggerClass
 
-``` php
+```php
 <?php
-src/MyProject/MyBundle/Resolver/CustomLogger.php
+//src/Logger/CustomLogger.php
 
-namespace  MyProject\MyBundle\Logger;
+namespace  App\Logger;
 
-use Xiidea\EasyAuditBundle\Logger\LoggerInterface
+use Xiidea\EasyAuditBundle\Logger\LoggerInterface;
+use Xiidea\EasyAuditBundle\Model\BaseAuditLog as AuditLog;
 
 class CustomLogger implements LoggerInterface
 {
@@ -21,15 +21,13 @@ class CustomLogger implements LoggerInterface
         //...
     }
 }
-
 ```
 
 ### 2. Define your Logger as service
 
-``` yaml
+```yaml
 services:
-     class: MyProject\MyBundle\Logger\CustomLogger
+     class: App\Logger\CustomLogger
      tags:
           - { name: easy_audit.logger }
-
 ```

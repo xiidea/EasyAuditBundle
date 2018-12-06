@@ -11,8 +11,8 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Fixtures\Event;
 
-
 use FOS\UserBundle\Event\UserEvent;
+use Symfony\Component\HttpFoundation\Request;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
 
 class DummyUserEvent extends UserEvent
@@ -21,6 +21,7 @@ class DummyUserEvent extends UserEvent
 
     public function __construct(UserEntity $user)
     {
+        parent::__construct($user, Request::create(''));
         $this->_user = $user;
     }
 
@@ -31,5 +32,4 @@ class DummyUserEvent extends UserEvent
     {
         return $this->_user;
     }
-
 }

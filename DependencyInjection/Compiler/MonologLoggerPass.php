@@ -25,6 +25,6 @@ class MonologLoggerPass implements CompilerPassInterface
 
         $definition = $container->getDefinition('xiidea.easy_audit.mono_logger.service');
 
-        $definition->setPublic(TRUE);
+        $definition->setPublic(true);
     }
 }

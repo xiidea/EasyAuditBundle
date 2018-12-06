@@ -18,11 +18,10 @@ use Symfony\Component\Console\ConsoleEvents;
 
 class DoctrineDeleteEventLoggerTest extends TestCase
 {
-
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $logger;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $responseevent;
 
     public function setUp()
@@ -46,7 +45,7 @@ class DoctrineDeleteEventLoggerTest extends TestCase
         $subscriber = new DoctrineDeleteEventLogger($this->logger);
         $this->assertEquals([
             ConsoleEvents::TERMINATE => 'savePendingLogs',
-            KernelEvents::TERMINATE => 'savePendingLogs'
+            KernelEvents::TERMINATE => 'savePendingLogs',
         ], $subscriber->getSubscribedEvents());
     }
 
@@ -57,6 +56,5 @@ class DoctrineDeleteEventLoggerTest extends TestCase
             ->method('savePendingLogs');
         $subscriber = new DoctrineDeleteEventLogger($this->logger);
         $subscriber->savePendingLogs($this->responseevent);
-
     }
 }

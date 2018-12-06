@@ -2,9 +2,10 @@
 services:
   xiidea.easy_audit.doctrine_subscriber:
           class: Xiidea\EasyAuditBundle\Subscriber\DoctrineSubscriber
-          arguments: ['%xiidea.easy_audit.doctrine_entities%']
+          arguments: ['%xiidea.easy_audit.doctrine_objects%']
           calls:
               - [ setDispatcher,[ '@event_dispatcher' ] ]
               - [ setAnnotationReader,[ '@annotation_reader' ] ]
           tags:
               - { name: doctrine.event_subscriber }
+              - { name: doctrine_mongodb.odm.event_subscriber }

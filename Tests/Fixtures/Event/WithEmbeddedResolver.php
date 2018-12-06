@@ -20,7 +20,7 @@ class WithEmbeddedResolver extends Basic implements EmbeddedEventResolverInterfa
         return array(
             'description' => 'It is an embedded event',
             'type' => $eventName,
-            'level' => 'emergency'
+            'level' => 'emergency',
         );
     }
 }

@@ -14,8 +14,8 @@ namespace Xiidea\EasyAuditBundle\Tests;
 use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\XiideaEasyAuditBundle;
 
-class XiideaEasyAuditBundleTest extends TestCase {
-
+class XiideaEasyAuditBundleTest extends TestCase
+{
     public function testBuildInitializeBundleAddCompilerPass()
     {
         $containerBuilder = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerBuilder')
@@ -25,19 +25,18 @@ class XiideaEasyAuditBundleTest extends TestCase {
         //Expect compiler pass to be added
         $containerBuilder
             ->expects($this->at(0))
-            ->method("addCompilerPass")
+            ->method('addCompilerPass')
             ->with($this->isInstanceOf('Xiidea\EasyAuditBundle\DependencyInjection\Compiler\MonologLoggerPass'));
         $containerBuilder
             ->expects($this->at(1))
-            ->method("addCompilerPass")
+            ->method('addCompilerPass')
             ->with($this->isInstanceOf('Xiidea\EasyAuditBundle\DependencyInjection\Compiler\LoggerFactoryPass'));
         $containerBuilder
             ->expects($this->at(2))
-            ->method("addCompilerPass")
+            ->method('addCompilerPass')
             ->with($this->isInstanceOf('Xiidea\EasyAuditBundle\DependencyInjection\Compiler\SubscriberPass'));
 
         $bundle = new XiideaEasyAuditBundle();
         $bundle->build($containerBuilder);
     }
 }
- 

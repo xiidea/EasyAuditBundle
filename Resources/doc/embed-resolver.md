@@ -1,12 +1,12 @@
-Embed Resolver with event
-==========================
+# Embed Resolver with event
 
 Sometime it is easy if you could embed your resolver with your event itself. Easy audit also support such implementation. What you need to do just write your event class implementing `Xiidea\EasyAuditBundle\Resolver\EmbeddedEventResolverInterface`
 
-``` php
+```php
 <?php
 
 use Xiidea\EasyAuditBundle\Resolver\EmbeddedEventResolverInterface;
+use Symfony\Component\EventDispatcher\Event;
 
 class MyEvent extends Event implements EmbeddedEventResolverInterface
 {
@@ -23,7 +23,7 @@ class MyEvent extends Event implements EmbeddedEventResolverInterface
         return $this->data;
     }
 
-    public function getEventLogInfo($eventName, EventDispatcherInterface $dispatcher)
+    public function getEventLogInfo($eventName)
     {
         return array(
             'description'=>'Embeded Event description',
@@ -32,5 +32,4 @@ class MyEvent extends Event implements EmbeddedEventResolverInterface
     }
 
 }
-
 ```

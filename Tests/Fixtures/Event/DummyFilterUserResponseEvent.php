@@ -11,8 +11,9 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Fixtures\Event;
 
-
 use FOS\UserBundle\Event\FilterUserResponseEvent;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
 
 class DummyFilterUserResponseEvent extends FilterUserResponseEvent
@@ -21,6 +22,7 @@ class DummyFilterUserResponseEvent extends FilterUserResponseEvent
 
     public function __construct(UserEntity $user)
     {
+        parent::__construct($user, Request::create(''), Response::create());
         $this->_user = $user;
     }
 
@@ -31,5 +33,4 @@ class DummyFilterUserResponseEvent extends FilterUserResponseEvent
     {
         return $this->_user;
     }
-
 }

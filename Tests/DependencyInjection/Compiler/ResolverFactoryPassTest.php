@@ -14,18 +14,18 @@ namespace Xiidea\EasyAuditBundle\Tests\DependencyInjection\Compiler;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Definition;
 use Xiidea\EasyAuditBundle\DependencyInjection\Compiler\ResolverFactoryPass;
-use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
+use Xiidea\EasyAuditBundle\Model\BaseAuditLog;
 use Xiidea\EasyAuditBundle\Resolver\EventResolverFactory;
 
-class ResolverFactoryPassTest extends TestCase {
-
+class ResolverFactoryPassTest extends TestCase
+{
     public function testProcessWithoutResolverFactoryDefinition()
     {
         $containerBuilder = $this->createMock('Symfony\Component\DependencyInjection\ContainerBuilder');
 
         $containerBuilder->expects($this->once())
             ->method('hasDefinition')
-            ->with($this->equalTo("xiidea.easy_audit.event_resolver_factory"))
+            ->with($this->equalTo('xiidea.easy_audit.event_resolver_factory'))
             ->will($this->returnValue(false));
         $containerBuilder->expects($this->never())
             ->method('getDefinition');
@@ -44,17 +44,15 @@ class ResolverFactoryPassTest extends TestCase {
             ->with($this->equalTo('xiidea.easy_audit.event_resolver_factory'))
             ->will($this->returnValue($definitionObject));
 
-
         $getParameterCall = array(
             array('xiidea.easy_audit.custom_resolvers', array()),
             array('xiidea.easy_audit.resolver', 'default.resolver'),
-            array('xiidea.easy_audit.entity_event_resolver', null),
+            array('xiidea.easy_audit.doctrine_event_resolver', null),
         );
 
         $containerBuilderMock->expects($this->any())
             ->method('getParameter')
             ->will($this->returnValueMap($getParameterCall));
-
 
         $resolverFactoryPass = new ResolverFactoryPass();
         $resolverFactoryPass->process($containerBuilderMock);
@@ -75,17 +73,15 @@ class ResolverFactoryPassTest extends TestCase {
             ->with($this->equalTo('xiidea.easy_audit.event_resolver_factory'))
             ->will($this->returnValue($definitionObject));
 
-
         $getParameterCall = array(
             array('xiidea.easy_audit.custom_resolvers', array()),
             array('xiidea.easy_audit.resolver', 'default.resolver'),
-            array('xiidea.easy_audit.entity_event_resolver', 'entity.resolver'),
+            array('xiidea.easy_audit.doctrine_event_resolver', 'entity.resolver'),
         );
 
         $containerBuilderMock->expects($this->any())
             ->method('getParameter')
             ->will($this->returnValueMap($getParameterCall));
-
 
         $resolverFactoryPass = new ResolverFactoryPass();
         $resolverFactoryPass->process($containerBuilderMock);
@@ -106,7 +102,7 @@ class ResolverFactoryPassTest extends TestCase {
         $getParameterCall = array(
             array('xiidea.easy_audit.custom_resolvers', array('event1' => 'resolver1')),
             array('xiidea.easy_audit.resolver', 'default.resolver'),
-            array('xiidea.easy_audit.entity_event_resolver', null),
+            array('xiidea.easy_audit.doctrine_event_resolver', null),
         );
 
         $definitionObject = $this->getDefinitionObject();
@@ -121,11 +117,9 @@ class ResolverFactoryPassTest extends TestCase {
             ->with($this->equalTo('xiidea.easy_audit.event_resolver_factory'))
             ->will($this->returnValue($definitionObject));
 
-
         $containerBuilderMock->expects($this->any())
             ->method('getParameter')
             ->will($this->returnValueMap($getParameterCall));
-
 
         $resolverFactoryPass = new ResolverFactoryPass();
         $resolverFactoryPass->process($containerBuilderMock);
@@ -161,7 +155,7 @@ class ResolverFactoryPassTest extends TestCase {
 
         $containerBuilderMock->expects($this->any())
             ->method('hasDefinition')
-            ->with($this->equalTo("xiidea.easy_audit.event_resolver_factory"))
+            ->with($this->equalTo('xiidea.easy_audit.event_resolver_factory'))
             ->will($this->returnValue(true));
 
         return $containerBuilderMock;

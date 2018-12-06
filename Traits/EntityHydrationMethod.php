@@ -20,7 +20,7 @@ trait EntityHydrationMethod
         $accessor = PropertyAccess::createPropertyAccessor();
 
         foreach ($data as $property => $value) {
-            if($accessor->isWritable($this, $property)) {
+            if ($accessor->isWritable($this, $property)) {
                 $accessor->setValue($this, $property, $value);
             }
         }

@@ -11,16 +11,14 @@
 
 namespace Xiidea\EasyAuditBundle\Resolver\UserEventCommand;
 
-
 abstract class UserLoginCommand extends ResolverCommand
 {
-
     /**
      * @return string
      */
     public function getType()
     {
-        return "User Logged in";
+        return 'User Logged in';
     }
 
     /**

@@ -12,12 +12,11 @@
 namespace Xiidea\EasyAuditBundle\Tests\Functional\Bundle\TestBundle\Logger;
 
 use Symfony\Component\Filesystem\Filesystem;
-use Xiidea\EasyAuditBundle\Entity\BaseAuditLog as AuditLog;
+use Xiidea\EasyAuditBundle\Model\BaseAuditLog as AuditLog;
 use Xiidea\EasyAuditBundle\Logger\LoggerInterface;
 
 class FileLogger implements LoggerInterface
 {
-
     private $dir;
 
     public function __construct($dir)
@@ -27,23 +26,23 @@ class FileLogger implements LoggerInterface
 
     public function log(AuditLog $event = null)
     {
-        if(empty($event)) {
+        if (empty($event)) {
             return;
         }
 
-        $array = array (
+        $array = array(
             'typeId' => $event->getType(),
             'type' => $event->getTypeId(),
             'description' => $event->getDescription(),
             'user' => $event->getUser(),
             'impersonatingUser' => $event->getImpersonatingUser(),
-            'ip' => $event->getIp()
+            'ip' => $event->getIp(),
         );
 
         $fs = new Filesystem();
 
         $fs->mkdir($this->dir);
 
-        file_put_contents($this->dir . DIRECTORY_SEPARATOR . "audit.log", serialize($array));
+        file_put_contents($this->dir.DIRECTORY_SEPARATOR.'audit.log', serialize($array));
     }
 }

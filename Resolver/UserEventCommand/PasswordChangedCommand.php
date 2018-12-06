@@ -11,14 +11,13 @@
 
 namespace Xiidea\EasyAuditBundle\Resolver\UserEventCommand;
 
-
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 
 class PasswordChangedCommand extends ResolverCommand
 {
-
     /**
      * @param FilterUserResponseEvent $event
+     *
      * @return array
      */
     public function resolve($event)
@@ -30,13 +29,12 @@ class PasswordChangedCommand extends ResolverCommand
         return null;
     }
 
-
     /**
      * @return string
      */
     public function getType()
     {
-        return "Password Changed";
+        return 'Password Changed';
     }
 
     /**

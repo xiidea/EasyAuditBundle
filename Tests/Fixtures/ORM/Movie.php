@@ -11,8 +11,6 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Fixtures\ORM;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * @ORM\Entity
  */
@@ -30,7 +28,8 @@ class Movie
      */
     protected $name;
 
-    public function __construct($id = 1, $name = "car") {
+    public function __construct($id = 1, $name = 'car')
+    {
         $this->id = $id;
         $this->name = $name;
     }

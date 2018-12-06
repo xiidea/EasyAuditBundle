@@ -19,7 +19,6 @@ class SubscriberPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-
         if (false === $container->hasDefinition('xiidea.easy_audit.event_listener')) {
             return;
         }
@@ -29,21 +28,17 @@ class SubscriberPass implements CompilerPassInterface
 
     private function initializeSubscriberEvents(ContainerBuilder $container)
     {
-
         $eventsList = $container->getParameter('xiidea.easy_audit.events');
 
         $this->appendDoctrineEventsToList($container, $eventsList);
         $this->appendSubscribedEventsToList($container, $eventsList);
 
         $this->registerEventsToListener($eventsList, $container);
-
     }
 
     private function appendDoctrineEventsToList(ContainerBuilder $container, &$events = array())
     {
-        $doctrine_entities = $container->getParameter('xiidea.easy_audit.doctrine_entities');
-
-        if ($doctrine_entities === false) {
+        if (false === $container->getParameter('xiidea.easy_audit.doctrine_objects')) {
             return;
         }
 
@@ -54,7 +49,7 @@ class SubscriberPass implements CompilerPassInterface
 
     /**
      * @param ContainerBuilder $container
-     * @param array $events
+     * @param array            $events
      */
     private function appendSubscribedEventsToList(ContainerBuilder $container, &$events = array())
     {
@@ -73,7 +68,6 @@ class SubscriberPass implements CompilerPassInterface
 
     /**
      * @param $attributes
-     * @return null
      */
     private function getResolverFromConfigurationAttributes($attributes)
     {
@@ -93,7 +87,6 @@ class SubscriberPass implements CompilerPassInterface
         $subscribedEvents = $subscriber->getSubscribedEvents();
 
         foreach ($subscribedEvents as $key => $item) {
-
             $resolver = !empty($defaultResolver) && !is_string($key) ? $defaultResolver : $key;
             $this->addEventFromSubscriber($events, $item, $resolver);
         }
@@ -129,6 +122,7 @@ class SubscriberPass implements CompilerPassInterface
 
     /**
      * @param $resolver
+     *
      * @return bool
      */
     private function isEventWithResolver($resolver)
@@ -140,13 +134,14 @@ class SubscriberPass implements CompilerPassInterface
      * @param $events
      * @param $items
      * @param $key
+     *
      * @internal param $event
      */
     private function appendEventWithResolver(&$events, $items, $key)
     {
         $items = (array) $items;
 
-        foreach($items as $item) {
+        foreach ($items as $item) {
             array_push($events, array($item => $key));
         }
     }
@@ -157,7 +152,7 @@ class SubscriberPass implements CompilerPassInterface
      */
     private function registerEventsToListener($events, ContainerBuilder $container)
     {
-        if(empty($events)) {
+        if (empty($events)) {
             return;
         }
 
@@ -173,6 +168,7 @@ class SubscriberPass implements CompilerPassInterface
 
     /**
      * @param $events
+     *
      * @return array
      */
     private function getListenableEventList($events)
@@ -180,12 +176,11 @@ class SubscriberPass implements CompilerPassInterface
         $eventList = array();
 
         foreach ($events as $item) {
-
             $event = is_array($item) ? key($item) : $item;
 
             $eventList[$event] = array(
                 'event' => $event,
-                'method' => 'resolveEventHandler'
+                'method' => 'resolveEventHandler',
             );
         }
 

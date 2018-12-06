@@ -15,11 +15,10 @@ use Symfony\Component\EventDispatcher\Event;
 
 class DefaultEventResolver implements EventResolverInterface
 {
-
     /**
      * @param Event $event
-     *
      * @param $eventName
+     *
      * @return array
      */
     public function getEventLogInfo(Event $event, $eventName)

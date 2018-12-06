@@ -32,29 +32,29 @@ class MonologLoggerPassTest extends TestCase
 
     public function testProcessWithoutLoggerDefinition()
     {
-        $this->containerBuilder ->expects($this->once())
+        $this->containerBuilder->expects($this->once())
             ->method('hasAlias')
-            ->with($this->equalTo("logger"))
+            ->with($this->equalTo('logger'))
             ->will($this->returnValue(false));
-        $this->containerBuilder ->expects($this->never())
+        $this->containerBuilder->expects($this->never())
             ->method('getDefinition');
 
         $subscriberPass = new MonologLoggerPass();
-        $subscriberPass->process( $this->containerBuilder);
+        $subscriberPass->process($this->containerBuilder);
     }
 
     public function testProcessWithLoggerDefinitions()
     {
         $this->definition->expects($this->once())
             ->method('setPublic')
-            ->with($this->equalTo(TRUE));
+            ->with($this->equalTo(true));
 
         $this->containerBuilder->expects($this->once())
             ->method('getDefinition')
             ->with($this->equalTo('xiidea.easy_audit.mono_logger.service'))
-            ->will($this->returnValue( $this->definition));
+            ->will($this->returnValue($this->definition));
 
         $loggerFactoryPass = new MonologLoggerPass();
-        $loggerFactoryPass->process( $this->containerBuilder);
+        $loggerFactoryPass->process($this->containerBuilder);
     }
 }

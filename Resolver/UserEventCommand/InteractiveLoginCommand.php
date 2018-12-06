@@ -27,6 +27,7 @@ class InteractiveLoginCommand extends UserLoginCommand
 
     /**
      * @param $event
+     *
      * @return mixed
      */
     public function resolve($event)

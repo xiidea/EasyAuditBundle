@@ -1,42 +1,43 @@
-Doctrine Entity Events
-========================
-You can track doctrine entity events. Currently Supported Events are [created, updated, deleted]. There are two way to achieve this.
+# Doctrine Object Events
+
+You can track doctrine object(ORM/MongoDB) events. Currently Supported Events are [created, updated, deleted]. There are two way to achieve this.
 
 ### 1. By Configuration :
 
-You can configure to select the entity you like to track as well as the events. If you like to track all events for your entity MyProject\Bundle\MyBundle\Entity\MyEntity just put `MyProject\Bundle\MyBundle\Entity\MyEntity : ~`
+You can configure to select the entity you like to track as well as the events. If you like to track all events for your entity App\\Entity\\MyEntity just put `App\Entity\MyEntity : ~`
 
 See the following example configuration value:
 
-``` yaml
+```yaml
 xiidea_easy_audit:
-     doctrine_entities :                                              #Optional
-          MyProject\Bundle\MyBundle\Entity\MyEntity : [updated, deleted]
-          MyProject\Bundle\MyBundle\Entity\MyEntity2 : [deleted]
-          MyProject\Bundle\MyBundle\Entity\MyEntity3 : ~
+     doctrine_objects :                                              #Optional
+          App\Entity\MyEntity : [updated, deleted]
+          App\Entity\MyEntity2 : [deleted]
+          App\Entity\MyEntity3 : ~
 ```
 
 ### 2. By Annotation
 
 You can use annotation to tell XiideaEasyAuditBundle to track events of an entity.
 
-@ORMSubscribedEvents: This annotation lets you define which event you like to track for a doctrine entity:
+@SubscribeDoctrineEvents: This annotation lets you define which event you like to track for a doctrine entity:
 
 ```php
+<?php
 //track only updated and created event
 /**
- * @ORMSubscribedEvents(events = "updated, created")
+ * @SubscribeDoctrineEvents(events = "updated, created")
  * or
- * @ORMSubscribedEvents("updated, created")
+ * @SubscribeDoctrineEvents("updated, created")
  */
 
 //track all(updated, created, deleted) events
 /**
- * @ORMSubscribedEvents(events = "updated, created, deleted")
+ * @SubscribeDoctrineEvents(events = "updated, created, deleted")
  * or
- * @ORMSubscribedEvents("updated, created, deleted")
+ * @SubscribeDoctrineEvents("updated, created, deleted")
  * or even short form
- * @ORMSubscribedEvents()
+ * @SubscribeDoctrineEvents()
  */
 ```
 
@@ -44,17 +45,36 @@ An entity example to track updated and created events
 
 ```php
 <?php
-// src/MyProject/MyBundle/Entity/MyEntity.php
+// src/Entity/MyEntity.php
 
-use Xiidea\EasyAuditBundle\Annotation\ORMSubscribedEvents;
+use Xiidea\EasyAuditBundle\Annotation\SubscribeDoctrineEvents;
 
 /**
- * @ORM\Entity
- * @ORMSubscribedEvents(events = "updated, created")
+ * ...
+ * 
+ * @SubscribeDoctrineEvents(events = "updated, created")
  */
 class MyEntity
 {
-    ...
+   // ...
+
+}
+```
+
+```php
+<?php
+// src/Document/MyDocument.php
+
+use Xiidea\EasyAuditBundle\Annotation\SubscribeDoctrineEvents;
+
+/**
+ * ...
+ * 
+ * @SubscribeDoctrineEvents(events = "updated, created")
+ */
+class MyDocument
+{
+    //...
 
 }
 ```

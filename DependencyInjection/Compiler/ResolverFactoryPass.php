@@ -19,7 +19,6 @@ class ResolverFactoryPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-
         if (false === $container->hasDefinition('xiidea.easy_audit.event_resolver_factory')) {
             return;
         }
@@ -36,12 +35,12 @@ class ResolverFactoryPass implements CompilerPassInterface
         }
 
         $definition->addMethodCall('setCommonResolver', array(
-            $this->getServiceReferenceByConfigName($container, 'resolver'))
+            $this->getServiceReferenceByConfigName($container, 'resolver'), )
         );
 
-        if ($container->getParameter('xiidea.easy_audit.entity_event_resolver') !== null) {
+        if (null !== $container->getParameter('xiidea.easy_audit.doctrine_event_resolver')) {
             $definition->addMethodCall('setEntityEventResolver', array(
-                    $this->getServiceReferenceByConfigName($container, 'entity_event_resolver'))
+                    $this->getServiceReferenceByConfigName($container, 'doctrine_event_resolver'), )
             );
         }
 
@@ -51,10 +50,11 @@ class ResolverFactoryPass implements CompilerPassInterface
     /**
      * @param ContainerBuilder $container
      * @param $configName
+     *
      * @return Reference
      */
     protected function getServiceReferenceByConfigName(ContainerBuilder $container, $configName)
     {
-        return new Reference($container->getParameter('xiidea.easy_audit.' . $configName));
+        return new Reference($container->getParameter('xiidea.easy_audit.'.$configName));
     }
 }

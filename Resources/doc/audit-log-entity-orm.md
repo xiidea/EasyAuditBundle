@@ -1,19 +1,21 @@
-Step 3:  Create audit_log entity Doctrine ORM mapping
-======================================================
-The ORM implementation does not provide a concrete AuditLog class for your use,
-you must create one. This can be done by extending the abstract entities
+# Step 3:  Create audit_log entity mapping
+
+BaseAuditLog class does not provide ODM/ODM Mapping,
+you must create one. This can be done by extending the BaseAuditLog model 
 provided by the bundle and creating the appropriate mappings.
 
 For example:
 
-``` php
-<?php
-// src/MyProject/MyBundle/Entity/AuditLog.php
+### Doctrine ORM Entity Class
 
-namespace MyProject\MyBundle\Entity;
+```php
+<?php
+// src/Entity/AuditLog.php
+
+namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Xiidea\EasyAuditBundle\Entity\BaseAuditLog;
+use Xiidea\EasyAuditBundle\Model\BaseAuditLog;
 
 /**
  * @ORM\Entity
@@ -78,12 +80,91 @@ class AuditLog extends BaseAuditLog
 }
 ```
 
-## Configure your application
+##### Configure your application
 
-``` yaml
-# app/config/config.yml
+```yaml
+# config/packages/xiidea_easy_audit.yaml
 
 xiidea_easy_audit:
-    entity_class : MyProject\MyBundle\Entity\AuditLog
+    audit_log_class : App\Entity\AuditLog
+```
 
+### Or, Doctrine ODM Document Class
+
+```php
+<?php
+// src/Document/AuditLog.php
+
+namespace App\Document;
+
+use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Xiidea\EasyAuditBundle\Model\BaseAuditLog;
+
+/**
+ * @MongoDB\Document
+ */
+class AuditLog extends BaseAuditLog
+{
+    /**
+     * @MongoDB\Id
+     */
+    protected $id;
+
+    /**
+     * Type Of Event(Internal Type ID)
+     *
+     * @var string
+     * @MongoDB\Field(type="string")
+     */
+    protected $typeId;
+
+    /**
+     * Type Of Event
+     *
+     * @var string
+     * @MongoDB\Field(type="string")
+     */
+    protected $type;
+
+    /**
+     * @var string
+     * @MongoDB\Field(type="string")
+     */
+    protected $description;
+
+    /**
+     * Time Of Event
+     * @var \DateTime
+     * @MongoDB\Field(type="date")
+     */
+    protected $eventTime;
+
+    /**
+     * @var string
+     * @MongoDB\Field(type="string")
+     */
+    protected $user;
+   
+    /**
+     * @var string
+     * @MongoDB\Field(type="string", nullable=true)
+     */
+    protected $impersonatingUser;
+    
+    /**
+     * @var string
+     * @MongoDB\Field(type="string")
+     */
+    protected $ip;    
+
+}
+```
+
+#### Configure your application
+
+```yaml
+# config/packages/xiidea_easy_audit.yaml
+
+xiidea_easy_audit:
+    audit_log_class : App\Document\AuditLog
 ```

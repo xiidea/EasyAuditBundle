@@ -11,8 +11,7 @@
 
 namespace Xiidea\EasyAuditBundle\Exception;
 
-
-class UnrecognizedEntityException extends \Exception {
-
-    protected $message = "Entity must extend Xiidea\\EasyAuditBundle\\Entity\\BaseAuditLog";
+class UnrecognizedEntityException extends \Exception
+{
+    protected $message = 'Entity must extend Xiidea\\EasyAuditBundle\\Entity\\BaseAuditLog';
 }

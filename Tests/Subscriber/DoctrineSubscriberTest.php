@@ -11,37 +11,36 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Subscriber;
 
-
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
-use Xiidea\EasyAuditBundle\Annotation\ORMSubscribedEvents;
+use Xiidea\EasyAuditBundle\Annotation\SubscribeDoctrineEvents;
 use Xiidea\EasyAuditBundle\Subscriber\DoctrineSubscriber;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class DoctrineSubscriberTest extends TestCase
 {
-    /** @var  \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $dispatcher;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $annotationReader;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $entityManager;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $metaData;
 
     public function setUp()
     {
-
         $this->dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
-        $this->entityManager = $this->createMock('Doctrine\ORM\EntityManagerInterface');
-        $this->metaData = $this->createMock('Doctrine\ORM\Mapping\ClassMetadataInfo');
+        $this->entityManager = $this->createMock(ObjectManager::class);
+        $this->metaData = $this->createMock(ClassMetadata::class);
 
         $this->entityManager->method('getClassMetadata')
             ->willReturn($this->metaData);
-
 
         $this->annotationReader = $this->getMockBuilder('\Doctrine\Common\Annotations\FileCacheReader')
             ->disableOriginalConstructor()
@@ -70,19 +69,18 @@ class DoctrineSubscriberTest extends TestCase
             'postUpdate',
             'preRemove',
             'postRemove',
-        ),$subscriber->getSubscribedEvents());
+        ), $subscriber->getSubscribedEvents());
     }
 
     public function testCreateEventForAnnotatedEntity()
     {
-        $annotation = new ORMSubscribedEvents(array('events'=>'created'));
+        $annotation = new SubscribeDoctrineEvents(array('events' => 'created'));
 
         $this->initializeAnnotationReader($annotation);
 
         $subscriber = new DoctrineSubscriber(array());
 
         $this->invokeCreatedEventCall($subscriber);
-
     }
 
     public function testCreateEventForEntityNotConfiguredToTrack()
@@ -96,7 +94,7 @@ class DoctrineSubscriberTest extends TestCase
     {
         $this->initializeAnnotationReader();
 
-        $subscriber = new DoctrineSubscriber(array('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie'=>array('created')));
+        $subscriber = new DoctrineSubscriber(array('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie' => array('created')));
 
         $this->invokeCreatedEventCall($subscriber);
     }
@@ -105,7 +103,7 @@ class DoctrineSubscriberTest extends TestCase
     {
         $this->initializeAnnotationReader();
 
-        $subscriber = new DoctrineSubscriber(array('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie'=>array()));
+        $subscriber = new DoctrineSubscriber(array('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie' => array()));
 
         $this->invokeCreatedEventCall($subscriber);
     }
@@ -129,10 +127,9 @@ class DoctrineSubscriberTest extends TestCase
         $this->initializeAnnotationReader(null);
 
         $this->mockMetaData();
-        $subscriber = new DoctrineSubscriber(array('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie'=>array()));
+        $subscriber = new DoctrineSubscriber(array('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie' => array()));
         $this->invokeDeletedEventCall($subscriber);
     }
-
 
     private function initializeAnnotationReader($metaData = null)
     {
@@ -157,7 +154,7 @@ class DoctrineSubscriberTest extends TestCase
      */
     private function invokeUpdatedEventCall($subscriber)
     {
-        $subscriber->setDispatcher($this->dispatcher);;
+        $subscriber->setDispatcher($this->dispatcher);
         $subscriber->setAnnotationReader($this->annotationReader);
 
         $subscriber->postUpdate(new LifecycleEventArgs(new Movie(), $this->entityManager));
@@ -168,7 +165,7 @@ class DoctrineSubscriberTest extends TestCase
      */
     private function invokeDeletedEventCall($subscriber)
     {
-        $subscriber->setDispatcher($this->dispatcher);;
+        $subscriber->setDispatcher($this->dispatcher);
         $subscriber->setAnnotationReader($this->annotationReader);
 
         $movie = new Movie();
@@ -181,4 +178,3 @@ class DoctrineSubscriberTest extends TestCase
         $this->metaData->method('getIdentifierValues')->willReturn($data);
     }
 }
- 

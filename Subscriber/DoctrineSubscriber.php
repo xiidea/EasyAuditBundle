@@ -12,17 +12,15 @@
 namespace Xiidea\EasyAuditBundle\Subscriber;
 
 use Doctrine\Common\EventSubscriber;
+use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\Common\Util\ClassUtils;
-use Doctrine\ORM\Event\LifecycleEventArgs;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Xiidea\EasyAuditBundle\Events\DoctrineEntityEvent;
+use Xiidea\EasyAuditBundle\Annotation\SubscribeDoctrineEvents;
+use Xiidea\EasyAuditBundle\Events\DoctrineObjectEvent;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 
 class DoctrineSubscriber implements EventSubscriber
 {
-    use ContainerAwareTrait;
-
     /** @var \Doctrine\Common\Annotations\Reader */
     private $annotationReader;
 
@@ -49,7 +47,7 @@ class DoctrineSubscriber implements EventSubscriber
             'postPersist',
             'postUpdate',
             'preRemove',
-            'postRemove'
+            'postRemove',
         );
     }
 
@@ -65,33 +63,33 @@ class DoctrineSubscriber implements EventSubscriber
 
     public function preRemove(LifecycleEventArgs $args)
     {
-        if (false === $this->isConfiguredToTrack($args->getEntity(), DoctrineEvents::ENTITY_DELETED)) {
+        if (false === $this->isConfiguredToTrack($args->getObject(), DoctrineEvents::ENTITY_DELETED)) {
             return;
         }
 
-        $className = ClassUtils::getClass($args->getEntity());
+        $className = ClassUtils::getClass($args->getObject());
 
         if (!isset($this->toBeDeleted[$className])) {
             $this->toBeDeleted[$className] = [];
         }
 
-        $this->toBeDeleted[$className][spl_object_hash($args->getEntity())] = $this->getIdentity($args, $className);
+        $this->toBeDeleted[$className][spl_object_hash($args->getObject())] = $this->getIdentity($args, $className);
     }
 
     public function postRemove(LifecycleEventArgs $args)
     {
-        $identity = $this->getToBeDeletedId($args->getEntity());
+        $identity = $this->getToBeDeletedId($args->getObject());
 
         if (null !== $identity) {
             $this->dispatcher->dispatch(DoctrineEvents::ENTITY_DELETED,
-                new DoctrineEntityEvent($args, $identity)
+                new DoctrineObjectEvent($args, $identity)
             );
         }
     }
 
     private function getToBeDeletedId($entity)
     {
-        if($this->isScheduledForDelete($entity)) {
+        if ($this->isScheduledForDelete($entity)) {
             return $this->toBeDeleted[ClassUtils::getClass($entity)][spl_object_hash($entity)];
         }
 
@@ -99,14 +97,14 @@ class DoctrineSubscriber implements EventSubscriber
     }
 
     /**
-     * @param string $eventName
+     * @param string             $eventName
      * @param LifecycleEventArgs $args
      */
     private function handleEvent($eventName, LifecycleEventArgs $args)
     {
-        if (true === $this->isConfiguredToTrack($args->getEntity(), $eventName)) {
+        if (true === $this->isConfiguredToTrack($args->getObject(), $eventName)) {
             $this->dispatcher->dispatch($eventName,
-                new DoctrineEntityEvent($args, $this->getIdentity($args, ClassUtils::getClass($args->getEntity())))
+                new DoctrineObjectEvent($args, $this->getIdentity($args, ClassUtils::getClass($args->getObject())))
             );
         }
     }
@@ -114,6 +112,7 @@ class DoctrineSubscriber implements EventSubscriber
     /**
      * @param $entity
      * @param string $eventName
+     *
      * @return bool
      */
     private function isConfiguredToTrack($entity, $eventName = '')
@@ -125,12 +124,12 @@ class DoctrineSubscriber implements EventSubscriber
             return $track;
         }
 
-        if (!$this->isConfigured($class)) {
-            return FALSE;
+        if (!isset($this->entities[$class])) {
+            return false;
         }
 
         if ($this->shouldTrackAllEventType($class)) {
-            return TRUE;
+            return true;
         }
 
         return $this->shouldTrackEventType($eventType, $class);
@@ -139,6 +138,7 @@ class DoctrineSubscriber implements EventSubscriber
     /**
      * @param $entity
      * @param string $eventType
+     *
      * @return bool|null
      */
     protected function isAnnotatedEvent($entity, $eventType)
@@ -154,6 +154,7 @@ class DoctrineSubscriber implements EventSubscriber
 
     /**
      * @param $entity
+     *
      * @return null|object
      */
     protected function hasAnnotation($entity)
@@ -162,8 +163,7 @@ class DoctrineSubscriber implements EventSubscriber
 
         return $this
             ->getAnnotationReader()
-            ->getClassAnnotation($reflection, 'Xiidea\EasyAuditBundle\Annotation\ORMSubscribedEvents');
-
+            ->getClassAnnotation($reflection, SubscribeDoctrineEvents::class);
     }
 
     /**
@@ -176,6 +176,7 @@ class DoctrineSubscriber implements EventSubscriber
 
     /**
      * @param $object
+     *
      * @return \ReflectionClass
      */
     protected function getReflectionClassFromObject($object)
@@ -188,29 +189,22 @@ class DoctrineSubscriber implements EventSubscriber
     /**
      * @param string $eventType
      * @param string $class
+     *
      * @return bool
      */
     private function shouldTrackEventType($eventType, $class)
     {
-        return (is_array($this->entities[$class]) && in_array($eventType, $this->entities[$class]));
+        return is_array($this->entities[$class]) && in_array($eventType, $this->entities[$class]);
     }
 
     /**
      * @param string $class
+     *
      * @return bool
      */
     private function shouldTrackAllEventType($class)
     {
         return empty($this->entities[$class]);
-    }
-
-    /**
-     * @param string $class
-     * @return bool
-     */
-    protected function isConfigured($class)
-    {
-        return isset($this->entities[$class]);
     }
 
     /**
@@ -224,16 +218,18 @@ class DoctrineSubscriber implements EventSubscriber
     /**
      * @param LifecycleEventArgs $args
      * @param $className
+     *
      * @return array
      */
     protected function getIdentity(LifecycleEventArgs $args, $className)
     {
-        return $args->getEntityManager()->getClassMetadata($className)->getIdentifierValues($args->getEntity());
+        return $args->getObjectManager()->getClassMetadata($className)->getIdentifierValues($args->getObject());
     }
 
     /**
      * @param $entity
-     * @return boolean
+     *
+     * @return bool
      */
     private function isScheduledForDelete($entity)
     {

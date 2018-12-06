@@ -11,9 +11,9 @@
 
 namespace Xiidea\EasyAuditBundle\Logger;
 
-use Doctrine\ORM\EntityManager;
-use Xiidea\EasyAuditBundle\Entity\BaseAuditLog as AuditLog;
-use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Persistence\ObjectManager;
+use Xiidea\EasyAuditBundle\Model\BaseAuditLog as AuditLog;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 
 class Logger implements LoggerInterface
@@ -21,23 +21,24 @@ class Logger implements LoggerInterface
     private $entityDeleteLogs = [];
 
     /**
-     * @var \Doctrine\Bundle\DoctrineBundle\Registry
+     * @var \Doctrine\Common\Persistence\ManagerRegistry
      */
     private $doctrine;
 
-    public function __construct(Registry $doctrine)
+    public function __construct(ManagerRegistry $doctrine)
     {
         $this->doctrine = $doctrine;
     }
 
     public function log(AuditLog $event = null)
     {
-        if(empty($event)) {
+        if (empty($event)) {
             return;
         }
 
-        if($event->getTypeId() === DoctrineEvents::ENTITY_DELETED) {
+        if (DoctrineEvents::ENTITY_DELETED === $event->getTypeId()) {
             $this->entityDeleteLogs[] = $event;
+
             return;
         }
 
@@ -45,15 +46,15 @@ class Logger implements LoggerInterface
     }
 
     /**
-     * @return EntityManager
+     * @return ObjectManager
      */
-    protected function getEntityManager()
+    protected function getManager()
     {
-         return $this->getDoctrine()->getManager();
+        return $this->getDoctrine()->getManager();
     }
 
     /**
-     * @return \Doctrine\Bundle\DoctrineBundle\Registry
+     * @return \Doctrine\Common\Persistence\ManagerRegistry
      */
     public function getDoctrine()
     {
@@ -62,13 +63,11 @@ class Logger implements LoggerInterface
 
     /**
      * @param AuditLog $event
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     protected function saveLog(AuditLog $event)
     {
-        $this->getEntityManager()->persist($event);
-        $this->getEntityManager()->flush($event);
+        $this->getManager()->persist($event);
+        $this->getManager()->flush($event);
     }
 
     public function savePendingLogs()
@@ -79,5 +78,4 @@ class Logger implements LoggerInterface
 
         $this->entityDeleteLogs = [];
     }
-
 }

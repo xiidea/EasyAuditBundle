@@ -11,7 +11,6 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Resolver;
 
-
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -26,7 +25,7 @@ use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\InvalidEventInfoResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\InvalidEventResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\NullResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
-use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\EntityEvent;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\DoctrineEvent;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\WithEmbeddedResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie;
@@ -34,14 +33,13 @@ use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
 
 class EventResolverFactoryTest extends TestCase
 {
-
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $tokenStorage;
 
-    /** @var  EventResolverFactory */
+    /** @var EventResolverFactory */
     private $resolverFactory;
 
-    /** @var  Event */
+    /** @var Event */
     private $event;
 
     public function setUp()
@@ -64,7 +62,6 @@ class EventResolverFactoryTest extends TestCase
             ->method('getToken')
             ->willReturn(new DummyToken(new UserEntity()));
 
-
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 
         $this->assertEventInfo($auditLog, array(
@@ -72,7 +69,7 @@ class EventResolverFactoryTest extends TestCase
             'description' => 'basic',
             'user' => 'admin',
             'impersonatingUser' => null,
-            'ip' => '127.0.0.1'
+            'ip' => '127.0.0.1',
         ));
     }
 
@@ -99,7 +96,7 @@ class EventResolverFactoryTest extends TestCase
             'description' => 'basic',
             'user' => 'a',
             'impersonatingUser' => 'admin',
-            'ip' => '127.0.0.1'
+            'ip' => '127.0.0.1',
         ));
     }
 
@@ -130,7 +127,7 @@ class EventResolverFactoryTest extends TestCase
             'description' => 'custom',
             'user' => 'By Command',
             'impersonatingUser' => null,
-            'ip' => ''
+            'ip' => '',
         ));
     }
 
@@ -177,7 +174,6 @@ class EventResolverFactoryTest extends TestCase
             ->method('getToken')
             ->willReturn(new DummyToken(new UserEntity()));
 
-
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 
         $this->assertEventInfo($auditLog, array(
@@ -185,9 +181,8 @@ class EventResolverFactoryTest extends TestCase
             'description' => 'basic',
             'user' => 'admin',
             'impersonatingUser' => null,
-            'ip' => '127.0.0.1'
+            'ip' => '127.0.0.1',
         ));
-
     }
 
     public function testEmbeddedEventResolver()
@@ -202,7 +197,6 @@ class EventResolverFactoryTest extends TestCase
             ->method('getToken')
             ->willReturn(new DummyToken(new UserEntity()));
 
-
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'embedded');
 
         $this->assertEventInfo($auditLog, array(
@@ -210,7 +204,7 @@ class EventResolverFactoryTest extends TestCase
             'description' => 'It is an embedded event',
             'user' => 'admin',
             'impersonatingUser' => null,
-            'ip' => '127.0.0.1'
+            'ip' => '127.0.0.1',
         ));
     }
 
@@ -226,7 +220,7 @@ class EventResolverFactoryTest extends TestCase
 
     public function testEntityEventResolver()
     {
-        $this->event = new EntityEvent();
+        $this->event = new DoctrineEvent();
 
         $this->resolverFactory->setEntityEventResolver(new DefaultEventResolver());
 
@@ -237,13 +231,12 @@ class EventResolverFactoryTest extends TestCase
             ->method('getToken')
             ->willReturn(new DummyToken(new UserEntity()));
 
-
-        $auditLog = $this->resolverFactory->getEventLog($this->event, 'easy_audit.doctrine.entity.created');
+        $auditLog = $this->resolverFactory->getEventLog($this->event, 'easy_audit.doctrine.object.created');
 
         $this->assertEventInfo($auditLog,
             array(
-                'description' => 'easy_audit.doctrine.entity.created',
-                'name' => 'easy_audit.doctrine.entity.created',
+                'description' => 'easy_audit.doctrine.object.created',
+                'name' => 'easy_audit.doctrine.object.created',
                 'user' => 'admin',
                 'impersonatingUser' => null,
                 'ip' => '127.0.0.1',
@@ -256,7 +249,6 @@ class EventResolverFactoryTest extends TestCase
 
         $this->resolverFactory->setCommonResolver(new CustomEventResolver());
 
-
         $this->mockClientIpResolverForBrowserRequest();
 
         $this->mockSecurityAuthChecker();
@@ -264,7 +256,6 @@ class EventResolverFactoryTest extends TestCase
         $this->tokenStorage->expects($this->any())
             ->method('getToken')
             ->willReturn(new DummyToken(new UserEntity()));
-
 
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 
@@ -302,7 +293,6 @@ class EventResolverFactoryTest extends TestCase
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 
         $this->assertNull($auditLog);
-
     }
 
     public function testEventTriggeredFromConsoleCommand()
@@ -325,7 +315,7 @@ class EventResolverFactoryTest extends TestCase
                 'name' => 'basic',
                 'user' => 'By Command',
                 'impersonatingUser' => null,
-                'type' => 'easy_audit.doctrine.entity.created',
+                'type' => 'easy_audit.doctrine.object.created',
                 'ip' => '',
             ));
     }
@@ -346,7 +336,6 @@ class EventResolverFactoryTest extends TestCase
             ->method('getToken')
             ->willReturn(new DummyToken(new UserEntity()));
 
-
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 
         $this->assertEventInfo($auditLog, array(
@@ -354,7 +343,7 @@ class EventResolverFactoryTest extends TestCase
             'description' => 'basic',
             'user' => 'admin',
             'impersonatingUser' => null,
-            'ip' => '127.0.0.1'
+            'ip' => '127.0.0.1',
         ));
     }
 
@@ -376,16 +365,14 @@ class EventResolverFactoryTest extends TestCase
             ->method('getToken')
             ->willReturn(new DummyToken(new UserEntity()));
 
-
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'custom');
-
 
         $this->assertEventInfo($auditLog, array(
             'name' => 'custom',
             'description' => 'Custom custom Description',
             'user' => 'admin',
             'impersonatingUser' => null,
-            'ip' => '127.0.0.1'
+            'ip' => '127.0.0.1',
         ));
     }
 
@@ -399,13 +386,11 @@ class EventResolverFactoryTest extends TestCase
 
         $this->resolverFactory->setCommonResolver(new DefaultEventResolver());
 
-
         $this->mockClientIpResolverForBrowserRequest();
 
         $this->tokenStorage->expects($this->any())
             ->method('getToken')
             ->willReturn(new DummyToken(new UserEntity()));
-
 
         $this->mockSecurityAuthChecker();
 
@@ -416,7 +401,7 @@ class EventResolverFactoryTest extends TestCase
             'description' => 'basic',
             'user' => '',
             'impersonatingUser' => null,
-            'ip' => '127.0.0.1'
+            'ip' => '127.0.0.1',
         ));
     }
 
@@ -445,12 +430,11 @@ class EventResolverFactoryTest extends TestCase
         $this->event = new Basic();
         $this->resolverFactory->setCommonResolver(new DefaultEventResolver());
 
-
         $this->mockClientIpResolverForBrowserRequest();
 
         $this->tokenStorage->expects($this->once())
             ->method('getToken')
-            ->willReturn(new DummyToken(""));
+            ->willReturn(new DummyToken(''));
 
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 
@@ -460,7 +444,7 @@ class EventResolverFactoryTest extends TestCase
                 'name' => 'basic',
                 'user' => 'Anonymous',
                 'impersonatingUser' => null,
-                'type' => 'easy_audit.doctrine.entity.created',
+                'type' => 'easy_audit.doctrine.object.created',
                 'ip' => '127.0.0.1',
             ));
     }
@@ -488,13 +472,12 @@ class EventResolverFactoryTest extends TestCase
 
     /**
      * @param bool $on
-     * @param int $callIndex
+     * @param int  $callIndex
      */
     protected function initiateContainerWithDebugMode($on = true)
     {
         $this->resolverFactory->setDebug($on);
     }
-
 
     private function mockSecurityAuthChecker($isGranted = false)
     {
@@ -525,7 +508,7 @@ class EventResolverFactoryTest extends TestCase
 
     /**
      * @param AuditLog $auditLog
-     * @param array $expected
+     * @param array    $expected
      */
     private function assertEventInfo(AuditLog $auditLog, array $expected)
     {
@@ -539,4 +522,3 @@ class EventResolverFactoryTest extends TestCase
         $this->assertNotNull($auditLog->getEventTime());
     }
 }
- 

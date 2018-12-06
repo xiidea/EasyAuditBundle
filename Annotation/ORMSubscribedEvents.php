@@ -11,6 +11,8 @@
 
 namespace Xiidea\EasyAuditBundle\Annotation;
 
+@trigger_error(sprintf('The "%s" annotation is deprecated since version 1.4.10. Use "%s" instead.', ORMSubscribedEvents::class, SubscribeDoctrineEvents::class), E_USER_DEPRECATED);
+
 /**
  * Annotation for ORM Subscribed Event.
  *
@@ -18,22 +20,9 @@ namespace Xiidea\EasyAuditBundle\Annotation;
  * @Target({"CLASS"})
  *
  * @author Roni Saha <roni@xiidea.net>
+ *
+ * @deprecated since version 1.4.10
  */
-final class ORMSubscribedEvents
+final class ORMSubscribedEvents extends SubscribeDoctrineEvents
 {
-    public $events = array();
-
-    public function __construct(array $values)
-    {
-        if (isset($values['value'])) {
-            $values['events'] = $values['value'];
-        }
-        if (!isset($values['events'])) {
-            return;
-        }
-
-        $this->events = is_array($values['events']) ? $values['events'] : array_map('trim', explode(',', $values['events']));
-
-        $this->events = array_filter($this->events);
-    }
 }
