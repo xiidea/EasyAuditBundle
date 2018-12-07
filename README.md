@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/xiidea/EasyAuditBundle.svg?branch=master)](https://travis-ci.org/xiidea/EasyAuditBundle)
 [![Coverage Status](https://coveralls.io/repos/xiidea/EasyAuditBundle/badge.svg?branch=master&service=github)](https://coveralls.io/github/xiidea/EasyAuditBundle?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/xiidea/EasyAuditBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/xiidea/EasyAuditBundle/?branch=master)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/327c3f057c384aa894f76154bb2ebb74)](https://app.codacy.com/app/ronisaha/EasyAuditBundle?utm_source=github.com&utm_medium=referral&utm_content=xiidea/EasyAuditBundle&utm_campaign=Badge_Grade_Dashboard)
 [![Latest Stable Version](https://poser.pugx.org/xiidea/easy-audit/v/stable.png)](https://packagist.org/packages/xiidea/easy-audit)
 [![Total Downloads](https://poser.pugx.org/xiidea/easy-audit/downloads.png)](https://packagist.org/packages/xiidea/easy-audit)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/b8802bf0-af10-4343-a6c4-846d6b481978/mini.png)](https://insight.sensiolabs.com/projects/b8802bf0-af10-4343-a6c4-846d6b481978)
