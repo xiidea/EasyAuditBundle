@@ -271,7 +271,7 @@ class EventResolverFactory extends UserAwareComponent
 
     /**
      * @param BaseAuditLog $entity
-     * @param $userProperty
+     * @param string $userProperty
      */
     protected function setImpersonatingUser(BaseAuditLog $entity, $userProperty)
     {

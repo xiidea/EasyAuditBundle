@@ -1,6 +1,14 @@
+build:
+    nodes:
+        analysis:
+            tests:
+                override:
+                    - php-scrutinizer-run
 filter:
     excluded_paths:
         - Tests/*
+        - Annotation/ORMSubscribedEvents.php
+        - Resolver/EntityEventResolver.php
 
 checks:
     php:
