@@ -113,13 +113,13 @@ $ php app/console doctrine:schema:update --force
 
 ## Core Concepts
 
-#### Logger:
+### Logger
 
 `Logger` is the core service which are responsible for persist the event info. You can define as many logger as you like.
 EasyAudit Bundled with a logger service `xiidea.easy_audit.logger.service` which is the default logger service. You can easily
 disable the service by setting `default_logger: false` in configuration.
 
-#### Resolver:
+### Resolver
 
 `Resolver` is like translator for an event. It used to translate an event to AuditLog entity. EasyAudit bundled with two(2)
 resolver services `xiidea.easy_audit.default_event_resolver`, `xiidea.easy_audit.default_doctrine_event_resolver`. And a
@@ -130,14 +130,16 @@ described by [PSR-3](http://www.php-fig.org/psr/psr-3). These values are present
 use this value as channel to register different logger to handle different event. If you add any other field to your
 AuditLog object, this is the place to add those extra information (tags, metadata, etc..)
 
-#### Channel
+### Channel
 
 It is now possible to register logger for specific channel. channel is refers to log level. you can configure EasyAudit logger
 services to handle only specific level of event.
 
 ## Warning - BC Breaking Changes
 
--   Since v1.2.2 `pre_persist_listener` option has been removed. You can use [this cookbook](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/pre-persist-listener.md) to achieve the same functionality
+-   Since v1.2.2 `pre_persist_listener` option has been removed. You can use 
+[this cookbook](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/pre-persist-listener.md) 
+to achieve the same functionality
 -   Since v1.2.2 `EventResolverInterface` been split into `EmbeddedEventResolverInterface` and `EventResolverInterface`
 -   Since v1.3.x The new Event object has been adapted. And the signature of `EmbeddedEventResolverInterface` and 
     `EventResolverInterface` also changed. Now it expects extra $eventName parameter     
