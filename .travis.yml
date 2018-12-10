@@ -2,24 +2,32 @@ language: php
 dist: trusty
 
 php:
+  - 7.3
   - 7.2
   - 7.1
-  - 7.0
   - 5.6
 
 env:
-  - SYMFONY_VERSION=3.3.*
-  - SYMFONY_VERSION=3.2.*
   - SYMFONY_VERSION=2.8.*
   - SYMFONY_VERSION=2.7.*
 
 matrix:
   fast_finish: true
   include:
+    - php: 7.3
+      env: SYMFONY_VERSION=4.0.*
+    - php: 7.3
+      env: SYMFONY_VERSION=4.1.*
+    - php: 7.3
+      env: SYMFONY_VERSION=4.2.*
+    - php: 7.3
+      env: SYMFONY_VERSION=3.4
     - php: 7.2
       env: SYMFONY_VERSION=4.0.*
     - php: 7.2
       env: SYMFONY_VERSION=4.1.*
+    - php: 7.2
+      env: SYMFONY_VERSION=4.2.*
     - php: 7.2
       env: SYMFONY_VERSION=3.4
     - php: 7.1
@@ -27,8 +35,8 @@ matrix:
     - php: 7.1
       env: SYMFONY_VERSION=4.1.*
     - php: 7.1
-      env: SYMFONY_VERSION=3.4
-    - php: 7.0
+      env: SYMFONY_VERSION=4.2.*
+    - php: 7.1
       env: SYMFONY_VERSION=3.4
 
 cache:
@@ -42,3 +50,6 @@ before_script:
 script:
   - mkdir -p build/logs
   - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+
+after_script:
+  - if [ "$TRAVIS_PHP_VERSION" == "7.3" ]; then php vendor/bin/php-coveralls -v --exclude-no-stmt; fi
