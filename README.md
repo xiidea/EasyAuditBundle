@@ -141,9 +141,14 @@ services to handle only specific level of event.
 -   Since v1.2.2 `pre_persist_listener` option has been removed. You can use 
 [this cookbook](https://github.com/xiidea/EasyAuditBundle/blob/master/Resources/doc/pre-persist-listener.md) 
 to achieve the same functionality
+
 -   Since v1.2.2 `EventResolverInterface` been split into `EmbeddedEventResolverInterface` and `EventResolverInterface`
+
 -   Since v1.3.x The new Event object has been adapted. And the signature of `EmbeddedEventResolverInterface` and 
-    `EventResolverInterface` also changed. Now it expects extra $eventName parameter     
+    `EventResolverInterface` also changed. Now it expects extra $eventName parameter
+         
+-   Since v1.4.7 `EntityEventResolver` been refactored to a simplified version, if your code directly depends on older version of the implementation
+    you are advised to copy the content of old implementation from [here](https://github.com/xiidea/EasyAuditBundle/blob/1.4.6/Resolver/EntityEventResolver.php)
 
 ## Cookbook
 
