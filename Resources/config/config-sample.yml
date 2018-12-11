@@ -3,7 +3,7 @@
 xiidea_easy_audit:
     #resolver: xiidea.easy_audit.default_event_resolver                             #Optional
     #audit_log_class : MyProject\Bundle\MyBundle\Entity\AuditLog                    #Required
-    #doctrine_event_resolver : xiidea.easy_audit.default_entity_event_resolver      #Optional
+    #doctrine_event_resolver : xiidea.easy_audit.default_doctrine_event_resolver    #Optional
     #default_logger : true                                                          #Optional
 
     #user property to use as actor of an event
