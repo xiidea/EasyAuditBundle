@@ -1,43 +1,17 @@
 language: php
-dist: trusty
 
 php:
   - 7.3
   - 7.2
   - 7.1
-  - 5.6
 
 env:
+  - SYMFONY_VERSION=4.2.*
+  - SYMFONY_VERSION=4.1.*
+  - SYMFONY_VERSION=4.0.*
+  - SYMFONY_VERSION=3.4.*
   - SYMFONY_VERSION=2.8.*
   - SYMFONY_VERSION=2.7.*
-
-matrix:
-  fast_finish: true
-  include:
-    - php: 7.3
-      env: SYMFONY_VERSION=4.0.*
-    - php: 7.3
-      env: SYMFONY_VERSION=4.1.*
-    - php: 7.3
-      env: SYMFONY_VERSION=4.2.*
-    - php: 7.3
-      env: SYMFONY_VERSION=3.4
-    - php: 7.2
-      env: SYMFONY_VERSION=4.0.*
-    - php: 7.2
-      env: SYMFONY_VERSION=4.1.*
-    - php: 7.2
-      env: SYMFONY_VERSION=4.2.*
-    - php: 7.2
-      env: SYMFONY_VERSION=3.4
-    - php: 7.1
-      env: SYMFONY_VERSION=4.0.*
-    - php: 7.1
-      env: SYMFONY_VERSION=4.1.*
-    - php: 7.1
-      env: SYMFONY_VERSION=4.2.*
-    - php: 7.1
-      env: SYMFONY_VERSION=3.4
 
 cache:
   directories:
