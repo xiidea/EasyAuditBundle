@@ -15,6 +15,7 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\Common\Util\ClassUtils;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 use Xiidea\EasyAuditBundle\Annotation\SubscribeDoctrineEvents;
 use Xiidea\EasyAuditBundle\Events\DoctrineObjectEvent;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
@@ -243,6 +244,10 @@ class DoctrineSubscriber implements EventSubscriber
      */
     public function setDispatcher($dispatcher)
     {
+        if(class_exists(LegacyEventDispatcherProxy::class)) {
+            $dispatcher = LegacyEventDispatcherProxy::decorate($dispatcher);
+        }
+
         $this->dispatcher = $dispatcher;
     }
 }

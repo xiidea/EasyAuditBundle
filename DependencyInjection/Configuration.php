@@ -23,14 +23,16 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
  */
 class Configuration implements ConfigurationInterface
 {
+    const ROOT_NODE_NAME = 'xiidea_easy_audit';
+
     /**
      * {@inheritdoc}
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
+        $treeBuilder = new TreeBuilder(self::ROOT_NODE_NAME);
 
-        $rootNode = $treeBuilder->root('xiidea_easy_audit');
+        $rootNode = $this->getRootNode($treeBuilder);
 
         $this->addRequiredConfigs($rootNode);
         $this->addDefaultServices($rootNode);
@@ -203,5 +205,18 @@ class Configuration implements ConfigurationInterface
         return function ($v) {
             return empty($v);
         };
+    }
+
+    /**
+     * @param TreeBuilder $treeBuilder
+     * @return ArrayNodeDefinition|\Symfony\Component\Config\Definition\Builder\NodeDefinition
+     */
+    protected function getRootNode($treeBuilder)
+    {
+        if (method_exists($treeBuilder, 'getRootNode')) {
+            return $treeBuilder->getRootNode();
+        }
+
+        return $treeBuilder->root(self::ROOT_NODE_NAME);
     }
 }
