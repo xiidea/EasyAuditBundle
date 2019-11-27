@@ -30,7 +30,8 @@
         "phpunit/phpunit": "^5.0 || ^6.0",
         "friendsofsymfony/user-bundle": "^2.0",
         "php-coveralls/php-coveralls": "^2.1",
-        "doctrine/common": ">=2.2 <3.0"
+        "doctrine/common": ">=2.2 <3.0",
+        "doctrine/orm": "^2.2"
     },
     "autoload": {
       "psr-4": {

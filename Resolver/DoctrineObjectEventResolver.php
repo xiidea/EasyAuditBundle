@@ -11,11 +11,10 @@
 
 namespace Xiidea\EasyAuditBundle\Resolver;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Util\ClassUtils;
 use Symfony\Component\EventDispatcher\Event;
-use Xiidea\EasyAuditBundle\Events\DoctrineObjectEvent;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
+use Xiidea\EasyAuditBundle\Events\DoctrineObjectEvent;
 
 /** Custom Event Resolver Example Class */
 class DoctrineObjectEventResolver implements EventResolverInterface
@@ -32,9 +31,9 @@ class DoctrineObjectEventResolver implements EventResolverInterface
     protected $identity = ['', ''];
 
     /**
-     * @var ManagerRegistry
+     * @var \Doctrine\ORM\EntityManager
      */
-    protected $doctrine;
+    protected $manager;
 
     protected $changeSetGetterMethods = [
         'getEntityChangeSet',
@@ -88,6 +87,7 @@ class DoctrineObjectEventResolver implements EventResolverInterface
         $this->eventName = $eventName;
         $this->event = $event;
         $this->entity = $event->getLifecycleEventArgs()->getObject();
+        $this->manager = $event->getLifecycleEventArgs()->getObjectManager();
         $this->identity = $this->getSingleIdentity();
     }
 
@@ -182,22 +182,6 @@ class DoctrineObjectEventResolver implements EventResolverInterface
      */
     protected function getUnitOfWork()
     {
-        return $this->getDoctrine()->getManager()->getUnitOfWork();
-    }
-
-    /**
-     * @return ManagerRegistry|object
-     */
-    protected function getDoctrine()
-    {
-        return $this->doctrine;
-    }
-
-    /**
-     * @param ManagerRegistry $doctrine
-     */
-    public function setDoctrine($doctrine)
-    {
-        $this->doctrine = $doctrine;
+        return $this->manager->getUnitOfWork();
     }
 }
