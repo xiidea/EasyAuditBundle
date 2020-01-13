@@ -14,7 +14,6 @@ namespace Xiidea\EasyAuditBundle\Tests\Common;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
-use Symfony\Component\Security\Core\Role\SwitchUserRole;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\DummyToken;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\DummyUserAwareComponent;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
