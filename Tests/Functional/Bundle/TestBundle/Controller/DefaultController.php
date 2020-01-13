@@ -2,37 +2,34 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Functional\Bundle\TestBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
 
-class DefaultController extends Controller
+class DefaultController
 {
     const RESPONSE_BOUNDARY = '======';
 
-    public function indexAction($event)
+    public function index(EventDispatcherInterface $dispatcher, ParameterBagInterface $parameterBag, $event)
     {
-        $this->get('event_dispatcher')->dispatch($event,
-            new Basic()
-        );
+        $dispatcher->dispatch(new Basic(), $event);
 
-        $logFile = $this->container->getParameter('kernel.cache_dir').DIRECTORY_SEPARATOR.'audit.log';
+        $logFile = $parameterBag->get('kernel.cache_dir').DIRECTORY_SEPARATOR.'audit.log';
 
         return new Response(self::RESPONSE_BOUNDARY.file_get_contents($logFile).self::RESPONSE_BOUNDARY);
     }
 
-    public function secureAction($event)
+    public function secure(EventDispatcherInterface $dispatcher, ParameterBagInterface $parameterBag, $event)
     {
-        $this->get('event_dispatcher')->dispatch($event,
-            new Basic()
-        );
+        $dispatcher->dispatch(new Basic(), $event);
 
-        $logFile = $this->container->getParameter('kernel.cache_dir').DIRECTORY_SEPARATOR.'audit.log';
+        $logFile = $parameterBag->get('kernel.cache_dir').DIRECTORY_SEPARATOR.'audit.log';
 
         return new Response(self::RESPONSE_BOUNDARY.file_get_contents($logFile).self::RESPONSE_BOUNDARY);
     }
 
-    public function secureNoEventAction()
+    public function secureNoEvent()
     {
         return new Response('ok');
     }

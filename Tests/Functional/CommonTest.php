@@ -48,9 +48,7 @@ class CommonTest extends BaseTestCase
 
         $name = 'simple.event';
 
-        $container->get('event_dispatcher')->dispatch($name,
-            new Basic()
-        );
+        $container->get('event_dispatcher')->dispatch(new Basic(), $name);
 
         $logFile = realpath($container->getParameter('kernel.cache_dir').DIRECTORY_SEPARATOR.'audit.log');
 
@@ -75,13 +73,9 @@ class CommonTest extends BaseTestCase
 
         $name = 'simple.event';
 
-        $container->get('event_dispatcher')->dispatch($name,
-            new Basic()
-        );
+        $container->get('event_dispatcher')->dispatch(new Basic(), $name);
 
-        $container->get('event_dispatcher')->dispatch($name.'2',
-            new WithEmbeddedResolver()
-        );
+        $container->get('event_dispatcher')->dispatch(new WithEmbeddedResolver(), $name.'2');
 
         $logFile = realpath($container->getParameter('kernel.cache_dir').DIRECTORY_SEPARATOR.'audit.log');
         $logFile2 = realpath($container->getParameter('kernel.cache_dir').'2'.DIRECTORY_SEPARATOR.'audit.log');
@@ -150,6 +144,8 @@ class CommonTest extends BaseTestCase
      */
     public function testEventOnPublicUrlWithoutUserLogin()
     {
+        $this->createDefaultClient();
+
         $name = 'simple.event';
         $crawler = $this->client->request('GET', "/public/some-public-url/{$name}");
         $this->assertTrue($this->client->getResponse()->isSuccessful());
