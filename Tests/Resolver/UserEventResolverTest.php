@@ -13,6 +13,8 @@ namespace Xiidea\EasyAuditBundle\Tests\Resolver;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Event\AuthenticationFailureEvent;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Xiidea\EasyAuditBundle\Resolver\UserEventResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\DummyToken;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
@@ -47,20 +49,6 @@ class UserEventResolverTest extends TestCase
         $this->assertEquals(array('type' => 'any_random_event', 'description' => 'any_random_event'), $auditLog);
     }
 
-    public function testPasswordChangedEvent()
-    {
-        $event = new DummyFilterUserResponseEvent(new UserEntity());
-
-        $auditLog = $this->eventResolver->getEventLogInfo($event, 'fos_user.change_password.edit.completed');
-
-        $this->assertNotNull($auditLog);
-
-        $this->assertEquals(array(
-            'description' => "Password of user 'admin' Changed Successfully",
-            'type' => 'Password Changed',
-        ), $auditLog);
-    }
-
     public function testLoginEvent()
     {
         $event = new DummyFilterUserResponseEvent(new UserEntity());
@@ -77,21 +65,10 @@ class UserEventResolverTest extends TestCase
         ), $auditLog);
     }
 
-    public function testLoginUsingRememberMeService()
-    {
-        $event = new DummyUserEvent(new UserEntity());
-
-        $auditLog = $this->eventResolver->getEventLogInfo($event, 'fos_user.security.implicit_login');
-
-        $this->assertEquals(array(
-            'description' => "User 'admin' Logged in Successfully using remember me service",
-            'type' => 'User Logged in',
-        ), $auditLog);
-    }
 
     public function testAuthenticationFailureEvent()
     {
-        $event = new DummyAuthenticationFailureEvent();
+        $event = new AuthenticationFailureEvent(new DummyToken('user'), new AuthenticationException());
 
         $auditLog = $this->eventResolver->getEventLogInfo($event, 'security.authentication.failure');
 

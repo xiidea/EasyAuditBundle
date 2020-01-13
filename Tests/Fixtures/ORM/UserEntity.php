@@ -11,7 +11,8 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Fixtures\ORM;
 
-use FOS\UserBundle\Model\UserInterface;
+
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity

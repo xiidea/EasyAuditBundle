@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class BaseTestCase extends WebTestCase
 {
-    /** @var null|\Symfony\Bundle\FrameworkBundle\Client */
+    /** @var null|\Symfony\Bundle\FrameworkBundle\KernelBrowser */
     protected $client = null;
 
     protected static function createKernel(array $options = array())
@@ -26,16 +26,17 @@ class BaseTestCase extends WebTestCase
         );
     }
 
-    protected function setUp()
+    protected function createDefaultClient()
     {
         $this->client = static::createClient();
     }
 
     protected function logIn()
     {
-        $this->client = static::createClient(array(), array(
+        $this->client = static::createClient(array(), [
             'PHP_AUTH_USER' => 'admin',
             'PHP_AUTH_PW' => 'login',
-        ));
+        ]
+        );
     }
 }

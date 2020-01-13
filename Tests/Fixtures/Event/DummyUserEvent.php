@@ -11,7 +11,6 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Fixtures\Event;
 
-use FOS\UserBundle\Event\UserEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
 

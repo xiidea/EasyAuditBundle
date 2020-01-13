@@ -127,7 +127,7 @@ class DummyToken implements TokenInterface
      */
     public function isAuthenticated()
     {
-        return;
+        return false;
     }
 
     /**
@@ -135,7 +135,7 @@ class DummyToken implements TokenInterface
      *
      * @param bool $isAuthenticated The authenticated flag
      */
-    public function setAuthenticated($isAuthenticated)
+    public function setAuthenticated(bool $isAuthenticated)
     {
         return;
     }
@@ -155,7 +155,7 @@ class DummyToken implements TokenInterface
      */
     public function getAttributes()
     {
-        return;
+        return [];
     }
 
     /**
@@ -175,9 +175,9 @@ class DummyToken implements TokenInterface
      *
      * @return bool true if the attribute exists, false otherwise
      */
-    public function hasAttribute($name)
+    public function hasAttribute(string $name)
     {
-        return;
+        return false;
     }
 
     /**
@@ -189,7 +189,7 @@ class DummyToken implements TokenInterface
      *
      * @throws \InvalidArgumentException When attribute doesn't exist for this token
      */
-    public function getAttribute($name)
+    public function getAttribute(string $name)
     {
         return;
     }
@@ -200,8 +200,32 @@ class DummyToken implements TokenInterface
      * @param string $name  The attribute name
      * @param mixed  $value The attribute value
      */
-    public function setAttribute($name, $value)
+    public function setAttribute(string $name, $value)
     {
         return;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRoleNames(): array
+    {
+        // TODO: Implement getRoleNames() method.
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function __serialize(): array
+    {
+        // TODO: Implement __serialize() method.
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function __unserialize(array $data): void
+    {
+        // TODO: Implement __unserialize() method.
     }
 }

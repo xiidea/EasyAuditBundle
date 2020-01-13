@@ -29,3 +29,6 @@ services:
           arguments: ["%kernel.cache_dir%2"]
           tags:
              - { name: easy_audit.logger }
+
+    Xiidea\EasyAuditBundle\Tests\Functional\Bundle\TestBundle\Controller\DefaultController:
+      tags: ['controller.service_arguments']

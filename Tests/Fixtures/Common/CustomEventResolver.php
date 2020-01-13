@@ -11,7 +11,7 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Fixtures\Common;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 use Xiidea\EasyAuditBundle\Resolver\EventResolverInterface;
 
 /** Custom Event Resolver Example Class */

@@ -63,6 +63,11 @@ class ImpersonatingUserTestKernel extends Kernel
         return sys_get_temp_dir().'/XiideaEasyAuditBundle/logs/'.substr(sha1($this->config), 0, 6);
     }
 
+    public function getProjectDir()
+    {
+        return __DIR__;
+    }
+
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load($this->config);

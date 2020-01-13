@@ -17,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ImpersonatingUserTest extends WebTestCase
 {
-    /** @var null|\Symfony\Bundle\FrameworkBundle\Client */
+    /** @var null|\Symfony\Bundle\FrameworkBundle\KernelBrowser */
     protected $client = null;
 
     protected static function createKernel(array $options = array())

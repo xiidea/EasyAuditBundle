@@ -4,12 +4,11 @@ imports:
 framework:
     validation: { enabled: true, enable_annotations: true }
     router:
-        resource: "%kernel.root_dir%/config/common/logiin_routing.yml"
+        resource: "%kernel.project_dir%/config/common/login_routing.yml"
     csrf_protection: true
     form: true
     default_locale: en
     profiler: { only_exceptions: false }
-    templating:    { engines: ['twig'] }
 
 # Twig Configuration
 twig:
