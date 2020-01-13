@@ -1,16 +1,13 @@
 language: php
 
 php:
+  - 7.4
   - 7.3
   - 7.2
-  - 7.1
 
 env:
-  - SYMFONY_VERSION=4.3.*
-  - SYMFONY_VERSION=4.2.*
-  - SYMFONY_VERSION=4.1.*
-  - SYMFONY_VERSION=3.4.*
-  - SYMFONY_VERSION=2.8.*
+  - SYMFONY_VERSION=5.0.*
+  - SYMFONY_VERSION=4.4.*
 
 cache:
   directories:
@@ -25,4 +22,4 @@ script:
   - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 
 after_script:
-  - if [ "$TRAVIS_PHP_VERSION" == "7.3" ]; then php vendor/bin/php-coveralls -v --exclude-no-stmt; fi
+  - if [ "$TRAVIS_PHP_VERSION" == "7.4" ]; then php vendor/bin/php-coveralls -v --exclude-no-stmt; fi
