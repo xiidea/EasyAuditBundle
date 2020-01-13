@@ -6,7 +6,7 @@ Sometime it is easy if you could embed your resolver with your event itself. Eas
 <?php
 
 use Xiidea\EasyAuditBundle\Resolver\EmbeddedEventResolverInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class MyEvent extends Event implements EmbeddedEventResolverInterface
 {

@@ -11,7 +11,7 @@
 
 namespace Xiidea\EasyAuditBundle\Resolver;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 interface EventResolverInterface
 {

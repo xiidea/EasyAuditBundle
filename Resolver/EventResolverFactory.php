@@ -11,7 +11,7 @@
 
 namespace Xiidea\EasyAuditBundle\Resolver;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Xiidea\EasyAuditBundle\Common\UserAwareComponent;

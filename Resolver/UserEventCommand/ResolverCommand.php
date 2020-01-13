@@ -27,7 +27,7 @@ abstract class ResolverCommand
     }
 
     /**
-     * @param \Symfony\Component\EventDispatcher\Event $event
+     * @param \Symfony\Contracts\EventDispatcher\Event $event
      *
      * @return mixed
      */

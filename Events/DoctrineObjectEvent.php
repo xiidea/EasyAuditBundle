@@ -10,8 +10,8 @@
 
 namespace Xiidea\EasyAuditBundle\Events;
 
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
-use Symfony\Component\EventDispatcher\Event;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class DoctrineObjectEvent extends Event
 {

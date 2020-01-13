@@ -11,12 +11,10 @@
 
 namespace Xiidea\EasyAuditBundle\Resolver;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 use Xiidea\EasyAuditBundle\Common\UserAwareComponent;
 use Xiidea\EasyAuditBundle\Resolver\UserEventCommand\AuthenticationFailedCommand;
-use Xiidea\EasyAuditBundle\Resolver\UserEventCommand\ImplicitLoginCommand;
 use Xiidea\EasyAuditBundle\Resolver\UserEventCommand\InteractiveLoginCommand;
-use Xiidea\EasyAuditBundle\Resolver\UserEventCommand\PasswordChangedCommand;
 use Xiidea\EasyAuditBundle\Resolver\UserEventCommand\ResolverCommand;
 
 /** Custom Event Resolver Example For FosUserBundle  */
@@ -29,9 +27,7 @@ class UserEventResolver extends UserAwareComponent implements EventResolverInter
     public function __construct()
     {
         $this->commands = array(
-            'fos_user.change_password.edit.completed' => new PasswordChangedCommand(),
             'security.interactive_login' => new InteractiveLoginCommand($this),
-            'fos_user.security.implicit_login' => new ImplicitLoginCommand(),
             'security.authentication.failure' => new AuthenticationFailedCommand(),
         );
     }

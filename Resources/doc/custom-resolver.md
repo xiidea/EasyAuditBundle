@@ -11,7 +11,7 @@ You could easily customize CustomEventResolver with a version adapted to your ne
 namespace App\Resolver;
 
 use Xiidea\EasyAuditBundle\Resolver\EventResolverInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class CustomEventResolver implements EventResolverInterface
 {

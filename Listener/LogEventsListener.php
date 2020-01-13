@@ -11,7 +11,7 @@
 
 namespace Xiidea\EasyAuditBundle\Listener;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 use Xiidea\EasyAuditBundle\Logger\LoggerFactory;
 use Xiidea\EasyAuditBundle\Resolver\EventResolverFactory;
 
