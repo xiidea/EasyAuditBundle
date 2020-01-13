@@ -15,7 +15,6 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\Common\Util\ClassUtils;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 use Xiidea\EasyAuditBundle\Annotation\SubscribeDoctrineEvents;
 use Xiidea\EasyAuditBundle\Events\DoctrineObjectEvent;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
@@ -82,9 +81,7 @@ class DoctrineSubscriber implements EventSubscriber
         $identity = $this->getToBeDeletedId($args->getObject());
 
         if (null !== $identity) {
-            $this->dispatcher->dispatch(DoctrineEvents::ENTITY_DELETED,
-                new DoctrineObjectEvent($args, $identity)
-            );
+            $this->dispatcher->dispatch(new DoctrineObjectEvent($args, $identity), DoctrineEvents::ENTITY_DELETED);
         }
     }
 
@@ -104,8 +101,8 @@ class DoctrineSubscriber implements EventSubscriber
     private function handleEvent($eventName, LifecycleEventArgs $args)
     {
         if (true === $this->isConfiguredToTrack($args->getObject(), $eventName)) {
-            $this->dispatcher->dispatch($eventName,
-                new DoctrineObjectEvent($args, $this->getIdentity($args, ClassUtils::getClass($args->getObject())))
+            $this->dispatcher->dispatch(new DoctrineObjectEvent($args, $this->getIdentity($args, ClassUtils::getClass($args->getObject()))),
+                $eventName
             );
         }
     }
@@ -244,10 +241,6 @@ class DoctrineSubscriber implements EventSubscriber
      */
     public function setDispatcher($dispatcher)
     {
-        if(class_exists(LegacyEventDispatcherProxy::class)) {
-            $dispatcher = LegacyEventDispatcherProxy::decorate($dispatcher);
-        }
-
         $this->dispatcher = $dispatcher;
     }
 }
