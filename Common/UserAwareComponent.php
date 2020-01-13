@@ -12,6 +12,7 @@
 namespace Xiidea\EasyAuditBundle\Common;
 
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Role\SwitchUserRole;
@@ -130,11 +131,8 @@ class UserAwareComponent
      */
     protected function getImpersonatingUserFromRole($token, $user = null)
     {
-        foreach ($token->getRoles() as $role) {
-            if ($role instanceof SwitchUserRole) {
-                $user = $role->getSource()->getUser();
-                break;
-            }
+        if ($token instanceof SwitchUserToken) {
+            $user = $token->getOriginalToken()->getUser();
         }
 
         return $user;

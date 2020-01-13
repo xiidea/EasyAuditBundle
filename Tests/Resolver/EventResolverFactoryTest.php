@@ -12,10 +12,10 @@
 namespace Xiidea\EasyAuditBundle\Tests\Resolver;
 
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
+use Symfony\Contracts\EventDispatcher\Event;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Role\SwitchUserRole;
 use Xiidea\EasyAuditBundle\Resolver\DefaultEventResolver;
 use Xiidea\EasyAuditBundle\Resolver\EventResolverFactory;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\AuditObjectResolver;
@@ -87,7 +87,7 @@ class EventResolverFactoryTest extends TestCase
 
         $this->tokenStorage->expects($this->any())
             ->method('getToken')
-            ->willReturn(new DummyToken(new UserEntity(1, 'a', array(new SwitchUserRole('', $userToken)))));
+            ->willReturn(new SwitchUserToken(new UserEntity(1, 'a'), '', 'main', [], $userToken));
 
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 
