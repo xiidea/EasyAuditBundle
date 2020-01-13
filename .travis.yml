@@ -21,4 +21,4 @@ script:
   - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 
 after_script:
-  - if [ "$TRAVIS_PHP_VERSION" == "7.4" ]; then php vendor/bin/php-coveralls -v --exclude-no-stmt; fi
+  - if [ "$TRAVIS_PHP_VERSION" == "7.3" ]; then php vendor/bin/php-coveralls -v --exclude-no-stmt; fi
