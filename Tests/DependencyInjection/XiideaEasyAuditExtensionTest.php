@@ -208,22 +208,6 @@ class XiideaEasyAuditExtensionTest extends TestCase
         $this->assertEquals($channel, $this->container->getParameter('xiidea.easy_audit.logger_channel'));
     }
 
-    public function testOldConfigValue()
-    {
-        $loader = new XiideaEasyAuditExtension();
-        $config = $this->getOldConfig();
-
-        $this->container->prependExtensionConfig('doctrine', []);
-        $this->container->prependExtensionConfig($loader->getAlias(), $config);
-
-        $loader->prepend($this->container);
-        $loader->load($this->container->getExtensionConfig($loader->getAlias()), $this->container);
-
-        $this->assertNotFalse($this->container->getParameter('xiidea.easy_audit.doctrine_objects'));
-        $this->assertNotFalse($this->container->getParameter('xiidea.easy_audit.events'));
-        $this->assertCount(2, $this->container->getParameter('xiidea.easy_audit.doctrine_objects'));
-    }
-
     /**
      * getRequiredConfig.
      *
@@ -238,23 +222,6 @@ EOF;
         return $this->getArrayFromYaml($yaml);
     }
 
-    /**
-     * getRequiredConfig.
-     *
-     * @return array
-     */
-    protected function getOldConfig()
-    {
-        $yaml = <<<EOF
-entity_class : MyProject\Bundle\MyBundle\Entity\AuditLog                     #Required
-entity_event_resolver : doctrine_event_resolver                                              #Required
-doctrine_entities : 
-     MyProject\Bundle\MyBundle\Entity\MyEntity : [created, updated, deleted]
-     MyProject\Bundle\MyBundle\Entity\MyEntity2 : ~
-user_property : ~ # or username                                              #Required
-EOF;
-        return $this->getArrayFromYaml($yaml);
-    }
 
     /**
      * getFullConfig.

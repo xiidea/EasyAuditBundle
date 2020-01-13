@@ -92,37 +92,10 @@ class XiideaEasyAuditExtension extends Extension implements PrependExtensionInte
 
         $prependConfig = [];
 
-        $optionMap = [
-            'entity_class' => 'audit_log_class',
-            'entity_event_resolver' => 'doctrine_event_resolver',
-            'doctrine_entities' => 'doctrine_objects',
-        ];
-
-        foreach ($optionMap as $oldOption => $newOption) {
-            $prependConfig = $this->prependConfigFromOldOption($oldOption, $newOption, $configs, $prependConfig);
-        }
-
         $doctrineConfig = $container->getExtensionConfig('doctrine');
 
         if (!empty($doctrineConfig) && !isset($configs['doctrine_event_resolver'])) {
             $prependConfig['doctrine_event_resolver'] = 'xiidea.easy_audit.default_doctrine_event_resolver';
-        }
-
-        return $prependConfig;
-    }
-
-    /**
-     * @param $oldOption
-     * @param $newOption
-     * @param array $configs
-     * @param array $prependConfig
-     * @return array
-     */
-    protected function prependConfigFromOldOption($oldOption, $newOption, array $configs, array $prependConfig)
-    {
-        if (isset($configs[$oldOption]) && !isset($configs[$newOption])) {
-            @trigger_error(sprintf('The "%s" option is deprecated since XiideaEasyAuditBundle 1.4.10. and will not be supported anymore in 2.0. Use "%s" instead.', $oldOption, $newOption), E_USER_DEPRECATED);
-            $prependConfig[$newOption] = $configs[$oldOption];
         }
 
         return $prependConfig;

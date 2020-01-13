@@ -32,7 +32,7 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder(self::ROOT_NODE_NAME);
 
-        $rootNode = $this->getRootNode($treeBuilder);
+        $rootNode = $treeBuilder->getRootNode();
 
         $this->addRequiredConfigs($rootNode);
         $this->addDefaultServices($rootNode);
@@ -51,9 +51,6 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('user_property')->isRequired()->end()
                 ->scalarNode('audit_log_class')->cannotBeOverwritten()->isRequired()->cannotBeEmpty()->end()
-                ->scalarNode('entity_class')->cannotBeOverwritten()
-//                    ->setDeprecated('The "%node%" option is deprecated since XiideaEasyAuditBundle 1.4.10. and will not be supported anymore in 2.0. Use "audit_log_class" instead.')
-                ->end()
             ->end();
     }
 
@@ -68,10 +65,6 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('doctrine_event_resolver')
                     ->defaultValue(null)
                 ->end()
-                ->scalarNode('entity_event_resolver')
-                    ->defaultValue(null)
-//                    ->setDeprecated('The "%node%" option is deprecated since XiideaEasyAuditBundle 1.4.10. and will not be supported anymore in 2.0. Use "doctrine_event_resolver" instead.')
-                ->end()
                 ->booleanNode('default_logger')->defaultValue(true)->end()
             ->end();
     }
@@ -85,10 +78,6 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->variableNode('doctrine_objects')
                     ->defaultValue(array())
-                ->end()
-                ->variableNode('doctrine_entities')
-                    ->defaultValue(array())
-//                    ->setDeprecated('The "%node%" option is deprecated since XiideaEasyAuditBundle 1.4.10. and will not be supported anymore in 2.0. Use "doctrine_objects" instead.')
                 ->end()
                 ->variableNode('events')->defaultValue(array())->end()
                 ->variableNode('custom_resolvers')->defaultValue(array())->end()
@@ -205,18 +194,5 @@ class Configuration implements ConfigurationInterface
         return function ($v) {
             return empty($v);
         };
-    }
-
-    /**
-     * @param TreeBuilder $treeBuilder
-     * @return ArrayNodeDefinition|\Symfony\Component\Config\Definition\Builder\NodeDefinition
-     */
-    protected function getRootNode($treeBuilder)
-    {
-        if (method_exists($treeBuilder, 'getRootNode')) {
-            return $treeBuilder->getRootNode();
-        }
-
-        return $treeBuilder->root(self::ROOT_NODE_NAME);
     }
 }
