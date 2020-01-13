@@ -51,9 +51,7 @@ class TestKernel extends Kernel
 
     public function getCacheDir()
     {
-        $str = sys_get_temp_dir().'/XiideaEasyAuditBundle/'.substr(sha1($this->config), 0, 6);
-        file_put_contents('/Users/Projects/libs/php/EasyAuditBundle/a.txt', $str);
-        return $str.'/cache';
+        return sys_get_temp_dir().'/XiideaEasyAuditBundle/'.substr(sha1($this->config), 0, 6).'/cache';
     }
 
     public function getLogDir()
