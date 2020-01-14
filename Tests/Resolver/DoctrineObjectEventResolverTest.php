@@ -49,12 +49,6 @@ class DoctrineObjectEventResolverTest extends TestCase
         $this->mockMethodCallTree();
     }
 
-    public function testOldEntityEventResolverWorks()
-    {
-        $this->eventResolver = new EntityEventResolver();
-        $this->assertInstanceOf('Xiidea\EasyAuditBundle\Resolver\EventResolverInterface', $this->eventResolver);
-    }
-
     public function testIsAnInstanceOfEventResolverInterface()
     {
         $this->assertInstanceOf('Xiidea\EasyAuditBundle\Resolver\EventResolverInterface', $this->eventResolver);
