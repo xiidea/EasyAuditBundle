@@ -1,0 +1,8 @@
+title: Easy Audit Bundle
+description: A Symfony2 Bundle To Log Selective Events
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-hacker
+
+gems:
+  - jekyll-mentions
