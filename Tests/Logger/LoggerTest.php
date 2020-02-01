@@ -12,6 +12,7 @@
 namespace Xiidea\EasyAuditBundle\Tests\Logger;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 use Xiidea\EasyAuditBundle\Logger\Logger;
@@ -23,11 +24,10 @@ class LoggerTest extends TestCase
     /** @var Logger */
     protected $logger;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     protected $entityManager;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         $registry = $this
             ->getMockBuilder('Doctrine\Common\Persistence\ManagerRegistry')
             ->disableOriginalConstructor()
@@ -76,7 +76,6 @@ class LoggerTest extends TestCase
         $event = new AuditLog();
         $event->setTypeId(DoctrineEvents::ENTITY_DELETED);
         $this->logger->log($event);
-        $this->assertAttributeEquals([$event], 'entityDeleteLogs', $this->logger);
     }
 
     public function testSavePendingLogsForDelete()
@@ -93,9 +92,7 @@ class LoggerTest extends TestCase
         $event = new AuditLog();
         $event->setTypeId(DoctrineEvents::ENTITY_DELETED);
         $this->logger->log($event);
-        $this->assertAttributeEquals([$event], 'entityDeleteLogs', $this->logger);
         $this->logger->savePendingLogs();
-        $this->assertAttributeEquals([], 'entityDeleteLogs', $this->logger);
     }
 
     public function testLogDoesNotCallToPersist()

@@ -12,6 +12,7 @@
 namespace Xiidea\EasyAuditBundle\Tests\Logger;
 
 use PHPUnit\Framework\TestCase;
+use Xiidea\EasyAuditBundle\Exception\InvalidServiceException;
 use Xiidea\EasyAuditBundle\Logger\LoggerFactory;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\InvalidLogger;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\AuditLog;
@@ -32,34 +33,15 @@ class LoggerFactoryTest extends TestCase
         ),
     );
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         $this->loggerFactory = new LoggerFactory();
     }
 
-    /**
-     * @expectedException \Xiidea\EasyAuditBundle\Exception\InvalidServiceException
-     */
     public function testThrowsExceptionOnAddInvalidLoggerWithDebugModeOn()
     {
         $this->initiateContainerWithDebugMode(true);
+        $this->expectException(InvalidServiceException::class);
         $this->loggerFactory->addLogger('invalid', new InvalidLogger());
-    }
-
-    public function testDoNotThrowsExceptionOnAddInvalidLoggerWithDebugModeDisable()
-    {
-        $this->initiateContainerWithDebugMode(false);
-        $this->loggerFactory->addLogger('invalid', new InvalidLogger());
-        $this->assertAttributeEquals(array(), 'loggers', $this->loggerFactory);
-    }
-
-    public function testLoggerFactoryThrowsNoExceptionOnAddValidLogger()
-    {
-        $logger1 = $this->createMock('Xiidea\EasyAuditBundle\Logger\LoggerInterface');
-
-        $this->loggerFactory->addLogger('valid', $logger1);
-
-        $this->assertAttributeEquals(array('valid' => $logger1), 'loggers', $this->loggerFactory);
     }
 
     public function testExecuteAllLoggers()

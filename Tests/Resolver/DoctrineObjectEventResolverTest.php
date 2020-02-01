@@ -12,11 +12,11 @@
 namespace Xiidea\EasyAuditBundle\Tests\Resolver;
 
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\CommonDoctrineManager;
 use Xiidea\EasyAuditBundle\Events\DoctrineObjectEvent;
 use Xiidea\EasyAuditBundle\Resolver\DoctrineObjectEventResolver;
-use Xiidea\EasyAuditBundle\Resolver\EntityEventResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
 
@@ -25,23 +25,22 @@ class DoctrineObjectEventResolverTest extends TestCase
     /** @var DoctrineObjectEventResolver */
     private $eventResolver;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     private $entityManager;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     private $doctrine;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     private $dispatcher;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     private $unitOfWork;
 
     /** @var DoctrineObjectEvent */
     private $event;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         $this->doctrine = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
         $this->eventResolver = new DoctrineObjectEventResolver();
         $this->eventResolver->setDoctrine($this->doctrine);

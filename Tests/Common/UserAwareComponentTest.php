@@ -11,8 +11,9 @@ namespace Xiidea\EasyAuditBundle\Tests\Common;
  * with this source code in the file LICENSE.
  */
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\DummyToken;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\DummyUserAwareComponent;
@@ -20,23 +21,24 @@ use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
 
 class UserAwareComponentTest extends TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     private $tokenStorage;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     private $authChecker;
 
     /** @var DummyUserAwareComponent */
     private $userAwareComponent;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
         $this->authChecker = $this->createMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
+        $this->tokenStorage = new TokenStorage();
         $this->userAwareComponent = new DummyUserAwareComponent();
         $this->userAwareComponent->setTokenStorage($this->tokenStorage);
         $this->userAwareComponent->setAuthChecker($this->authChecker);
     }
+
 
     public function testShouldReturnNullUserIfUserNotLoggedIn()
     {
@@ -47,9 +49,7 @@ class UserAwareComponentTest extends TestCase
 
     public function testShouldReturnUserObjectOnLoggedInState()
     {
-        $this->tokenStorage->expects($this->any())
-            ->method('getToken')
-            ->willReturn(new DummyToken(new UserEntity(1, 'admin')));
+        $this->tokenStorage->setToken(new DummyToken(new UserEntity(1, 'admin')));
 
         $user = $this->userAwareComponent->getUser();
 
@@ -60,9 +60,7 @@ class UserAwareComponentTest extends TestCase
 
     public function testShouldReturnNullIfAuthenticatedAnonymously()
     {
-        $this->tokenStorage->expects($this->any())
-            ->method('getToken')
-            ->willReturn(new DummyToken(''));
+        $this->tokenStorage->setToken(new DummyToken(''));
 
         $user = $this->userAwareComponent->getUser();
 
@@ -71,9 +69,7 @@ class UserAwareComponentTest extends TestCase
 
     public function testShouldReturnNullImpersonatingUserWhenSecurityTokenNotExists()
     {
-        $this->tokenStorage->expects($this->any())
-            ->method('getToken')
-            ->willReturn(null);
+        $this->tokenStorage->setToken(null);
 
         $user = $this->userAwareComponent->getImpersonatingUserForTest();
 
@@ -84,9 +80,7 @@ class UserAwareComponentTest extends TestCase
     {
         $this->mockSecurityAuthChecker();
 
-        $this->tokenStorage->expects($this->any())
-            ->method('getToken')
-            ->willReturn(new DummyToken(new UserEntity(1, 'a')));
+        $this->tokenStorage->setToken(new DummyToken(new UserEntity(1, 'a')));
 
         $user = $this->userAwareComponent->getImpersonatingUserForTest();
 
@@ -99,9 +93,7 @@ class UserAwareComponentTest extends TestCase
 
         $userToken = new DummyToken(new UserEntity(1, 'admin'));
 
-        $this->tokenStorage->expects($this->any())
-            ->method('getToken')
-            ->willReturn(new SwitchUserToken(new UserEntity(1, 'a'), '', 'main', [], $userToken));
+        $this->tokenStorage->setToken(new SwitchUserToken(new UserEntity(1, 'a'), '', 'main', [], $userToken));
 
         $user = $this->userAwareComponent->getImpersonatingUserForTest();
 

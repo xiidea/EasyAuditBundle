@@ -11,6 +11,7 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Logger;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Xiidea\EasyAuditBundle\Logger\MonologLogger;
 use PHPUnit\Framework\TestCase;
@@ -21,11 +22,10 @@ class MonologLoggerTest extends TestCase
     /** @var MonologLogger */
     protected $logger;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject| LoggerInterface */
+    /** @var MockObject| LoggerInterface */
     protected $symfonyLogger;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         $this->symfonyLogger = $this->createMock(LoggerInterface::class);
 
         $this->logger = new MonologLogger($this->symfonyLogger);

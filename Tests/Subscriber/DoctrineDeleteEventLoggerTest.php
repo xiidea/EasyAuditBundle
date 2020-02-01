@@ -24,20 +24,13 @@ class DoctrineDeleteEventLoggerTest extends TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $responseevent;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         $this->responseevent = $this->getMockBuilder('Symfony\Component\HttpKernel\Event\FilterResponseEvent')
             ->disableOriginalConstructor()
             ->getMock();
         $this->logger = $this->getMockBuilder('Xiidea\EasyAuditBundle\Logger\Logger')
             ->disableOriginalConstructor()
             ->getMock();
-    }
-
-    public function testConstructor()
-    {
-        $subscriber = new DoctrineDeleteEventLogger($this->logger);
-        $this->assertAttributeEquals($this->logger, 'logger', $subscriber);
     }
 
     public function testSubscribedEvents()

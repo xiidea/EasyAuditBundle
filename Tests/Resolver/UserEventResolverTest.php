@@ -11,6 +11,7 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Resolver;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Event\AuthenticationFailureEvent;
@@ -18,21 +19,18 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Xiidea\EasyAuditBundle\Resolver\UserEventResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\DummyToken;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
-use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\DummyAuthenticationFailureEvent;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\DummyFilterUserResponseEvent;
-use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\DummyUserEvent;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
 
 class UserEventResolverTest extends TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     private $tokenStorage;
 
     /** @var UserEventResolver */
     private $eventResolver;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
         $this->eventResolver = new UserEventResolver();
         $this->eventResolver->setTokenStorage($this->tokenStorage);
@@ -122,7 +120,7 @@ class UserEventResolverTest extends TestCase
     /**
      * @param $eventClass
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function initializeMockEvent($eventClass)
     {

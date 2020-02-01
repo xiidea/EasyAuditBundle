@@ -13,6 +13,7 @@ namespace Xiidea\EasyAuditBundle\Tests\Subscriber;
 
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\Annotation\SubscribeDoctrineEvents;
 use Xiidea\EasyAuditBundle\Subscriber\DoctrineSubscriber;
@@ -21,20 +22,19 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class DoctrineSubscriberTest extends TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     private $dispatcher;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     private $annotationReader;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     private $entityManager;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     private $metaData;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         $this->dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $this->entityManager = $this->createMock(ObjectManager::class);
         $this->metaData = $this->createMock(ClassMetadata::class);
@@ -50,15 +50,6 @@ class DoctrineSubscriberTest extends TestCase
     public function testInstanceOnSubscriber()
     {
         $this->assertInstanceOf('Doctrine\Common\EventSubscriber', new DoctrineSubscriber());
-    }
-
-    public function testConstructor()
-    {
-        $entities = array('entity1', 'entity2');
-        $subscriber = new DoctrineSubscriber($entities);
-        $this->assertAttributeEquals($entities, 'entities', $subscriber);
-        $subscriber = new DoctrineSubscriber(array());
-        $this->assertAttributeEquals(array(), 'entities', $subscriber);
     }
 
     public function testSubscribedEvents()

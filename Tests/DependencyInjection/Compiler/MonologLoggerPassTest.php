@@ -11,6 +11,7 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\DependencyInjection\Compiler;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -18,14 +19,13 @@ use Xiidea\EasyAuditBundle\DependencyInjection\Compiler\MonologLoggerPass;
 
 class MonologLoggerPassTest extends TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|ContainerBuilder */
+    /** @var MockObject|ContainerBuilder */
     private $containerBuilder;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|Definition */
+    /** @var MockObject|Definition */
     private $definition;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         $this->containerBuilder = $this->createMock(ContainerBuilder::class);
         $this->definition = $this->createMock(Definition::class);
     }

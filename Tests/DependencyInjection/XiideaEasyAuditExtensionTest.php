@@ -12,6 +12,7 @@
 namespace Xiidea\EasyAuditBundle\Tests\DependencyInjection;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Yaml\Parser;
 use Xiidea\EasyAuditBundle\DependencyInjection\XiideaEasyAuditExtension;
@@ -21,8 +22,7 @@ class XiideaEasyAuditExtensionTest extends TestCase
     /** @var ContainerBuilder */
     protected $container;
 
-    protected function setUp()
-    {
+    protected function setUp(): void    {
         $this->container = new ContainerBuilder();
     }
 
@@ -62,38 +62,31 @@ class XiideaEasyAuditExtensionTest extends TestCase
         $this->assertHasDefinition('xiidea.easy_audit.default_doctrine_event_resolver');
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     */
     public function testEasyAuditLoadThrowsExceptionUnlessEntityClassSet()
     {
         $loader = new XiideaEasyAuditExtension();
         $config = $this->getRequiredConfig();
         unset($config['audit_log_class']);
 
+        $this->expectException(InvalidConfigurationException::class);
         $loader->load(array($config), new ContainerBuilder());
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     */
     public function testEasyAuditLoadThrowsExceptionUnlessUserPropertySet()
     {
         $loader = new XiideaEasyAuditExtension();
         $config = $this->getRequiredConfig();
         unset($config['user_property']);
-
+        $this->expectException(InvalidConfigurationException::class);
         $loader->load(array($config), new ContainerBuilder());
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     */
     public function testEasyAuditLoadThrowsExceptionForInvalidLoggerChannelDefinition()
     {
         $loader = new XiideaEasyAuditExtension();
         $config = $this->getRequiredConfig();
         $config['logger_channel'] = array('foo.logger' => array('info', '!debug'));
+        $this->expectException(InvalidConfigurationException::class);
 
         $loader->load(array($config), new ContainerBuilder());
     }
