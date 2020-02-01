@@ -9,10 +9,9 @@
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/b8802bf0-af10-4343-a6c4-846d6b481978/mini.png)](https://insight.sensiolabs.com/projects/b8802bf0-af10-4343-a6c4-846d6b481978)
 [![knpbundles.com](http://knpbundles.com/xiidea/EasyAuditBundle/badge-short)](http://knpbundles.com/xiidea/EasyAuditBundle)
 
-A Symfony2 Bundle To Log Selective Events. It is easy to configure and easy to customize for your need.
+A Symfony Bundle To Log Selective Events. It is easy to configure and easy to customize for your need.
 
-**Note:** If you are using **Symfony** version **older then 2.4** you need to use [EasyAuditBundle 1.2.x](https://github.com/xiidea/EasyAuditBundle/tree/1.2.x)  
-**Note:** If you are using **Symfony** version **older then 2.6** you need to use [EasyAuditBundle 1.3.x](https://github.com/xiidea/EasyAuditBundle/tree/1.3.x)
+**Note:** If you are using **Symfony** version **older then 5.0** you need to use [EasyAuditBundle 1.4.x](https://github.com/xiidea/EasyAuditBundle/tree/1.4.x)
 
 ## Install
 
@@ -29,7 +28,7 @@ Add EasyAuditBundle in your composer.json:
 ```json
 {
     "require": {
-        "xiidea/easy-audit": "^1.4"
+        "xiidea/easy-audit": "^2.0"
     }
 }
 ```
@@ -149,7 +148,7 @@ to achieve the same functionality
          
 -   Since v1.4.7 `EntityEventResolver` been refactored to a simplified version, if your code directly depends on older version of the implementation
     you are advised to copy the content of old implementation from [here](https://github.com/xiidea/EasyAuditBundle/blob/1.4.6/Resolver/EntityEventResolver.php)
-
+-   Since v2.0 The FosUserBundle Events are removed from `UserEventResolver` and Event class using `Symfony\Contracts\*` namespace 
 ## Cookbook
 
 Look the cookbook for another interesting things.
