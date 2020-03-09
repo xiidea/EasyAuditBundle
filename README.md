@@ -11,7 +11,7 @@
 
 A Symfony Bundle To Log Selective Events. It is easy to configure and easy to customize for your need.
 
-**Note:** If you are using **Symfony** version **older then 5.0** you need to use [EasyAuditBundle 1.4.x](https://github.com/xiidea/EasyAuditBundle/tree/1.4.x)
+**Note:** If you are using **Symfony** version **older than 5.0** you need to use [EasyAuditBundle 1.4.x](https://github.com/xiidea/EasyAuditBundle/tree/1.4.x)
 
 ## Install
 
