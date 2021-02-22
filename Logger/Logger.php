@@ -11,8 +11,8 @@
 
 namespace Xiidea\EasyAuditBundle\Logger;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ObjectManager;
 use Xiidea\EasyAuditBundle\Model\BaseAuditLog as AuditLog;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 
@@ -21,7 +21,7 @@ class Logger implements LoggerInterface
     private $entityDeleteLogs = [];
 
     /**
-     * @var \Doctrine\Common\Persistence\ManagerRegistry
+     * @var \Doctrine\Persistence\ManagerRegistry
      */
     private $doctrine;
 

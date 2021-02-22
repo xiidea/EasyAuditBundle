@@ -11,7 +11,7 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Logger;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
@@ -29,7 +29,7 @@ class LoggerTest extends TestCase
 
     public function setUp(): void    {
         $registry = $this
-            ->getMockBuilder('Doctrine\Common\Persistence\ManagerRegistry')
+            ->getMockBuilder('Doctrine\Persistence\ManagerRegistry')
             ->disableOriginalConstructor()
             ->getMock();
 

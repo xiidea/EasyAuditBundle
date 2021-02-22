@@ -2,7 +2,7 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Fixtures\Common;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 
 interface CommonDoctrineManager extends ObjectManager
 {
