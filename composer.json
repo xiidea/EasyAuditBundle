@@ -21,7 +21,7 @@
         "source": "https://github.com/xiidea/EasyAuditBundle"
     },
     "require": {
-        "php": ">=7.2",
+        "php": "^7.2.5",
         "psr/log": "^1",
         "symfony/framework-bundle": ">=5.0 <6.0.0",
         "symfony/security-bundle": ">=5.0 <6.0.0"
