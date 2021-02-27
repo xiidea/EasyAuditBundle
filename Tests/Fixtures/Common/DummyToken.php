@@ -79,7 +79,7 @@ class DummyToken implements TokenInterface
      */
     public function __toString()
     {
-        return;
+        return '';
     }
 
     /**

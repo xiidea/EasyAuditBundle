@@ -12,8 +12,8 @@
 namespace Xiidea\EasyAuditBundle\Subscriber;
 
 use Doctrine\Common\EventSubscriber;
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\Common\Util\ClassUtils;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Xiidea\EasyAuditBundle\Annotation\SubscribeDoctrineEvents;
 use Xiidea\EasyAuditBundle\Events\DoctrineObjectEvent;

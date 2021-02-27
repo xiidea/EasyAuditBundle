@@ -11,7 +11,7 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Resolver;
 
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\CommonDoctrineManager;
@@ -41,7 +41,7 @@ class DoctrineObjectEventResolverTest extends TestCase
     private $event;
 
     public function setUp(): void    {
-        $this->doctrine = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $this->doctrine = $this->createMock('Doctrine\Persistence\ManagerRegistry');
         $this->eventResolver = new DoctrineObjectEventResolver();
         $this->eventResolver->setDoctrine($this->doctrine);
 
