@@ -54,7 +54,7 @@ class Logger implements LoggerInterface
     }
 
     /**
-     * @return \Doctrine\Common\Persistence\ManagerRegistry
+     * @return ManagerRegistry
      */
     public function getDoctrine()
     {
