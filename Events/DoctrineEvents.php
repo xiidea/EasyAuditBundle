@@ -13,7 +13,7 @@ namespace Xiidea\EasyAuditBundle\Events;
 
 class DoctrineEvents
 {
-    private static $prefix = 'easy_audit.doctrine.object.';
+    private static string $prefix = 'easy_audit.doctrine.object.';
 
     const ENTITY_UPDATED = 'easy_audit.doctrine.object.updated';
     const ENTITY_CREATED = 'easy_audit.doctrine.object.created';
@@ -24,7 +24,7 @@ class DoctrineEvents
      *
      * @return string
      */
-    public static function getShortEventType($eventName)
+    public static function getShortEventType(string $eventName): string
     {
         return str_replace(self::$prefix, '', $eventName);
     }
@@ -34,7 +34,7 @@ class DoctrineEvents
      *
      * @throws \ReflectionException
      */
-    public static function getConstants()
+    public static function getConstants(): array
     {
         $oClass = new \ReflectionClass(__CLASS__);
         return $oClass->getConstants();

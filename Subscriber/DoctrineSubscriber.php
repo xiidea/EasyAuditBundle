@@ -11,6 +11,7 @@
 
 namespace Xiidea\EasyAuditBundle\Subscriber;
 
+use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
@@ -21,27 +22,17 @@ use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 
 class DoctrineSubscriber implements EventSubscriber
 {
-    /** @var \Doctrine\Common\Annotations\Reader */
-    private $annotationReader;
+    private Reader $annotationReader;
+    private array $toBeDeleted = [];
+    private EventDispatcher $dispatcher;
+    private array $entities;
 
-    private $toBeDeleted = [];
-
-    /**
-     * @var EventDispatcher
-     */
-    private $dispatcher;
-
-    /**
-     * @var array
-     */
-    private $entities;
-
-    public function __construct($entities = array())
+    public function __construct($entities = [])
     {
         $this->entities = $entities;
     }
 
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): array
     {
         return array(
             'postPersist',
@@ -95,13 +86,14 @@ class DoctrineSubscriber implements EventSubscriber
     }
 
     /**
-     * @param string             $eventName
+     * @param string $eventName
      * @param LifecycleEventArgs $args
      */
-    private function handleEvent($eventName, LifecycleEventArgs $args)
+    private function handleEvent(string $eventName, LifecycleEventArgs $args)
     {
         if (true === $this->isConfiguredToTrack($args->getObject(), $eventName)) {
-            $this->dispatcher->dispatch(new DoctrineObjectEvent($args, $this->getIdentity($args, ClassUtils::getClass($args->getObject()))),
+            $this->dispatcher->dispatch(
+                new DoctrineObjectEvent($args, $this->getIdentity($args, ClassUtils::getClass($args->getObject()))),
                 $eventName
             );
         }
@@ -113,7 +105,7 @@ class DoctrineSubscriber implements EventSubscriber
      *
      * @return bool
      */
-    private function isConfiguredToTrack($entity, $eventName = '')
+    private function isConfiguredToTrack($entity, string $eventName = ''): bool
     {
         $class = ClassUtils::getClass($entity);
         $eventType = DoctrineEvents::getShortEventType($eventName);
@@ -190,7 +182,7 @@ class DoctrineSubscriber implements EventSubscriber
      *
      * @return bool
      */
-    private function shouldTrackEventType($eventType, $class)
+    private function shouldTrackEventType($eventType, $class): bool
     {
         return is_array($this->entities[$class]) && in_array($eventType, $this->entities[$class]);
     }
@@ -233,7 +225,11 @@ class DoctrineSubscriber implements EventSubscriber
     {
         $originalClassName = ClassUtils::getClass($entity);
 
-        return isset($this->toBeDeleted[$originalClassName]) && isset($this->toBeDeleted[$originalClassName][spl_object_hash($entity)]);
+        return isset($this->toBeDeleted[$originalClassName]) && isset(
+                $this->toBeDeleted[$originalClassName][spl_object_hash(
+                    $entity
+                )]
+            );
     }
 
     /**
