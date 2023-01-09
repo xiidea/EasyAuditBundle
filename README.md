@@ -4,8 +4,9 @@
 [![Coverage Status](https://coveralls.io/repos/xiidea/EasyAuditBundle/badge.svg?branch=master&service=github)](https://coveralls.io/github/xiidea/EasyAuditBundle?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/xiidea/EasyAuditBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/xiidea/EasyAuditBundle/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/xiidea/easy-audit/v/stable.png)](https://packagist.org/packages/xiidea/easy-audit)
+[![Latest Unstable Version](http://poser.pugx.org/xiidea/easy-audit/v/unstable)](https://packagist.org/packages/xiidea/easy-audit)
 [![Total Downloads](https://poser.pugx.org/xiidea/easy-audit/downloads.png)](https://packagist.org/packages/xiidea/easy-audit)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/b8802bf0-af10-4343-a6c4-846d6b481978/mini.png)](https://insight.sensiolabs.com/projects/b8802bf0-af10-4343-a6c4-846d6b481978)
+[![License](http://poser.pugx.org/xiidea/easy-audit/license)](https://packagist.org/packages/xiidea/easy-audit)
 
 A Symfony Bundle To Log Selective Events. It is easy to configure and easy to customize for your need.
 
@@ -35,7 +36,7 @@ Add EasyAuditBundle in your composer.json:
 ```json
 {
     "require": {
-        "xiidea/easy-audit": "^2.0"
+        "xiidea/easy-audit": "^3.0"
     }
 }
 ```
