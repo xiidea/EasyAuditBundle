@@ -31,9 +31,9 @@
         "php-coveralls/php-coveralls": "^2.1",
         "doctrine/common": ">=2.2 <4.0",
         "symfony/test-pack": "^1.0",
-        "symfony/twig-bundle": "^6.2",
-        "symfony/form": "^6.2",
-        "symfony/validator": "^6.2",
+        "symfony/twig-bundle": "^6.0",
+        "symfony/form": "^6.0",
+        "symfony/validator": "^6.0",
         "doctrine/annotations": "^2.0"
     },
     "autoload": {
