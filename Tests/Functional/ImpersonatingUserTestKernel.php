@@ -13,7 +13,7 @@ namespace Xiidea\EasyAuditBundle\Tests\Functional;
 
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\SecurityBundle\SecurityBundle;
-use Symfony\Bundle\SecurityBundle\Tests\Functional\Bundle\FormLoginBundle\FormLoginBundle;
+//use Symfony\Bundle\SecurityBundle\Tests\Functional\Bundle\FormLoginBundle\FormLoginBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -41,29 +41,29 @@ class ImpersonatingUserTestKernel extends Kernel
         $this->config = $config;
     }
 
-    public function registerBundles()
+    public function registerBundles(): iterable
     {
         return array(
             new FrameworkBundle(),
             new TwigBundle(),
             new SecurityBundle(),
-            new FormLoginBundle(),
+//            new FormLoginBundle(),
             new XiideaEasyAuditBundle(),
             new XiideaTestBundle(),
         );
     }
 
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         return sys_get_temp_dir().'/XiideaEasyAuditBundle/cache/'.substr(sha1($this->config), 0, 6);
     }
 
-    public function getLogDir()
+    public function getLogDir(): string
     {
         return sys_get_temp_dir().'/XiideaEasyAuditBundle/logs/'.substr(sha1($this->config), 0, 6);
     }
 
-    public function getProjectDir()
+    public function getProjectDir(): string
     {
         return __DIR__;
     }

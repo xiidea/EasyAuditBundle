@@ -66,7 +66,7 @@ class UserEntity implements UserInterface
     /**
      * @return array
      */
-    public function getRoles()
+    public function getRoles(): array
     {
         return $this->roles;
     }
@@ -252,27 +252,6 @@ class UserEntity implements UserInterface
     {
     }
 
-    /**
-     * Gets the canonical username in search and sort queries.
-     *
-     * @return string
-     */
-    public function getUsernameCanonical()
-    {
-        return;
-    }
-
-    /**
-     * Sets the canonical username.
-     *
-     * @param string $usernameCanonical
-     *
-     * @return static
-     */
-    public function setUsernameCanonical($usernameCanonical)
-    {
-        return $this;
-    }
 
     /**
      * Gets email.
@@ -449,5 +428,10 @@ class UserEntity implements UserInterface
     public function removeRole($role)
     {
         return $this;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->username;
     }
 }

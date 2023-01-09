@@ -60,7 +60,7 @@ class UserAwareComponentTest extends TestCase
 
     public function testShouldReturnNullIfAuthenticatedAnonymously()
     {
-        $this->tokenStorage->setToken(new DummyToken(''));
+        $this->tokenStorage->setToken(new DummyToken(null));
 
         $user = $this->userAwareComponent->getUser();
 
@@ -93,7 +93,7 @@ class UserAwareComponentTest extends TestCase
 
         $userToken = new DummyToken(new UserEntity(1, 'admin'));
 
-        $this->tokenStorage->setToken(new SwitchUserToken(new UserEntity(1, 'a'), '', 'main', [], $userToken));
+        $this->tokenStorage->setToken(new SwitchUserToken(new UserEntity(1, 'a'), 'main', [], $userToken));
 
         $user = $this->userAwareComponent->getImpersonatingUserForTest();
 

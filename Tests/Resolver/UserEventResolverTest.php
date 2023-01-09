@@ -14,7 +14,6 @@ namespace Xiidea\EasyAuditBundle\Tests\Resolver;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Event\AuthenticationFailureEvent;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Xiidea\EasyAuditBundle\Resolver\UserEventResolver;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\DummyToken;
@@ -60,21 +59,6 @@ class UserEventResolverTest extends TestCase
         $this->assertEquals(array(
             'description' => "User 'admin' Logged in Successfully",
             'type' => 'User Logged in',
-        ), $auditLog);
-    }
-
-
-    public function testAuthenticationFailureEvent()
-    {
-        $event = new AuthenticationFailureEvent(new DummyToken('user'), new AuthenticationException());
-
-        $auditLog = $this->eventResolver->getEventLogInfo($event, 'security.authentication.failure');
-
-        $this->assertNotNull($auditLog);
-
-        $this->assertEquals(array(
-            'description' => 'Bad credentials Username: user',
-            'type' => 'Authentication Failed',
         ), $auditLog);
     }
 

@@ -3,15 +3,22 @@
 [![Build Status](https://travis-ci.org/xiidea/EasyAuditBundle.svg?branch=master)](https://travis-ci.org/xiidea/EasyAuditBundle)
 [![Coverage Status](https://coveralls.io/repos/xiidea/EasyAuditBundle/badge.svg?branch=master&service=github)](https://coveralls.io/github/xiidea/EasyAuditBundle?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/xiidea/EasyAuditBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/xiidea/EasyAuditBundle/?branch=master)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/327c3f057c384aa894f76154bb2ebb74)](https://app.codacy.com/app/ronisaha/EasyAuditBundle?utm_source=github.com&utm_medium=referral&utm_content=xiidea/EasyAuditBundle&utm_campaign=Badge_Grade_Dashboard)
 [![Latest Stable Version](https://poser.pugx.org/xiidea/easy-audit/v/stable.png)](https://packagist.org/packages/xiidea/easy-audit)
 [![Total Downloads](https://poser.pugx.org/xiidea/easy-audit/downloads.png)](https://packagist.org/packages/xiidea/easy-audit)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/b8802bf0-af10-4343-a6c4-846d6b481978/mini.png)](https://insight.sensiolabs.com/projects/b8802bf0-af10-4343-a6c4-846d6b481978)
-[![knpbundles.com](http://knpbundles.com/xiidea/EasyAuditBundle/badge-short)](http://knpbundles.com/xiidea/EasyAuditBundle)
 
 A Symfony Bundle To Log Selective Events. It is easy to configure and easy to customize for your need.
 
-**Note:** If you are using **Symfony** version **older than 5.0** you need to use [EasyAuditBundle 1.4.x](https://github.com/xiidea/EasyAuditBundle/tree/1.4.x)
+### Versions
+
+| Symfony |    PHP    |                        EasyAuditBundle                        |       Support       |
+|:-------:|:---------:|:-------------------------------------------------------------:|:-------------------:|
+|   6.x   |  >=8.0.2  |                             3.x.x                             | New Features / Bugs |
+|   5.x   |  >=7.2.5  | [2.x.x](https://github.com/xiidea/EasyAuditBundle/tree/2.0.x) |        Bugs         |
+| 2.7-4.4 | ^5.6,^7.0 | [1.4.x](https://github.com/xiidea/EasyAuditBundle/tree/1.4.x) |          -          |
+|  <=2.8  | ^5.4-7.3  | [1.3.x](https://github.com/xiidea/EasyAuditBundle/tree/1.3.x) |          -          |
+|  <=2.4  |   ^5.4    | [1.2.x](https://github.com/xiidea/EasyAuditBundle/tree/1.2.x) |          -          |
+
 
 ## Install
 
@@ -89,7 +96,6 @@ xiidea_easy_audit:
     #List all custom resolver for event
     #custom_resolvers :
     #       security.interactive_login : user.event_resolver
-    #       security.authentication.failure : user.event_resolver
 
     #logger_channel:
     #    xiidea.easy_audit.logger.service: ["info", "debug"]
@@ -148,7 +154,8 @@ to achieve the same functionality
          
 -   Since v1.4.7 `EntityEventResolver` been refactored to a simplified version, if your code directly depends on older version of the implementation
     you are advised to copy the content of old implementation from [here](https://github.com/xiidea/EasyAuditBundle/blob/1.4.6/Resolver/EntityEventResolver.php)
--   Since v2.0 The FosUserBundle Events are removed from `UserEventResolver` and Event class using `Symfony\Contracts\*` namespace 
+-   Since v2.0 The FosUserBundle Events are removed from `UserEventResolver` and Event class using `Symfony\Contracts\*` namespace
+-   Since v3.0 As `Symfony\Component\Security\Core\Event\AuthenticationEvent` not exists anymore, `security.authentication.failure` resolver also removed.
 ## Cookbook
 
 Look the cookbook for another interesting things.

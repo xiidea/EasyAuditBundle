@@ -44,7 +44,7 @@ class EventResolverFactory extends UserAwareComponent
      * @param $userProperty
      * @param $entityClass
      */
-    public function __construct(array $resolverEventMap = array(), $userProperty = 'username', $entityClass = BaseAuditLog::class)
+    public function __construct(array $resolverEventMap = array(), $userProperty = 'userIdentifier', $entityClass = BaseAuditLog::class)
     {
         $this->resolverEventMap = $resolverEventMap;
         $this->userProperty = $userProperty;

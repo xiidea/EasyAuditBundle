@@ -18,11 +18,11 @@ class BaseTestCase extends WebTestCase
     /** @var null|\Symfony\Bundle\FrameworkBundle\KernelBrowser */
     protected $client = null;
 
-    protected static function createKernel(array $options = array())
+    protected static function createKernel(array $options = array()): TestKernel
     {
         return new TestKernel(
-            isset($options['config']) ? $options['config'] : 'config',
-            isset($options['debug']) ? (bool) $options['debug'] : true
+            $options['config'] ?? 'config',
+            !isset($options['debug']) || (bool)$options['debug']
         );
     }
 

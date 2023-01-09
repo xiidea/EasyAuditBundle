@@ -39,7 +39,7 @@ class TestKernel extends Kernel
         $this->config = $config;
     }
 
-    public function registerBundles()
+    public function registerBundles(): iterable
     {
         return array(
             new FrameworkBundle(),
@@ -49,12 +49,12 @@ class TestKernel extends Kernel
         );
     }
 
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         return sys_get_temp_dir().'/XiideaEasyAuditBundle/'.substr(sha1($this->config), 0, 6).'/cache';
     }
 
-    public function getLogDir()
+    public function getLogDir(): string
     {
         return sys_get_temp_dir().'/XiideaEasyAuditBundle/'.substr(sha1($this->config), 0, 6).'/logs';
     }
@@ -64,7 +64,7 @@ class TestKernel extends Kernel
         $loader->load($this->config);
     }
 
-    public function getProjectDir()
+    public function getProjectDir(): string
     {
         return __DIR__;
     }

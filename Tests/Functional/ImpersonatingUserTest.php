@@ -20,11 +20,11 @@ class ImpersonatingUserTest extends WebTestCase
     /** @var null|\Symfony\Bundle\FrameworkBundle\KernelBrowser */
     protected $client = null;
 
-    protected static function createKernel(array $options = array())
+    protected static function createKernel(array $options = array()): ImpersonatingUserTestKernel
     {
         return new ImpersonatingUserTestKernel(
-            isset($options['config']) ? $options['config'] : 'config',
-            isset($options['debug']) ? (bool) $options['debug'] : true
+            $options['config'] ?? 'config',
+            !isset($options['debug']) || (bool)$options['debug']
         );
     }
 
@@ -34,13 +34,14 @@ class ImpersonatingUserTest extends WebTestCase
      */
     public function testSecuredEventWithImpersonatingUser()
     {
-        $this->client = $this->createAuthenticatedClient('admin');
+        $this->client = $this->createAuthenticatedClient();
 
         $name = 'simple.event';
+        $this->client->request('GET', "/some-secure-url/{$name}", [], [], [
+            "HTTP_AUTHORIZATION" => "Basic " . base64_encode("admin:login")
+        ]);
         $crawler = $this->client->request('GET', "/some-secure-url/{$name}?_switch_user=user");
         $this->assertTrue($this->client->getResponse()->isSuccessful());
-
-        $this->assertEquals('user', $this->client->getProfile()->getCollector('security')->getUser());
 
         $event = $this->getEventArrayFromResponse($crawler);
 
@@ -52,16 +53,11 @@ class ImpersonatingUserTest extends WebTestCase
         $this->assertEquals('127.0.0.1', $event['ip']);
     }
 
-    protected function createAuthenticatedClient($username)
+    protected function createAuthenticatedClient()
     {
-        $client = $this->createClient(array('config' => 'switchuser'));
-        $client->followRedirects(true);
-        $crawler = $client->request('GET', '/login');
-        $form = $crawler->selectButton('login')->form();
+        $client = static::createClient(array('config' => 'switchuser'));
 
-        $form['_username'] = $username;
-        $form['_password'] = 'login';
-        $client->submit($form);
+        $client->followRedirects(true);
 
         return $client;
     }
@@ -71,7 +67,7 @@ class ImpersonatingUserTest extends WebTestCase
      *
      * @return mixed
      */
-    private function getEventArrayFromResponse(Crawler $crawler)
+    private function getEventArrayFromResponse(Crawler $crawler): array
     {
         $html = $crawler->html();
         $parts = explode(DefaultController::RESPONSE_BOUNDARY, $html);

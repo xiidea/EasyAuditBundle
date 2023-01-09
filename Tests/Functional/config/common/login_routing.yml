@@ -1,5 +1,5 @@
 _existing:
     resource: 'routing.yml'
 
-_form_login_bundle:
-    resource: '@FormLoginBundle/Resources/config/routing.yml'
+#_form_login_bundle:
+#    resource: '@FormLoginBundle/Resources/config/routing.yml'

@@ -4,7 +4,7 @@ imports:
 
 xiidea_easy_audit:
     audit_log_class : Xiidea\EasyAuditBundle\Tests\Functional\Bundle\TestBundle\Entity\AuditLog
-    user_property : username
+    user_property : userIdentifier
     doctrine_objects : false
     default_logger : false
 

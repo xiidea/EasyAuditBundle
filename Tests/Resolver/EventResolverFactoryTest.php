@@ -88,7 +88,7 @@ class EventResolverFactoryTest extends TestCase
 
         $this->tokenStorage->expects($this->any())
             ->method('getToken')
-            ->willReturn(new SwitchUserToken(new UserEntity(1, 'a'), '', 'main', [], $userToken));
+            ->willReturn(new SwitchUserToken(new UserEntity(1, 'a'), 'main', [], $userToken));
 
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 
@@ -427,7 +427,7 @@ class EventResolverFactoryTest extends TestCase
 
         $this->tokenStorage->expects($this->once())
             ->method('getToken')
-            ->willReturn(new DummyToken(''));
+            ->willReturn(new DummyToken(null));
 
         $auditLog = $this->resolverFactory->getEventLog($this->event, 'basic');
 

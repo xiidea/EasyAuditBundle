@@ -42,7 +42,7 @@ class DoctrineSubscriberTest extends TestCase
         $this->entityManager->method('getClassMetadata')
             ->willReturn($this->metaData);
 
-        $this->annotationReader = $this->getMockBuilder('\Doctrine\Common\Annotations\FileCacheReader')
+        $this->annotationReader = $this->getMockBuilder('\Doctrine\Common\Annotations\AnnotationReader')
             ->disableOriginalConstructor()
             ->getMock();
     }

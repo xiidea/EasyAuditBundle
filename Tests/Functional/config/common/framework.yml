@@ -2,7 +2,10 @@ framework:
     secret: test
     test: ~
     session:
-        storage_id: session.storage.filesystem
+        handler_id: null
+        cookie_secure: auto
+        cookie_samesite: lax
+        storage_factory_id: session.storage.factory.native
     router:
         resource: "%kernel.project_dir%/config/common/routing.yml"
 

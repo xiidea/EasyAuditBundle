@@ -45,6 +45,11 @@ class MonologLoggerPassTest extends TestCase
 
     public function testProcessWithLoggerDefinitions()
     {
+        $this->containerBuilder->expects($this->once())
+            ->method('hasAlias')
+            ->with($this->equalTo('logger'))
+            ->will($this->returnValue(true));
+
         $this->definition->expects($this->once())
             ->method('setPublic')
             ->with($this->equalTo(true));

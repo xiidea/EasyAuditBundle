@@ -9,17 +9,17 @@ security:
     role_hierarchy:
         ROLE_ADMIN: [ROLE_USER, ROLE_ALLOWED_TO_SWITCH]
 
-    encoders:
-        Symfony\Component\Security\Core\User\UserInterface: plaintext
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'plaintext'
 
     firewalls:
         login_form:
                 pattern: ^/login$
                 security: false
         main:
-            anonymous:    true
+            lazy: true
             http_basic: ~
 
     access_control:
-        - { path: ^/public/, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/public/, role: PUBLIC_ACCESS }
 

@@ -12,17 +12,24 @@
 namespace Xiidea\EasyAuditBundle\Tests\Fixtures\Common;
 
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\UserEntity;
+
+$defaultUser = new UserEntity(2, 'user');
+if(!defined('DEFAULT_USER')) {
+    define('DEFAULT_USER', $defaultUser);
+}
 
 class DummyToken implements TokenInterface
 {
     private $user;
 
-    public function __construct($user = 'user')
+    public function __construct($user = DEFAULT_USER)
     {
         $this->user = $user;
     }
 
-    public function getUser()
+    public function getUser(): ?UserInterface
     {
         return $this->user;
     }
@@ -77,7 +84,7 @@ class DummyToken implements TokenInterface
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return '';
     }
@@ -148,15 +155,6 @@ class DummyToken implements TokenInterface
         return;
     }
 
-    /**
-     * Returns the token attributes.
-     *
-     * @return array The token attributes
-     */
-    public function getAttributes()
-    {
-        return [];
-    }
 
     /**
      * Sets the token attributes.
@@ -175,7 +173,7 @@ class DummyToken implements TokenInterface
      *
      * @return bool true if the attribute exists, false otherwise
      */
-    public function hasAttribute(string $name)
+    public function hasAttribute(string $name): bool
     {
         return false;
     }
@@ -189,9 +187,9 @@ class DummyToken implements TokenInterface
      *
      * @throws \InvalidArgumentException When attribute doesn't exist for this token
      */
-    public function getAttribute(string $name)
+    public function getAttribute(string $name): mixed
     {
-        return;
+        return null;
     }
 
     /**
@@ -227,5 +225,15 @@ class DummyToken implements TokenInterface
     public function __unserialize(array $data): void
     {
         // TODO: Implement __unserialize() method.
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return 'username';
+    }
+
+    public function getAttributes(): array
+    {
+        return [];
     }
 }

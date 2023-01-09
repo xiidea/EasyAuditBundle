@@ -18,14 +18,9 @@ twig:
 security:
     firewalls:
         login_form:
-                pattern: ^/login$
-                security: false
+            pattern: ^/login$
+            security: false
         main:
-            form_login:
-                check_path: /login_check
-                default_target_path: /some-secure-url/simple.event
-            logout: ~
-            anonymous: ~
+            lazy: true
+            http_basic: ~
             switch_user: true
-
-

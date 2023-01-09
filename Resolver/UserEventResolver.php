@@ -13,7 +13,6 @@ namespace Xiidea\EasyAuditBundle\Resolver;
 
 use Symfony\Contracts\EventDispatcher\Event;
 use Xiidea\EasyAuditBundle\Common\UserAwareComponent;
-use Xiidea\EasyAuditBundle\Resolver\UserEventCommand\AuthenticationFailedCommand;
 use Xiidea\EasyAuditBundle\Resolver\UserEventCommand\InteractiveLoginCommand;
 use Xiidea\EasyAuditBundle\Resolver\UserEventCommand\ResolverCommand;
 
@@ -27,8 +26,7 @@ class UserEventResolver extends UserAwareComponent implements EventResolverInter
     public function __construct()
     {
         $this->commands = array(
-            'security.interactive_login' => new InteractiveLoginCommand($this),
-            'security.authentication.failure' => new AuthenticationFailedCommand(),
+            'security.interactive_login' => new InteractiveLoginCommand($this)
         );
     }
 
