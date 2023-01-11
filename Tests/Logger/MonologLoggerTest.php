@@ -39,6 +39,9 @@ class MonologLoggerTest extends TestCase
     public function testLogCallsLogToLogServiceWithLogArray()
     {
         $log = new AuditLog();
+        $log->setDescription('null');
+        $log->setType('null');
+        $log->setTypeId('null');
 
         $this->symfonyLogger
             ->expects($this->at(0))
@@ -47,8 +50,8 @@ class MonologLoggerTest extends TestCase
                 $this->equalTo('info'),
                 $log->getDescription(),
                 array(
-                    'typeId' => null,
-                    'type' => null,
+                    'typeId' => 'null',
+                    'type' => 'null',
                     'eventTime' => null,
                     'user' => null,
                     'ip' => null,
