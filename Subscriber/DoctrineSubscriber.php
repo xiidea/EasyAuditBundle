@@ -41,7 +41,7 @@ class DoctrineSubscriber implements EventSubscriber
         $this->entities = $entities;
     }
 
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): array
     {
         return array(
             'postPersist',

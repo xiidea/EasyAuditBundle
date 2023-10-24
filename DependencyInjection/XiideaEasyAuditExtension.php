@@ -28,7 +28,7 @@ class XiideaEasyAuditExtension extends Extension implements PrependExtensionInte
     /**
      * {@inheritdoc}
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
@@ -72,7 +72,7 @@ class XiideaEasyAuditExtension extends Extension implements PrependExtensionInte
      * Allow an extension to prepend the extension configurations.
      * @param ContainerBuilder $container
      */
-    public function prepend(ContainerBuilder $container)
+    public function prepend(ContainerBuilder $container): void
     {
         $prependConfig = $this->getExtendedConfig($container);
 
@@ -86,7 +86,7 @@ class XiideaEasyAuditExtension extends Extension implements PrependExtensionInte
      *
      * @return array
      */
-    protected function getExtendedConfig(ContainerBuilder $container)
+    protected function getExtendedConfig(ContainerBuilder $container): array
     {
         $configs = array_merge(...$container->getExtensionConfig($this->getAlias()));
 

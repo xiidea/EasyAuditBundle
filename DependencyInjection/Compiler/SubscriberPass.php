@@ -17,7 +17,7 @@ use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 
 class SubscriberPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (false === $container->hasDefinition('xiidea.easy_audit.event_listener')) {
             return;

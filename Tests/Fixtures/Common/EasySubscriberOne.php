@@ -20,7 +20,7 @@ class EasySubscriberOne implements EasyAuditEventSubscriberInterface
      *
      * @return array
      */
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): array
     {
         return array(
             'custom_resolver1' => 'event1',
