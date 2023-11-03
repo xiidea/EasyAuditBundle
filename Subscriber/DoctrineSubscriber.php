@@ -11,44 +11,25 @@
 
 namespace Xiidea\EasyAuditBundle\Subscriber;
 
-use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Xiidea\EasyAuditBundle\Annotation\SubscribeDoctrineEvents;
-use Xiidea\EasyAuditBundle\Events\DoctrineObjectEvent;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
+use Xiidea\EasyAuditBundle\Events\DoctrineObjectEvent;
 
-class DoctrineSubscriber implements EventSubscriber
+#[AsDoctrineListener]
+class DoctrineSubscriber
 {
     /** @var \Doctrine\Common\Annotations\Reader */
     private $annotationReader;
+    private array $toBeDeleted = [];
+    private  $dispatcher = null;
+    private array $entities;
 
-    private $toBeDeleted = [];
-
-    /**
-     * @var EventDispatcher
-     */
-    private $dispatcher;
-
-    /**
-     * @var array
-     */
-    private $entities;
-
-    public function __construct($entities = array())
+    public function __construct($entities = [])
     {
         $this->entities = $entities;
-    }
-
-    public function getSubscribedEvents(): array
-    {
-        return array(
-            'postPersist',
-            'postUpdate',
-            'preRemove',
-            'postRemove',
-        );
     }
 
     public function postPersist(LifecycleEventArgs $args)
@@ -95,13 +76,14 @@ class DoctrineSubscriber implements EventSubscriber
     }
 
     /**
-     * @param string             $eventName
-     * @param LifecycleEventArgs $args
+     * @param  string  $eventName
+     * @param  LifecycleEventArgs  $args
      */
     private function handleEvent($eventName, LifecycleEventArgs $args)
     {
         if (true === $this->isConfiguredToTrack($args->getObject(), $eventName)) {
-            $this->dispatcher->dispatch(new DoctrineObjectEvent($args, $this->getIdentity($args, ClassUtils::getClass($args->getObject()))),
+            $this->dispatcher->dispatch(
+                new DoctrineObjectEvent($args, $this->getIdentity($args, ClassUtils::getClass($args->getObject()))),
                 $eventName
             );
         }
@@ -109,7 +91,7 @@ class DoctrineSubscriber implements EventSubscriber
 
     /**
      * @param $entity
-     * @param string $eventName
+     * @param  string  $eventName
      *
      * @return bool
      */
@@ -135,7 +117,7 @@ class DoctrineSubscriber implements EventSubscriber
 
     /**
      * @param $entity
-     * @param string $eventType
+     * @param  string  $eventType
      *
      * @return bool|null
      */
@@ -185,8 +167,8 @@ class DoctrineSubscriber implements EventSubscriber
     }
 
     /**
-     * @param string $eventType
-     * @param string $class
+     * @param  string  $eventType
+     * @param  string  $class
      *
      * @return bool
      */
@@ -196,7 +178,7 @@ class DoctrineSubscriber implements EventSubscriber
     }
 
     /**
-     * @param string $class
+     * @param  string  $class
      *
      * @return bool
      */
@@ -206,7 +188,7 @@ class DoctrineSubscriber implements EventSubscriber
     }
 
     /**
-     * @param \Doctrine\Common\Annotations\Reader $annotationReader
+     * @param  \Doctrine\Common\Annotations\Reader  $annotationReader
      */
     public function setAnnotationReader($annotationReader = null)
     {
@@ -214,7 +196,7 @@ class DoctrineSubscriber implements EventSubscriber
     }
 
     /**
-     * @param LifecycleEventArgs $args
+     * @param  LifecycleEventArgs  $args
      * @param $className
      *
      * @return array
@@ -233,11 +215,15 @@ class DoctrineSubscriber implements EventSubscriber
     {
         $originalClassName = ClassUtils::getClass($entity);
 
-        return isset($this->toBeDeleted[$originalClassName]) && isset($this->toBeDeleted[$originalClassName][spl_object_hash($entity)]);
+        return isset($this->toBeDeleted[$originalClassName]) && isset(
+                $this->toBeDeleted[$originalClassName][spl_object_hash(
+                    $entity
+                )]
+            );
     }
 
     /**
-     * @param EventDispatcher $dispatcher
+     * @param  EventDispatcherInterface  $dispatcher
      */
     public function setDispatcher($dispatcher)
     {
