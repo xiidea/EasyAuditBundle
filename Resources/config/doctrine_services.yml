@@ -7,5 +7,11 @@ services:
               - [ setDispatcher,[ '@event_dispatcher' ] ]
               - [ setAnnotationReader,[ '@annotation_reader' ] ]
           tags:
-              - { name: doctrine.event_subscriber }
-              - { name: doctrine_mongodb.odm.event_subscriber }
+              - { name: doctrine.event_listener, event: preRemove }
+              - { name: doctrine.event_listener, event: postUpdate }
+              - { name: doctrine.event_listener, event: postRemove }
+              - { name: doctrine.event_listener, event: postPersist }
+              - { name: doctrine_mongodb.odm.event_listener, event: preRemove }
+              - { name: doctrine_mongodb.odm.event_listener, event: postUpdate }
+              - { name: doctrine_mongodb.odm.event_listener, event: postRemove }
+              - { name: doctrine_mongodb.odm.event_listener, event: postPersist }

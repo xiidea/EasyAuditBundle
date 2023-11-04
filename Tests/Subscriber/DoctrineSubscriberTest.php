@@ -47,21 +47,6 @@ class DoctrineSubscriberTest extends TestCase
             ->getMock();
     }
 
-    public function testInstanceOnSubscriber()
-    {
-        $this->assertInstanceOf('Doctrine\Common\EventSubscriber', new DoctrineSubscriber());
-    }
-
-    public function testSubscribedEvents()
-    {
-        $subscriber = new DoctrineSubscriber();
-        $this->assertEquals(array(
-            'postPersist',
-            'postUpdate',
-            'preRemove',
-            'postRemove',
-        ), $subscriber->getSubscribedEvents());
-    }
 
     public function testCreateEventForAnnotatedEntity()
     {

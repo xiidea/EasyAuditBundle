@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 
 class MonologLoggerPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (false === $container->hasAlias('logger')) {
             $container->removeDefinition('xiidea.easy_audit.mono_logger.service');

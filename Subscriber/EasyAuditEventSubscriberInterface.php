@@ -18,5 +18,5 @@ interface EasyAuditEventSubscriberInterface
      *
      * @return array
      */
-    public function getSubscribedEvents();
+    public function getSubscribedEvents(): array;
 }
