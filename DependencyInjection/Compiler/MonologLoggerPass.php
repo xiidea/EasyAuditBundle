@@ -16,6 +16,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 
 class MonologLoggerPass implements CompilerPassInterface
 {
+    #[\Override]
     public function process(ContainerBuilder $container): void
     {
         if (false === $container->hasAlias('logger')) {

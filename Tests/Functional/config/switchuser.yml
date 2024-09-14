@@ -2,7 +2,7 @@ imports:
     - { resource: ./config.yml }
 
 framework:
-    validation: { enabled: true, enable_annotations: true }
+    validation: { enabled: true, enable_attributes: true }
     router:
         resource: "%kernel.project_dir%/config/common/login_routing.yml"
     csrf_protection: true

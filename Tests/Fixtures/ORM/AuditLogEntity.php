@@ -21,6 +21,9 @@ class AuditLogEntity extends BaseAuditLog
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\Column(type: 'integer')]
     protected $id;
 
     /**
@@ -29,6 +32,7 @@ class AuditLogEntity extends BaseAuditLog
      * @var string
      * @ORM\Column(name="type_id", type="string", length=200, nullable=false)
      */
+    #[ORM\Column(name: 'type_id', type: 'string', length: 200, nullable: false)]
     protected $typeId;
 
     /**
@@ -37,12 +41,14 @@ class AuditLogEntity extends BaseAuditLog
      * @var string
      * @ORM\Column(name="type", type="string", length=200, nullable=true)
      */
+    #[ORM\Column(name: "type", type: "string", length: 200, nullable: true)]
     protected $type;
 
     /**
      * @var string
      * @ORM\Column(name="description", type="text", length=255, nullable=true)
      */
+    #[ORM\Column(name: "description", type: "text", length: 255, nullable: true)]
     protected $description;
 
     /**
@@ -51,18 +57,21 @@ class AuditLogEntity extends BaseAuditLog
      * @var \DateTime
      * @ORM\Column(name="event_time", type="datetime")
      */
+    #[ORM\Column(name: "event_time", type: "datetime")]
     protected $eventTime;
 
     /**
      * @var string
      * @ORM\Column(name="user", type="string", length=255)
      */
+    #[ORM\Column(name: "user", type: "string", length: 255)]
     protected $user;
 
     /**
      * @var string
      * @ORM\Column(name="ip", type="string", length=20, nullable=true)
      */
+    #[ORM\Column(name: "ip", type: "string", length: 20, nullable: true)]
     protected $ip;
 
     /**

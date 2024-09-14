@@ -49,6 +49,7 @@ class DoctrineObjectEventResolver implements EventResolverInterface
      *
      * @throws \ReflectionException
      */
+    #[\Override]
     public function getEventLogInfo(Event $event, $eventName)
     {
         if (!$event instanceof DoctrineObjectEvent) {

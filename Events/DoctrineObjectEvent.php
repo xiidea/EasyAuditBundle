@@ -15,17 +15,8 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class DoctrineObjectEvent extends Event
 {
-    private $identity;
-
-    /**
-     * @var LifecycleEventArgs
-     */
-    private $lifecycleEventArgs;
-
-    public function __construct(LifecycleEventArgs $lifecycleEventArgs, $identity)
+    public function __construct(private LifecycleEventArgs $lifecycleEventArgs, private $identity)
     {
-        $this->lifecycleEventArgs = $lifecycleEventArgs;
-        $this->identity = $identity;
     }
 
     /**

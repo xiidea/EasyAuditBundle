@@ -21,6 +21,7 @@ class DefaultEventResolver implements EventResolverInterface
      *
      * @return array
      */
+    #[\Override]
     public function getEventLogInfo(Event $event, $eventName)
     {
         return array(

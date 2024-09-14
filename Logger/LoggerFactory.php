@@ -19,13 +19,10 @@ class LoggerFactory
     /** @var LoggerInterface[] */
     private static $loggers = array();
 
-    private $loggersChannel;
-
     private $debug = false;
 
-    public function __construct(array $channel = array())
+    public function __construct(private array $loggersChannel = array())
     {
-        $this->loggersChannel = $channel;
     }
 
     /**
@@ -116,10 +113,7 @@ class LoggerFactory
         return $logger instanceof LoggerInterface && $this->isChannelRegisterWithLogger($id, $eventInfo->getLevel());
     }
 
-    /**
-     * @param mixed $debug
-     */
-    public function setDebug($debug)
+    public function setDebug(mixed $debug)
     {
         $this->debug = $debug;
     }

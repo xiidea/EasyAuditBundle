@@ -9,10 +9,10 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Xiidea\EasyAuditBundle\Tests\Annotation;
+namespace Xiidea\EasyAuditBundle\Tests\Attribute;
 
 use PHPUnit\Framework\TestCase;
-use Xiidea\EasyAuditBundle\Annotation\SubscribeDoctrineEvents;
+use Xiidea\EasyAuditBundle\Attribute\SubscribeDoctrineEvents;
 
 class SubscribeDoctrineEventsTest extends TestCase
 {

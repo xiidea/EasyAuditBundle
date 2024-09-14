@@ -104,7 +104,7 @@ class DummyToken implements TokenInterface
      *
      * @param mixed $user
      */
-    public function setUser($user)
+    public function setUser($user): void
     {
         return;
     }
@@ -150,7 +150,7 @@ class DummyToken implements TokenInterface
     /**
      * Removes sensitive information from the token.
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         return;
     }
@@ -161,7 +161,7 @@ class DummyToken implements TokenInterface
      *
      * @param array $attributes The token attributes
      */
-    public function setAttributes(array $attributes)
+    public function setAttributes(array $attributes): void
     {
         return;
     }
@@ -198,7 +198,7 @@ class DummyToken implements TokenInterface
      * @param string $name  The attribute name
      * @param mixed  $value The attribute value
      */
-    public function setAttribute(string $name, $value)
+    public function setAttribute(string $name, $value): void
     {
         return;
     }

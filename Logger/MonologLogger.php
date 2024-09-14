@@ -17,18 +17,13 @@ use Xiidea\EasyAuditBundle\Model\BaseAuditLog as AuditLog;
 
 class MonologLogger implements LoggerInterface
 {
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
-
     private static $ignoreProperties = array('description', 'id', 'level');
 
-    public function __construct(\Psr\Log\LoggerInterface $logger)
+    public function __construct(private \Psr\Log\LoggerInterface $logger)
     {
-        $this->logger = $logger;
     }
 
+    #[\Override]
     public function log(AuditLog $event = null)
     {
         if (null === $event) {

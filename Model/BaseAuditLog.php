@@ -190,10 +190,7 @@ class BaseAuditLog
         return $this->impersonatingUser;
     }
 
-    /**
-     * @param mixed $impersonatingUser
-     */
-    public function setImpersonatingUser($impersonatingUser)
+    public function setImpersonatingUser(mixed $impersonatingUser)
     {
         $this->impersonatingUser = $impersonatingUser;
     }

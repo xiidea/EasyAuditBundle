@@ -13,22 +13,18 @@ namespace Xiidea\EasyAuditBundle\Subscriber;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
-use Xiidea\EasyAuditBundle\Annotation\SubscribeDoctrineEvents;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Xiidea\EasyAuditBundle\Attribute\SubscribeDoctrineEvents;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 use Xiidea\EasyAuditBundle\Events\DoctrineObjectEvent;
 
-#[AsDoctrineListener]
 class DoctrineSubscriber
 {
-    /** @var \Doctrine\Common\Annotations\Reader */
-    private $annotationReader;
     private array $toBeDeleted = [];
     private  $dispatcher = null;
-    private array $entities;
 
-    public function __construct($entities = [])
+    public function __construct(private array $entities = [])
     {
-        $this->entities = $entities;
     }
 
     public function postPersist(LifecycleEventArgs $args)
@@ -99,7 +95,7 @@ class DoctrineSubscriber
         $class = ClassUtils::getClass($entity);
         $eventType = DoctrineEvents::getShortEventType($eventName);
 
-        if (null !== $track = $this->isAnnotatedEvent($entity, $eventType)) {
+        if (null !== $track = $this->isAttributedEvent($entity, $eventType)) {
             return $track;
         }
 
@@ -116,54 +112,23 @@ class DoctrineSubscriber
 
     /**
      * @param $entity
-     * @param  string  $eventType
-     *
+     * @param string $eventType
      * @return bool|null
+     * @throws \ReflectionException
      */
-    protected function isAnnotatedEvent($entity, $eventType)
+    protected function isAttributedEvent($entity, $eventType)
     {
-        $metaData = $this->hasAnnotation($entity);
-
-        if (!$metaData) {
+        $reflection = new \ReflectionClass($entity);
+        $attribute = $reflection->getAttributes(SubscribeDoctrineEvents::class);
+        if (empty($attribute)) {
             return null;
         }
 
-        return empty($metaData->events) || in_array($eventType, $metaData->events);
+        $instance = $attribute[0]->newInstance();
+
+        return empty($instance->events) || in_array($eventType, $instance->events);
     }
 
-    /**
-     * @param $entity
-     *
-     * @return null|object
-     */
-    protected function hasAnnotation($entity)
-    {
-        $reflection = $this->getReflectionClassFromObject($entity);
-
-        return $this
-            ->getAnnotationReader()
-            ->getClassAnnotation($reflection, SubscribeDoctrineEvents::class);
-    }
-
-    /**
-     * @return \Doctrine\Common\Annotations\Reader
-     */
-    protected function getAnnotationReader()
-    {
-        return $this->annotationReader;
-    }
-
-    /**
-     * @param $object
-     *
-     * @return \ReflectionClass
-     */
-    protected function getReflectionClassFromObject($object)
-    {
-        $class = ClassUtils::getClass($object);
-
-        return new \ReflectionClass($class);
-    }
 
     /**
      * @param  string  $eventType
@@ -184,14 +149,6 @@ class DoctrineSubscriber
     private function shouldTrackAllEventType($class)
     {
         return empty($this->entities[$class]);
-    }
-
-    /**
-     * @param  \Doctrine\Common\Annotations\Reader  $annotationReader
-     */
-    public function setAnnotationReader($annotationReader = null)
-    {
-        $this->annotationReader = $annotationReader;
     }
 
     /**

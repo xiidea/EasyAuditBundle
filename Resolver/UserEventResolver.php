@@ -36,6 +36,7 @@ class UserEventResolver extends UserAwareComponent implements EventResolverInter
      *
      * @return array
      */
+    #[\Override]
     public function getEventLogInfo(Event $event, $eventName)
     {
         $this->default = array(
