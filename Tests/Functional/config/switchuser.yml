@@ -1,12 +1,8 @@
 imports:
     - { resource: ./config.yml }
-    # Load validation config for PHP 8.0
-    - { resource: 'validation_php80.yaml', when@php: '<=8.1' }
-      # Load validation config for PHP 8.1 and higher
-    - { resource: 'validation_php81.yaml', when@php: '>=8.1' }
 
 framework:
-
+    validation: { enabled: true, enable_attributes: true }
     router:
         resource: "%kernel.project_dir%/config/common/login_routing.yml"
     csrf_protection: true
