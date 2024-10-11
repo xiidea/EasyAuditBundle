@@ -31,11 +31,7 @@ class EventResolverFactory extends UserAwareComponent
      */
     private $entityEventResolver;
 
-    private $resolverEventMap = array();
-
     private $debug = false;
-    private $userProperty;
-    private $entityClass;
 
     /**
      * EventResolverFactory constructor.
@@ -44,11 +40,8 @@ class EventResolverFactory extends UserAwareComponent
      * @param $userProperty
      * @param $entityClass
      */
-    public function __construct(array $resolverEventMap = array(), $userProperty = 'userIdentifier', $entityClass = BaseAuditLog::class)
+    public function __construct(private array $resolverEventMap = array(), private $userProperty = 'userIdentifier', private $entityClass = BaseAuditLog::class)
     {
-        $this->resolverEventMap = $resolverEventMap;
-        $this->userProperty = $userProperty;
-        $this->entityClass = $entityClass;
     }
 
     /**
@@ -195,11 +188,9 @@ class EventResolverFactory extends UserAwareComponent
     }
 
     /**
-     * @param mixed $resolver
-     *
      * @throws \Exception
      */
-    public function setCommonResolver($resolver)
+    public function setCommonResolver(mixed $resolver)
     {
         if (!$resolver instanceof EventResolverInterface) {
             $this->commonResolver = $this->handleException(new InvalidServiceException(
@@ -280,10 +271,7 @@ class EventResolverFactory extends UserAwareComponent
         }
     }
 
-    /**
-     * @param mixed $debug
-     */
-    public function setDebug($debug)
+    public function setDebug(mixed $debug)
     {
         $this->debug = $debug;
     }

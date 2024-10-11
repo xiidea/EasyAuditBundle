@@ -17,19 +17,8 @@ use Xiidea\EasyAuditBundle\Resolver\EventResolverFactory;
 
 class LogEventsListener
 {
-    /**
-     * @var LoggerFactory
-     */
-    private $loggerFactory;
-    /**
-     * @var \Xiidea\EasyAuditBundle\Resolver\EventResolverFactory
-     */
-    private $resolverFactory;
-
-    public function __construct(LoggerFactory $loggerFactory, EventResolverFactory $resolverFactory)
+    public function __construct(private LoggerFactory $loggerFactory, private EventResolverFactory $resolverFactory)
     {
-        $this->loggerFactory = $loggerFactory;
-        $this->resolverFactory = $resolverFactory;
     }
 
     public function resolveEventHandler(Event $event, $eventName)

@@ -11,14 +11,18 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Fixtures\ORM;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * @ORM\Entity
  */
+#[ORM\Entity]
 class DummyEntity
 {
     /**
      * @ORM\Column(type="string")
      */
+    #[ORM\Column(type: 'string')]
     private $random;
 
     /**

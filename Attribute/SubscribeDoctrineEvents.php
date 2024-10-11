@@ -9,16 +9,15 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Xiidea\EasyAuditBundle\Annotation;
+namespace Xiidea\EasyAuditBundle\Attribute;
 
 /**
- * Annotation for ORM Subscribed Event.
- *
- * @Annotation
- * @Target({"CLASS"})
+ * Attribute for ORM Subscribed Event.
  *
  * @author Roni Saha <roni@xiidea.net>
  */
+
+#[\Attribute(\Attribute::TARGET_CLASS)]
 /* @final */ class SubscribeDoctrineEvents
 {
     public $events = array();

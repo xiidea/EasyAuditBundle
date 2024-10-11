@@ -15,14 +15,8 @@ use Xiidea\EasyAuditBundle\Common\UserAwareComponent;
 
 class InteractiveLoginCommand extends UserLoginCommand
 {
-    /**
-     * @var UserAwareComponent
-     */
-    private $userAwareComponent;
-
-    public function __construct(UserAwareComponent $userAwareComponent)
+    public function __construct(private UserAwareComponent $userAwareComponent)
     {
-        $this->userAwareComponent = $userAwareComponent;
     }
 
     /**
@@ -30,6 +24,7 @@ class InteractiveLoginCommand extends UserLoginCommand
      *
      * @return mixed
      */
+    #[\Override]
     public function resolve($event)
     {
         return $this->getEventDetailsArray($this->userAwareComponent->getUsername());

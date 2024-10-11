@@ -20,16 +20,11 @@ class Logger implements LoggerInterface
 {
     private $entityDeleteLogs = [];
 
-    /**
-     * @var \Doctrine\Persistence\ManagerRegistry
-     */
-    private $doctrine;
-
-    public function __construct(ManagerRegistry $doctrine)
+    public function __construct(private ManagerRegistry $doctrine)
     {
-        $this->doctrine = $doctrine;
     }
 
+    #[\Override]
     public function log(AuditLog $event = null)
     {
         if (empty($event)) {

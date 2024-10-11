@@ -16,6 +16,7 @@ abstract class UserLoginCommand extends ResolverCommand
     /**
      * @return string
      */
+    #[\Override]
     public function getType()
     {
         return 'User Logged in';
@@ -24,6 +25,7 @@ abstract class UserLoginCommand extends ResolverCommand
     /**
      * @return string
      */
+    #[\Override]
     public function getTemplate()
     {
         return "User '%s' Logged in Successfully";

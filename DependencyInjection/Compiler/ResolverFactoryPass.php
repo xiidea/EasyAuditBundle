@@ -17,6 +17,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class ResolverFactoryPass implements CompilerPassInterface
 {
+    #[\Override]
     public function process(ContainerBuilder $container): void
     {
         if (false === $container->hasDefinition('xiidea.easy_audit.event_resolver_factory')) {

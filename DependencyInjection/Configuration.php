@@ -28,6 +28,7 @@ class Configuration implements ConfigurationInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder(self::ROOT_NODE_NAME);
@@ -148,7 +149,7 @@ class Configuration implements ConfigurationInterface
 
     public static function appendChannelTypes($element, &$isExclusiveList, &$elements = array())
     {
-        $isExclusiveItem = 0 === strpos($element, '!');
+        $isExclusiveItem = str_starts_with($element, '!');
 
         self::throwExceptionOnInvalid(!$isExclusiveItem === $isExclusiveList);
 

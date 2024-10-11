@@ -19,18 +19,12 @@ use Symfony\Component\Console\ConsoleEvents;
 class DoctrineDeleteEventLogger implements EventSubscriberInterface
 {
     /**
-     * @var Logger
-     */
-    private $logger;
-
-    /**
      * DoctrineDeleteEventLogger constructor.
      *
      * @param Logger $logger
      */
-    public function __construct(Logger $logger)
+    public function __construct(private Logger $logger)
     {
-        $this->logger = $logger;
     }
 
     public function savePendingLogs()
@@ -41,6 +35,7 @@ class DoctrineDeleteEventLogger implements EventSubscriberInterface
     /**
      * @return array
      */
+    #[\Override]
     public static function getSubscribedEvents(): array
     {
         return [

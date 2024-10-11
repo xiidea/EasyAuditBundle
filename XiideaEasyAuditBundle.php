@@ -20,6 +20,7 @@ use Xiidea\EasyAuditBundle\DependencyInjection\Compiler\SubscriberPass;
 
 class XiideaEasyAuditBundle extends Bundle
 {
+    #[\Override]
     public function build(ContainerBuilder $container): void
     {
         parent::build($container);

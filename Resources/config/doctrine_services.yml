@@ -5,7 +5,6 @@ services:
           arguments: ['%xiidea.easy_audit.doctrine_objects%']
           calls:
               - [ setDispatcher,[ '@event_dispatcher' ] ]
-              - [ setAnnotationReader,[ '@annotation_reader' ] ]
           tags:
               - { name: doctrine.event_listener, event: preRemove }
               - { name: doctrine.event_listener, event: postUpdate }
