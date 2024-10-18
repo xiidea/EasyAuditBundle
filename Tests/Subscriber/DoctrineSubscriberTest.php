@@ -16,6 +16,7 @@ use Doctrine\Persistence\Mapping\ClassMetadata;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\Subscriber\DoctrineSubscriber;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\DummyEntity;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie;
 use Doctrine\Persistence\ObjectManager;
 
@@ -52,7 +53,7 @@ class DoctrineSubscriberTest extends TestCase
     public function testCreateEventForEntityNotConfiguredToTrack()
     {
         $subscriber = new DoctrineSubscriber(array());
-        $this->invokeCreatedEventCall($subscriber);
+        $this->invokeCreatedEventCall($subscriber, new DummyEntity());
     }
 
     public function testCreateEventForEntityConfiguredToTrack()
@@ -66,7 +67,6 @@ class DoctrineSubscriberTest extends TestCase
 
     public function testCreateEventForEntityConfiguredToTrackAllEvents()
     {
-
         $subscriber = new DoctrineSubscriber(array('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie' => array()));
 
         $this->invokeCreatedEventCall($subscriber);
@@ -75,7 +75,7 @@ class DoctrineSubscriberTest extends TestCase
     public function testUpdateEventForEntityNotConfiguredToTrack()
     {
         $subscriber = new DoctrineSubscriber(array());
-        $this->invokeUpdatedEventCall($subscriber);
+        $this->invokeUpdatedEventCall($subscriber, new DummyEntity());
     }
 
     public function testRemovedEventForEntityNotConfiguredToTrack()
@@ -95,21 +95,21 @@ class DoctrineSubscriberTest extends TestCase
     /**
      * @param DoctrineSubscriber $subscriber
      */
-    private function invokeCreatedEventCall($subscriber)
+    private function invokeCreatedEventCall($subscriber, $entity = null)
     {
         $subscriber->setDispatcher($this->dispatcher);
-        $subscriber->postPersist(new LifecycleEventArgs(new Movie(), $this->entityManager));
+        $subscriber->postPersist(new LifecycleEventArgs($entity ?? new Movie(), $this->entityManager));
         $this->assertTrue(true);
     }
 
     /**
      * @param DoctrineSubscriber $subscriber
      */
-    private function invokeUpdatedEventCall($subscriber)
+    private function invokeUpdatedEventCall($subscriber, $entity = null)
     {
         $subscriber->setDispatcher($this->dispatcher);
 
-        $subscriber->postUpdate(new LifecycleEventArgs(new Movie(), $this->entityManager));
+        $subscriber->postUpdate(new LifecycleEventArgs($entity ?? new Movie(), $this->entityManager));
         $this->assertTrue(true);
     }
 
