@@ -106,7 +106,7 @@ class UserAwareComponentTest extends TestCase
     {
         $this->authChecker->expects($this->once())
             ->method('isGranted')
-            ->with('ROLE_PREVIOUS_ADMIN')
+            ->with('IS_IMPERSONATOR')
             ->willReturn($isGranted);
     }
 }
