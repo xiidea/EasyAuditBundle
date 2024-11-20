@@ -87,7 +87,7 @@ class UserAwareComponent
             return null;
         }
 
-        if ($this->authChecker->isGranted('ROLE_PREVIOUS_ADMIN')) {
+        if ($this->authChecker->isGranted('IS_IMPERSONATOR')) {
             return $this->getImpersonatingUserFromRole($token);
         }
 
