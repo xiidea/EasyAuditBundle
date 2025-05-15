@@ -12,10 +12,10 @@
 namespace Xiidea\EasyAuditBundle\Resolver;
 
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Common\Util\ClassUtils;
+use Doctrine\Persistence\Proxy;
 use Symfony\Contracts\EventDispatcher\Event;
-use Xiidea\EasyAuditBundle\Events\DoctrineObjectEvent;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
+use Xiidea\EasyAuditBundle\Events\DoctrineObjectEvent;
 
 /** Custom Event Resolver Example Class */
 class DoctrineObjectEventResolver implements EventResolverInterface
@@ -81,7 +81,7 @@ class DoctrineObjectEventResolver implements EventResolverInterface
 
     /**
      * @param DoctrineObjectEvent $event
-     * @param string              $eventName
+     * @param string $eventName
      */
     private function initialize(DoctrineObjectEvent $event, $eventName)
     {
@@ -175,7 +175,7 @@ class DoctrineObjectEventResolver implements EventResolverInterface
      */
     protected function getReflectionClassFromObject($object)
     {
-        return new \ReflectionClass(ClassUtils::getClass($object));
+        return new \ReflectionClass($object instanceof Proxy ? get_parent_class($object) : get_class($object));
     }
 
     /**
