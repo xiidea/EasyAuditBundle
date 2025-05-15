@@ -15,7 +15,7 @@ class UnitOfWork implements PropertyChangedListener
      * @param mixed $oldValue the old value of the property that changed
      * @param mixed $newValue the new value of the property that changed
      */
-    public function propertyChanged(object $sender, string $propertyName, mixed $oldValue, mixed $newValue)
+    public function propertyChanged(object $sender, string $propertyName, mixed $oldValue, mixed $newValue): void
     {
     }
 
