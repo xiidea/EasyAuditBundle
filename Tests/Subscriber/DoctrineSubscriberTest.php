@@ -13,12 +13,13 @@ namespace Xiidea\EasyAuditBundle\Tests\Subscriber;
 
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Doctrine\Persistence\Mapping\ClassMetadata;
+use Doctrine\Persistence\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\Subscriber\DoctrineSubscriber;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\DummyEntity;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie;
-use Doctrine\Persistence\ObjectManager;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\TestMovie;
 
 class DoctrineSubscriberTest extends TestCase
 {
@@ -70,12 +71,14 @@ class DoctrineSubscriberTest extends TestCase
         $subscriber = new DoctrineSubscriber(array('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie' => array()));
 
         $this->invokeCreatedEventCall($subscriber);
+        $this->invokeCreatedEventCall($subscriber, new TestMovie());
     }
 
     public function testUpdateEventForEntityNotConfiguredToTrack()
     {
         $subscriber = new DoctrineSubscriber(array());
         $this->invokeUpdatedEventCall($subscriber, new DummyEntity());
+        $this->invokeUpdatedEventCall($subscriber, new TestMovie());
     }
 
     public function testRemovedEventForEntityNotConfiguredToTrack()
@@ -123,6 +126,7 @@ class DoctrineSubscriberTest extends TestCase
         $subscriber->preRemove(new LifecycleEventArgs($movie, $this->entityManager));
         $subscriber->postRemove(new LifecycleEventArgs($movie, $this->entityManager));
         $this->assertTrue(true);
+        $subscriber->postRemove(new LifecycleEventArgs(new TestMovie(), $this->entityManager));
     }
 
     private function mockMetaData($data = ['id' => 1])
