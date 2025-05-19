@@ -18,14 +18,14 @@ use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 
 class Logger implements LoggerInterface
 {
-    private $entityDeleteLogs = [];
+    private array $entityDeleteLogs = [];
 
     public function __construct(private ManagerRegistry $doctrine)
     {
     }
 
     #[\Override]
-    public function log(AuditLog $event = null)
+    public function log(?AuditLog $event = null): void
     {
         if (empty($event)) {
             return;
@@ -43,7 +43,7 @@ class Logger implements LoggerInterface
     /**
      * @return ObjectManager
      */
-    protected function getManager()
+    protected function getManager(): ObjectManager
     {
         return $this->getDoctrine()->getManager();
     }
@@ -51,7 +51,7 @@ class Logger implements LoggerInterface
     /**
      * @return ManagerRegistry
      */
-    public function getDoctrine()
+    public function getDoctrine(): ManagerRegistry
     {
         return $this->doctrine;
     }
@@ -59,13 +59,13 @@ class Logger implements LoggerInterface
     /**
      * @param AuditLog $event
      */
-    protected function saveLog(AuditLog $event)
+    protected function saveLog(AuditLog $event): void
     {
         $this->getManager()->persist($event);
         $this->getManager()->flush($event);
     }
 
-    public function savePendingLogs()
+    public function savePendingLogs(): void
     {
         foreach ($this->entityDeleteLogs as $log) {
             $this->saveLog($log);

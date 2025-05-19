@@ -11,9 +11,9 @@
 
 namespace Xiidea\EasyAuditBundle\Tests\Functional;
 
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
 use Xiidea\EasyAuditBundle\Tests\Functional\Bundle\TestBundle\Controller\DefaultController;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ImpersonatingUserTest extends WebTestCase
 {
@@ -38,7 +38,7 @@ class ImpersonatingUserTest extends WebTestCase
 
         $name = 'simple.event';
         $this->client->request('GET', "/some-secure-url/{$name}", [], [], [
-            "HTTP_AUTHORIZATION" => "Basic " . base64_encode("admin:login")
+            "HTTP_AUTHORIZATION" => "Basic ".base64_encode("admin:login"),
         ]);
         $crawler = $this->client->request('GET', "/some-secure-url/{$name}?_switch_user=user");
         $this->assertTrue($this->client->getResponse()->isSuccessful());
@@ -71,7 +71,7 @@ class ImpersonatingUserTest extends WebTestCase
     {
         $html = $crawler->html();
         $parts = explode(DefaultController::RESPONSE_BOUNDARY, $html);
-        $event = unserialize($parts[1]);
-        return $event;
+
+        return unserialize($parts[1]);
     }
 }

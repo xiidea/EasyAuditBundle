@@ -24,7 +24,7 @@ class FileLogger implements LoggerInterface
         $this->dir = $dir;
     }
 
-    public function log(AuditLog $event = null)
+    public function log(?AuditLog $event = null)
     {
         if (empty($event)) {
             return;

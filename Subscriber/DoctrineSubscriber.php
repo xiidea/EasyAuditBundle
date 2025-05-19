@@ -11,17 +11,17 @@
 
 namespace Xiidea\EasyAuditBundle\Subscriber;
 
-use Doctrine\Common\Util\ClassUtils;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Xiidea\EasyAuditBundle\Attribute\SubscribeDoctrineEvents;
+use Xiidea\EasyAuditBundle\Common\ClassUtils;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 use Xiidea\EasyAuditBundle\Events\DoctrineObjectEvent;
 
 class DoctrineSubscriber
 {
     private array $toBeDeleted = [];
-    private  $dispatcher = null;
+    private $dispatcher = null;
 
     public function __construct(private array $entities = [])
     {
@@ -71,10 +71,10 @@ class DoctrineSubscriber
     }
 
     /**
-     * @param  string  $eventName
-     * @param  LifecycleEventArgs  $args
+     * @param string $eventName
+     * @param LifecycleEventArgs $args
      */
-    private function handleEvent($eventName, LifecycleEventArgs $args)
+    private function handleEvent($eventName, LifecycleEventArgs $args): void
     {
         if (true === $this->isConfiguredToTrack($args->getObject(), $eventName)) {
             $this->dispatcher->dispatch(
@@ -86,7 +86,7 @@ class DoctrineSubscriber
 
     /**
      * @param $entity
-     * @param  string  $eventName
+     * @param string $eventName
      *
      * @return bool
      */
@@ -131,8 +131,8 @@ class DoctrineSubscriber
 
 
     /**
-     * @param  string  $eventType
-     * @param  string  $class
+     * @param string $eventType
+     * @param string $class
      *
      * @return bool
      */
@@ -142,7 +142,7 @@ class DoctrineSubscriber
     }
 
     /**
-     * @param  string  $class
+     * @param string $class
      *
      * @return bool
      */
@@ -152,7 +152,7 @@ class DoctrineSubscriber
     }
 
     /**
-     * @param  LifecycleEventArgs  $args
+     * @param LifecycleEventArgs $args
      * @param $className
      *
      * @return array
@@ -179,7 +179,7 @@ class DoctrineSubscriber
     }
 
     /**
-     * @param  EventDispatcherInterface  $dispatcher
+     * @param EventDispatcherInterface $dispatcher
      */
     public function setDispatcher($dispatcher)
     {
