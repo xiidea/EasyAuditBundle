@@ -12,9 +12,9 @@
 namespace Xiidea\EasyAuditBundle\Subscriber;
 
 use Doctrine\Persistence\Event\LifecycleEventArgs;
-use Doctrine\Persistence\Proxy;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Xiidea\EasyAuditBundle\Attribute\SubscribeDoctrineEvents;
+use Xiidea\EasyAuditBundle\Common\ClassUtils;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 use Xiidea\EasyAuditBundle\Events\DoctrineObjectEvent;
 
@@ -43,7 +43,7 @@ class DoctrineSubscriber
             return;
         }
 
-        $className = $this->getClass($args->getObject());
+        $className = ClassUtils::getClass($args->getObject());
 
         if (!isset($this->toBeDeleted[$className])) {
             $this->toBeDeleted[$className] = [];
@@ -64,7 +64,7 @@ class DoctrineSubscriber
     private function getToBeDeletedId($entity)
     {
         if ($this->isScheduledForDelete($entity)) {
-            return $this->toBeDeleted[$this->getClass($entity)][spl_object_hash($entity)];
+            return $this->toBeDeleted[ClassUtils::getClass($entity)][spl_object_hash($entity)];
         }
 
         return null;
@@ -74,11 +74,11 @@ class DoctrineSubscriber
      * @param string $eventName
      * @param LifecycleEventArgs $args
      */
-    private function handleEvent($eventName, LifecycleEventArgs $args)
+    private function handleEvent($eventName, LifecycleEventArgs $args): void
     {
         if (true === $this->isConfiguredToTrack($args->getObject(), $eventName)) {
             $this->dispatcher->dispatch(
-                new DoctrineObjectEvent($args, $this->getIdentity($args, $this->getClass($args->getObject()))),
+                new DoctrineObjectEvent($args, $this->getIdentity($args, ClassUtils::getClass($args->getObject()))),
                 $eventName
             );
         }
@@ -92,7 +92,7 @@ class DoctrineSubscriber
      */
     private function isConfiguredToTrack($entity, $eventName = '')
     {
-        $class = $this->getClass($entity);
+        $class = ClassUtils::getClass($entity);
         $eventType = DoctrineEvents::getShortEventType($eventName);
 
         if (null !== $track = $this->isAttributedEvent($entity, $eventType)) {
@@ -169,7 +169,7 @@ class DoctrineSubscriber
      */
     private function isScheduledForDelete($entity)
     {
-        $originalClassName = $this->getClass($entity);
+        $originalClassName = ClassUtils::getClass($entity);
 
         return isset($this->toBeDeleted[$originalClassName]) && isset(
                 $this->toBeDeleted[$originalClassName][spl_object_hash(
@@ -188,6 +188,6 @@ class DoctrineSubscriber
 
     private function getClass($entity): string
     {
-        return $entity instanceof Proxy ? get_parent_class($entity) : get_class($entity);
+        return ClassUtils::getClass($entity);
     }
 }

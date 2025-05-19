@@ -12,8 +12,8 @@
 namespace Xiidea\EasyAuditBundle\Resolver;
 
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Persistence\Proxy;
 use Symfony\Contracts\EventDispatcher\Event;
+use Xiidea\EasyAuditBundle\Common\ClassUtils;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
 use Xiidea\EasyAuditBundle\Events\DoctrineObjectEvent;
 
@@ -175,7 +175,7 @@ class DoctrineObjectEventResolver implements EventResolverInterface
      */
     protected function getReflectionClassFromObject($object)
     {
-        return new \ReflectionClass($object instanceof Proxy ? get_parent_class($object) : get_class($object));
+        return new \ReflectionClass(ClassUtils::getClass($object));
     }
 
     /**
