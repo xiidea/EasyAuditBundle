@@ -12,11 +12,11 @@ class DummyClass
 
 class DummyProxyClass extends DummyClass implements Proxy
 {
-    public function __load()
+    public function __load(): void
     {
     }
 
-    public function __isInitialized()
+    public function __isInitialized(): bool
     {
         return true;
     }
