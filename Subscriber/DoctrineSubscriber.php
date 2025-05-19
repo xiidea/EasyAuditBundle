@@ -185,9 +185,4 @@ class DoctrineSubscriber
     {
         $this->dispatcher = $dispatcher;
     }
-
-    private function getClass($entity): string
-    {
-        return ClassUtils::getClass($entity);
-    }
 }
