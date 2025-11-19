@@ -18,46 +18,36 @@ class SubscribeDoctrineEventsTest extends TestCase
 {
     public function testConstructWithoutData()
     {
-        $annotation = new SubscribeDoctrineEvents(array());
+        $annotation = new SubscribeDoctrineEvents([]);
 
         $this->assertTrue(is_array($annotation->events));
         $this->assertEmpty($annotation->events);
-    }
-
-    public function testConstructWithInvalidData()
-    {
-        $data = array(
-            'unknown' => 'foo',
-            'array' => array('bar' => 'bar'),
-        );
-
-        $annotation = new SubscribeDoctrineEvents($data);
-
-        $this->assertTrue(is_array($annotation->events));
+        $annotation = new SubscribeDoctrineEvents("");
         $this->assertEmpty($annotation->events);
     }
 
-    public function testConstructWithValue()
+
+    public function testConstructWithStringValue()
     {
-        $data = array('value' => 'updated,created');
+        $data = 'created,updated';
 
         $annotation = new SubscribeDoctrineEvents($data);
 
         $this->assertTrue(is_array($annotation->events));
         $this->assertNotEmpty($annotation->events);
 
-        $this->assertEquals(explode(',', $data['value']), $annotation->events);
+        $this->assertEquals(explode(',', $data), $annotation->events);
     }
 
-    public function testConstructWithEvent()
+    public function testConstructWithArrayValue()
     {
-        $data = array('events' => 'updated,created');
+        $data = ['created', 'updated'];
 
         $annotation = new SubscribeDoctrineEvents($data);
 
         $this->assertTrue(is_array($annotation->events));
         $this->assertNotEmpty($annotation->events);
 
-        $this->assertEquals(explode(',', $data['events']), $annotation->events);
+        $this->assertEquals($data, $annotation->events);
     }
 }

@@ -16,22 +16,14 @@ namespace Xiidea\EasyAuditBundle\Attribute;
  *
  * @author Roni Saha <roni@xiidea.net>
  */
-
 #[\Attribute(\Attribute::TARGET_CLASS)]
-/* @final */ class SubscribeDoctrineEvents
+class SubscribeDoctrineEvents
 {
-    public $events = array();
+    public array $events = [];
 
-    public function __construct(array $values)
+    public function __construct(array|string $values)
     {
-        if (isset($values['value'])) {
-            $values['events'] = $values['value'];
-        }
-        if (!isset($values['events'])) {
-            return;
-        }
-
-        $this->events = is_array($values['events']) ? $values['events'] : array_map('trim', explode(',', $values['events']));
+        $this->events = is_array($values) ? $values : array_map('trim', explode(',', $values));
 
         $this->events = array_filter($this->events);
     }
