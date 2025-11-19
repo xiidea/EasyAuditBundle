@@ -17,9 +17,9 @@ use Xiidea\EasyAuditBundle\Attribute\SubscribeDoctrineEvents;
 /**
  * @ORM\Entity
  */
-#[SubscribeDoctrineEvents(['created'])]
+#[SubscribeDoctrineEvents(['updated'])]
 #[ORM\Entity]
-class Movie
+class Book
 {
 
     #[ORM\Id]

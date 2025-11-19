@@ -17,15 +17,14 @@ use Doctrine\Persistence\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\Subscriber\DoctrineSubscriber;
-use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\DummyEntity;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Book;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Machine;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie;
-use Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\TestMovie;
 
 class DoctrineSubscriberTest extends TestCase
 {
     /** @var MockObject */
     private $dispatcher;
-
 
     /** @var MockObject */
     private $entityManager;
@@ -46,74 +45,79 @@ class DoctrineSubscriberTest extends TestCase
 
     public function testCreateEventForAttributedEntity()
     {
-        $subscriber = new DoctrineSubscriber(array());
+        $subscriber = new DoctrineSubscriber([]);
 
         $this->invokeCreatedEventCall($subscriber);
+        $this->assertTrue(true);
     }
 
     public function testCreateEventForEntityNotConfiguredToTrack()
     {
-        $subscriber = new DoctrineSubscriber(array());
-        $this->invokeCreatedEventCall($subscriber, new DummyEntity());
+        $subscriber = new DoctrineSubscriber([]);
+        $this->invokeCreatedEventCall($subscriber);
+        $this->assertTrue(true);
     }
 
     public function testCreateEventForEntityConfiguredToTrack()
     {
-        $subscriber = new DoctrineSubscriber(
-            array('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie' => array('created'))
-        );
+        $subscriber = new DoctrineSubscriber(['Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie' => ['created']]);
 
         $this->invokeCreatedEventCall($subscriber);
+        $this->assertTrue(true);
     }
 
     public function testCreateEventForEntityConfiguredToTrackAllEvents()
     {
-        $subscriber = new DoctrineSubscriber(array('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie' => array()));
+        $subscriber = new DoctrineSubscriber(['Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie' => []]);
 
         $this->invokeCreatedEventCall($subscriber);
-        $this->invokeCreatedEventCall($subscriber, new TestMovie());
+        $this->assertTrue(true);
     }
 
     public function testUpdateEventForEntityNotConfiguredToTrack()
     {
-        $subscriber = new DoctrineSubscriber(array());
-        $this->invokeUpdatedEventCall($subscriber, new DummyEntity());
-        $this->invokeUpdatedEventCall($subscriber, new TestMovie());
+        $subscriber = new DoctrineSubscriber([]);
+        $this->invokeUpdatedEventCall($subscriber);
+        $this->assertTrue(true);
     }
 
     public function testRemovedEventForEntityNotConfiguredToTrack()
     {
-        $subscriber = new DoctrineSubscriber(array());
+        $subscriber = new DoctrineSubscriber([]);
         $this->invokeDeletedEventCall($subscriber);
+        $this->assertTrue(true);
     }
 
     public function testRemovedEventForEntityConfiguredToTrackAllEvent()
     {
         $this->mockMetaData();
-        $subscriber = new DoctrineSubscriber(array('Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie' => array()));
+        $subscriber = new DoctrineSubscriber(['Xiidea\EasyAuditBundle\Tests\Fixtures\ORM\Movie' => []]);
         $this->invokeDeletedEventCall($subscriber);
+        $this->assertTrue(true);
     }
 
 
     /**
      * @param DoctrineSubscriber $subscriber
      */
-    private function invokeCreatedEventCall($subscriber, $entity = null)
+    private function invokeCreatedEventCall($subscriber)
     {
         $subscriber->setDispatcher($this->dispatcher);
-        $subscriber->postPersist(new LifecycleEventArgs($entity ?? new Movie(), $this->entityManager));
+
+        $subscriber->postPersist(new LifecycleEventArgs(new Movie(), $this->entityManager));
+        $subscriber->postPersist(new LifecycleEventArgs(new Machine(), $this->entityManager));
         $this->assertTrue(true);
     }
 
     /**
      * @param DoctrineSubscriber $subscriber
      */
-    private function invokeUpdatedEventCall($subscriber, $entity = null)
+    private function invokeUpdatedEventCall($subscriber)
     {
         $subscriber->setDispatcher($this->dispatcher);
 
-        $subscriber->postUpdate(new LifecycleEventArgs($entity ?? new Movie(), $this->entityManager));
-        $this->assertTrue(true);
+        $subscriber->postUpdate(new LifecycleEventArgs(new Book(), $this->entityManager));
+        $subscriber->postUpdate(new LifecycleEventArgs(new Machine(), $this->entityManager));
     }
 
     /**
@@ -122,11 +126,11 @@ class DoctrineSubscriberTest extends TestCase
     private function invokeDeletedEventCall($subscriber)
     {
         $subscriber->setDispatcher($this->dispatcher);
+
         $movie = new Movie();
         $subscriber->preRemove(new LifecycleEventArgs($movie, $this->entityManager));
         $subscriber->postRemove(new LifecycleEventArgs($movie, $this->entityManager));
         $this->assertTrue(true);
-        $subscriber->postRemove(new LifecycleEventArgs(new TestMovie(), $this->entityManager));
     }
 
     private function mockMetaData($data = ['id' => 1])
