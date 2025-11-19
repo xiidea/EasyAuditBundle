@@ -14,12 +14,10 @@ namespace Xiidea\EasyAuditBundle\Tests\Fixtures\ORM;
 use Doctrine\ORM\Mapping as ORM;
 use Xiidea\EasyAuditBundle\Attribute\SubscribeDoctrineEvents;
 
-/**
- * @ORM\Entity
- */
-#[SubscribeDoctrineEvents(['created'])]
+
+#[SubscribeDoctrineEvents([])]
 #[ORM\Entity]
-class Movie
+class Machine
 {
 
     #[ORM\Id]

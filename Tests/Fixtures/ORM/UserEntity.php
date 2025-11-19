@@ -58,7 +58,7 @@ class UserEntity implements UserInterface
         return $this->id;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getUsername();
     }
@@ -81,7 +81,7 @@ class UserEntity implements UserInterface
      *
      * @see AccountExpiredException
      */
-    public function isAccountNonExpired()
+    public function isAccountNonExpired(): bool
     {
         return true;
     }
@@ -96,7 +96,7 @@ class UserEntity implements UserInterface
      *
      * @see LockedException
      */
-    public function isAccountNonLocked()
+    public function isAccountNonLocked(): bool
     {
         return true;
     }
@@ -111,7 +111,7 @@ class UserEntity implements UserInterface
      *
      * @see CredentialsExpiredException
      */
-    public function isCredentialsNonExpired()
+    public function isCredentialsNonExpired(): bool
     {
         return true;
     }
@@ -126,7 +126,7 @@ class UserEntity implements UserInterface
      *
      * @see DisabledException
      */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         return true;
     }
@@ -156,7 +156,7 @@ class UserEntity implements UserInterface
      *
      * @since 5.1.0
      */
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
         return;
     }
@@ -166,7 +166,7 @@ class UserEntity implements UserInterface
      *
      * @return static
      */
-    public function setSalt($salt)
+    public function setSalt($salt): static
     {
         return $this;
     }
@@ -178,7 +178,7 @@ class UserEntity implements UserInterface
      *
      * @return static
      */
-    public function setPlainPassword($password)
+    public function setPlainPassword($password): static
     {
         return $this;
     }
@@ -190,7 +190,7 @@ class UserEntity implements UserInterface
      *
      * @return static
      */
-    public function setPassword($password)
+    public function setPassword($password): static
     {
         return $this;
     }
@@ -200,7 +200,7 @@ class UserEntity implements UserInterface
      *
      * @return bool
      */
-    public function isSuperAdmin()
+    public function isSuperAdmin(): bool
     {
         return true;
     }
@@ -212,20 +212,13 @@ class UserEntity implements UserInterface
      *
      * @return static
      */
-    public function setLastLogin(\DateTime $time = null)
+    public function setLastLogin(?\DateTime $time = null)
     {
         return $this;
     }
 
-    /**
-     * Returns the password used to authenticate the user.
-     *
-     * This should be the encoded password. On authentication, a plain-text
-     * password will be salted, encoded, and then compared to this value.
-     *
-     * @return string The password
-     */
-    public function getPassword()
+
+    public function getPassword(): void
     {
         return;
     }
@@ -237,7 +230,7 @@ class UserEntity implements UserInterface
      *
      * @return string|null The salt
      */
-    public function getSalt()
+    public function getSalt(): void
     {
         return;
     }
@@ -358,7 +351,7 @@ class UserEntity implements UserInterface
      *
      * @return static
      */
-    public function setPasswordRequestedAt(\DateTime $date = null)
+    public function setPasswordRequestedAt(?\DateTime $date = null)
     {
         return $this;
     }
