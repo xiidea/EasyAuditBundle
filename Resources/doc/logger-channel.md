@@ -12,7 +12,7 @@ xiidea_easy_audit:
         file.logger: ["!info", "!debug"]
 ```
 
-\##Notes:
+## Notes:
 
 -   If no channel configured for a logger service, it will log all event
 -   You can define either inclusive or exclusive list but not both for a logger. `file.logger: ["!info", "debug"]` is an invalid configuration
