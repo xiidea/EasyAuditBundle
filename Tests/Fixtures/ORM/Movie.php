@@ -21,19 +21,12 @@ use Xiidea\EasyAuditBundle\Attribute\SubscribeDoctrineEvents;
 #[ORM\Entity]
 class Movie
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue(strategy: "AUTO")]
     protected $id;
 
-    /**
-     * @ORM\Column(type="string")
-     */
     #[ORM\Column(type: 'string')]
     protected $name;
 
