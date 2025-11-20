@@ -1,7 +1,7 @@
 # Easy Audit
 
-[![Build Status](https://travis-ci.org/xiidea/EasyAuditBundle.svg?branch=master)](https://travis-ci.org/xiidea/EasyAuditBundle)
-[![Coverage Status](https://coveralls.io/repos/xiidea/EasyAuditBundle/badge.svg?branch=master&service=github)](https://coveralls.io/github/xiidea/EasyAuditBundle?branch=master)
+[![Build Status](https://github.com/xiidea/EasyAuditBundle/actions/workflows/ci.yml/badge.svg)](https://github.com/xiidea/EasyAuditBundle/actions/workflows/ci.yml)
+[![Coverage Status](https://coveralls.io/repos/github/xiidea/EasyAuditBundle/badge.svg?branch=master)](https://coveralls.io/github/xiidea/EasyAuditBundle?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/xiidea/EasyAuditBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/xiidea/EasyAuditBundle/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/xiidea/easy-audit/v/stable.png)](https://packagist.org/packages/xiidea/easy-audit)
 [![Latest Unstable Version](http://poser.pugx.org/xiidea/easy-audit/v/unstable)](https://packagist.org/packages/xiidea/easy-audit)
