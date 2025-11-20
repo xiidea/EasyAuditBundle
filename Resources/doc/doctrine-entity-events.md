@@ -25,20 +25,18 @@ You can use annotation to tell XiideaEasyAuditBundle to track events of an entit
 ```php
 <?php
 //track only updated and created event
-/**
- * @SubscribeDoctrineEvents(events = "updated, created")
- * or
- * @SubscribeDoctrineEvents("updated, created")
- */
+#[SubscribeDoctrineEvents(["updated", "created"])]
+// or
+#[SubscribeDoctrineEvents("updated, created")]
 
 //track all(updated, created, deleted) events
-/**
- * @SubscribeDoctrineEvents(events = "updated, created, deleted")
- * or
- * @SubscribeDoctrineEvents("updated, created, deleted")
- * or even short form
- * @SubscribeDoctrineEvents()
- */
+#[SubscribeDoctrineEvents(["updated", "created", "deleted"])]
+// or even short form
+#[SubscribeDoctrineEvents]
+class MyEntity
+{
+   // ...
+}
 ```
 
 An entity example to track updated and created events
@@ -47,13 +45,9 @@ An entity example to track updated and created events
 <?php
 // src/Entity/MyEntity.php
 
-use Xiidea\EasyAuditBundle\Annotation\SubscribeDoctrineEvents;
+use Xiidea\EasyAuditBundle\Attribute\SubscribeDoctrineEvents;
 
-/**
- * ...
- * 
- * @SubscribeDoctrineEvents(events = "updated, created")
- */
+#[SubscribeDoctrineEvents(events: ["updated", "created"])]
 class MyEntity
 {
    // ...
@@ -65,13 +59,9 @@ class MyEntity
 <?php
 // src/Document/MyDocument.php
 
-use Xiidea\EasyAuditBundle\Annotation\SubscribeDoctrineEvents;
+use Xiidea\EasyAuditBundle\Attribute\SubscribeDoctrineEvents;
 
-/**
- * ...
- * 
- * @SubscribeDoctrineEvents(events = "updated, created")
- */
+#[SubscribeDoctrineEvents(events: ["updated", "created"])]
 class MyDocument
 {
     //...

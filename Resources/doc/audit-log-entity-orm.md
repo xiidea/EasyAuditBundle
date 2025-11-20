@@ -15,67 +15,47 @@ For example:
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use DateTime;
 use Xiidea\EasyAuditBundle\Model\BaseAuditLog;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="audit_log")
- */
+#[ORM\Entity]
+#[ORM\Table(name: "audit_log")]
 class AuditLog extends BaseAuditLog
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: "integer")]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
     protected $id;
 
     /**
      * Type Of Event(Internal Type ID)
-     *
-     * @var string
-     * @ORM\Column(name="type_id", type="string", length=200, nullable=false)
      */
-    protected $typeId;
+    #[ORM\Column(name: "type_id", type: "string", length: 200)]
+    protected string $typeId;
 
     /**
      * Type Of Event
-     *
-     * @var string
-     * @ORM\Column(name="type", type="string", length=200, nullable=true)
      */
-    protected $type;
+    #[ORM\Column(type: "string", length: 200, nullable: true)]
+    protected ?string $type = null;
 
-    /**
-     * @var string
-     * @ORM\Column(name="description", type="string", length=255, nullable=true)
-     */
-    protected $description;
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    protected ?string $description = null;
 
     /**
      * Time Of Event
-     * @var \DateTime
-     * @ORM\Column(name="event_time", type="datetime")
      */
-    protected $eventTime;
+    #[ORM\Column(name: "event_time", type: "datetime")]
+    protected DateTime $eventTime;
 
-    /**
-     * @var string
-     * @ORM\Column(name="user", type="string", length=255)
-     */
-    protected $user;
-   
-    /**
-     * @var string
-     * @ORM\Column(name="impersonatingUser", type="string", length=255, nullable=true)
-     */
-    protected $impersonatingUser;
-    
-    /**
-     * @var string
-     * @ORM\Column(name="ip", type="string", length=20, nullable=true)
-     */
-    protected $ip;    
+    #[ORM\Column(type: "string", length: 255)]
+    protected string $user;
+
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    protected ?string $impersonatingUser = null;
+
+    #[ORM\Column(type: "string", length: 20, nullable: true)]
+    protected ?string $ip = null;
 
 }
 ```
