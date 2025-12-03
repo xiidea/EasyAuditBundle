@@ -14,7 +14,7 @@ A Symfony Bundle To Log Selective Events. It is easy to configure and easy to cu
 
 | Symfony |    PHP    |                        EasyAuditBundle                        |       Support       |
 |:-------:|:---------:|:-------------------------------------------------------------:|:-------------------:|
-|   6.x   |  >=8.0.2  |                             3.x.x                             | New Features / Bugs |
+| 5.4-7.4 |  >=8.0.2  |                             3.x.x                             | New Features / Bugs |
 |   5.x   |  >=7.2.5  | [2.x.x](https://github.com/xiidea/EasyAuditBundle/tree/2.0.x) |        Bugs         |
 | 2.7-4.4 | ^5.6,^7.0 | [1.4.x](https://github.com/xiidea/EasyAuditBundle/tree/1.4.x) |          -          |
 |  <=2.8  | ^5.4-7.3  | [1.3.x](https://github.com/xiidea/EasyAuditBundle/tree/1.3.x) |          -          |
