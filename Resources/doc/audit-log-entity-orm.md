@@ -1,6 +1,6 @@
 # Step 3:  Create audit_log entity mapping
 
-BaseAuditLog class does not provide ODM/ODM Mapping,
+BaseAuditLog class does not provide any ORM/ODM Mapping,
 you must create one. This can be done by extending the BaseAuditLog model 
 provided by the bundle and creating the appropriate mappings.
 
