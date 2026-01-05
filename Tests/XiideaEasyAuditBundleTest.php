@@ -24,17 +24,14 @@ class XiideaEasyAuditBundleTest extends TestCase
 
         //Expect compiler pass to be added
         $containerBuilder
-            ->expects($this->at(0))
+            ->expects($this->exactly(4))
             ->method('addCompilerPass')
-            ->with($this->isInstanceOf('Xiidea\EasyAuditBundle\DependencyInjection\Compiler\MonologLoggerPass'));
-        $containerBuilder
-            ->expects($this->at(1))
-            ->method('addCompilerPass')
-            ->with($this->isInstanceOf('Xiidea\EasyAuditBundle\DependencyInjection\Compiler\LoggerFactoryPass'));
-        $containerBuilder
-            ->expects($this->at(2))
-            ->method('addCompilerPass')
-            ->with($this->isInstanceOf('Xiidea\EasyAuditBundle\DependencyInjection\Compiler\SubscriberPass'));
+            ->withConsecutive(
+                array($this->isInstanceOf('Xiidea\EasyAuditBundle\DependencyInjection\Compiler\MonologLoggerPass')),
+                array($this->isInstanceOf('Xiidea\EasyAuditBundle\DependencyInjection\Compiler\LoggerFactoryPass')),
+                array($this->isInstanceOf('Xiidea\EasyAuditBundle\DependencyInjection\Compiler\SubscriberPass')),
+                array($this->isInstanceOf('Xiidea\EasyAuditBundle\DependencyInjection\Compiler\ResolverFactoryPass'))
+            );
 
         $bundle = new XiideaEasyAuditBundle();
         $bundle->build($containerBuilder);

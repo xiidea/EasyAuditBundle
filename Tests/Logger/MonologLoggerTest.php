@@ -44,7 +44,7 @@ class MonologLoggerTest extends TestCase
         $log->setTypeId('null');
 
         $this->symfonyLogger
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('log')
             ->with(
                 $this->equalTo('info'),

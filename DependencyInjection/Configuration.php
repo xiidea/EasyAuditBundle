@@ -46,7 +46,7 @@ class Configuration implements ConfigurationInterface
     /**
      * @param ArrayNodeDefinition $rootNode
      */
-    private function addRequiredConfigs(ArrayNodeDefinition $rootNode)
+    private function addRequiredConfigs(ArrayNodeDefinition $rootNode): void
     {
         $rootNode
             ->children()
@@ -58,7 +58,7 @@ class Configuration implements ConfigurationInterface
     /**
      * @param ArrayNodeDefinition $rootNode
      */
-    private function addDefaultServices(ArrayNodeDefinition $rootNode)
+    private function addDefaultServices(ArrayNodeDefinition $rootNode): void
     {
         $rootNode
             ->children()
