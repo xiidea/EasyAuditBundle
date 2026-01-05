@@ -11,7 +11,7 @@
 
 namespace Xiidea\EasyAuditBundle\Subscriber;
 
-use Doctrine\Common\Util\ClassUtils;
+use Xiidea\EasyAuditBundle\Common\ClassUtils;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Xiidea\EasyAuditBundle\Attribute\SubscribeDoctrineEvents;
@@ -27,17 +27,17 @@ class DoctrineSubscriber
     {
     }
 
-    public function postPersist(LifecycleEventArgs $args)
+    public function postPersist(LifecycleEventArgs $args): void
     {
         $this->handleEvent(DoctrineEvents::ENTITY_CREATED, $args);
     }
 
-    public function postUpdate(LifecycleEventArgs $args)
+    public function postUpdate(LifecycleEventArgs $args): void
     {
         $this->handleEvent(DoctrineEvents::ENTITY_UPDATED, $args);
     }
 
-    public function preRemove(LifecycleEventArgs $args)
+    public function preRemove(LifecycleEventArgs $args): void
     {
         if (false === $this->isConfiguredToTrack($args->getObject(), DoctrineEvents::ENTITY_DELETED)) {
             return;
@@ -52,7 +52,7 @@ class DoctrineSubscriber
         $this->toBeDeleted[$className][spl_object_hash($args->getObject())] = $this->getIdentity($args, $className);
     }
 
-    public function postRemove(LifecycleEventArgs $args)
+    public function postRemove(LifecycleEventArgs $args): void
     {
         $identity = $this->getToBeDeletedId($args->getObject());
 
@@ -74,7 +74,7 @@ class DoctrineSubscriber
      * @param  string  $eventName
      * @param  LifecycleEventArgs  $args
      */
-    private function handleEvent($eventName, LifecycleEventArgs $args)
+    private function handleEvent($eventName, LifecycleEventArgs $args): void
     {
         if (true === $this->isConfiguredToTrack($args->getObject(), $eventName)) {
             $this->dispatcher->dispatch(
@@ -90,7 +90,7 @@ class DoctrineSubscriber
      *
      * @return bool
      */
-    private function isConfiguredToTrack($entity, $eventName = '')
+    private function isConfiguredToTrack($entity, $eventName = ''): ?bool
     {
         $class = ClassUtils::getClass($entity);
         $eventType = DoctrineEvents::getShortEventType($eventName);
