@@ -11,8 +11,8 @@
 
 namespace Xiidea\EasyAuditBundle\Resolver;
 
+use Xiidea\EasyAuditBundle\Common\ClassUtils;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Common\Util\ClassUtils;
 use Symfony\Contracts\EventDispatcher\Event;
 use Xiidea\EasyAuditBundle\Events\DoctrineObjectEvent;
 use Xiidea\EasyAuditBundle\Events\DoctrineEvents;
