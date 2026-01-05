@@ -212,7 +212,7 @@ class UserEntity implements UserInterface
      *
      * @return static
      */
-    public function setLastLogin(\DateTime $time = null)
+    public function setLastLogin(?\DateTime $time = null)
     {
         return $this;
     }
@@ -358,7 +358,7 @@ class UserEntity implements UserInterface
      *
      * @return static
      */
-    public function setPasswordRequestedAt(\DateTime $date = null)
+    public function setPasswordRequestedAt(?\DateTime $date = null)
     {
         return $this;
     }

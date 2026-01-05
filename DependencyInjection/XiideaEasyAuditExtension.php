@@ -54,7 +54,7 @@ class XiideaEasyAuditExtension extends Extension implements PrependExtensionInte
      *
      * @throws \Exception
      */
-    protected function loadDefaultResolverServices($config, LoaderInterface $loader)
+    protected function loadDefaultResolverServices($config, LoaderInterface $loader): void
     {
         if ('xiidea.easy_audit.default_event_resolver' === $config['resolver']) {
             $loader->load('default/event-resolver.yml');

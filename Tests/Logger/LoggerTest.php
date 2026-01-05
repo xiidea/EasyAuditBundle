@@ -53,11 +53,11 @@ class LoggerTest extends TestCase
     public function testLogCallsPersistWithDoctrineForAuditLogObject()
     {
         $this->entityManager
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('persist')
             ->with($this->isInstanceOf(BaseAuditLog::class));
         $this->entityManager
-            ->expects($this->at(1))
+            ->expects($this->once())
             ->method('flush')
             ->with($this->isInstanceOf(BaseAuditLog::class));
 
@@ -81,11 +81,11 @@ class LoggerTest extends TestCase
     public function testSavePendingLogsForDelete()
     {
         $this->entityManager
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('persist')
             ->with($this->isInstanceOf(BaseAuditLog::class));
         $this->entityManager
-            ->expects($this->at(1))
+            ->expects($this->once())
             ->method('flush')
             ->with($this->isInstanceOf(BaseAuditLog::class));
 

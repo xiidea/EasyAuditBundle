@@ -50,7 +50,7 @@ class CommonTest extends BaseTestCase
 
         $container->get('event_dispatcher')->dispatch(new Basic(), $name);
 
-        $logFile = realpath($container->getParameter('kernel.cache_dir').DIRECTORY_SEPARATOR.'audit.log');
+        $logFile = realpath($container->getParameter('kernel.cache_dir') . DIRECTORY_SEPARATOR . 'audit.log');
 
         $event = unserialize(file_get_contents($logFile));
         $this->assertEquals($name, $event['typeId']);
@@ -75,10 +75,10 @@ class CommonTest extends BaseTestCase
 
         $container->get('event_dispatcher')->dispatch(new Basic(), $name);
 
-        $container->get('event_dispatcher')->dispatch(new WithEmbeddedResolver(), $name.'2');
+        $container->get('event_dispatcher')->dispatch(new WithEmbeddedResolver(), $name . '2');
 
-        $logFile = realpath($container->getParameter('kernel.cache_dir').DIRECTORY_SEPARATOR.'audit.log');
-        $logFile2 = realpath($container->getParameter('kernel.cache_dir').'2'.DIRECTORY_SEPARATOR.'audit.log');
+        $logFile = realpath($container->getParameter('kernel.cache_dir') . DIRECTORY_SEPARATOR . 'audit.log');
+        $logFile2 = realpath($container->getParameter('kernel.cache_dir') . '2' . DIRECTORY_SEPARATOR . 'audit.log');
 
         $event2 = unserialize(file_get_contents($logFile2));
         $event = unserialize(file_get_contents($logFile));
@@ -89,8 +89,8 @@ class CommonTest extends BaseTestCase
         $this->assertEquals('By Command', $event['user']);
         $this->assertEquals('', $event['ip']);
 
-        $this->assertEquals($name.'2', $event2['typeId']);
-        $this->assertEquals($name.'2', $event2['type']);
+        $this->assertEquals($name . '2', $event2['typeId']);
+        $this->assertEquals($name . '2', $event2['type']);
         $this->assertEquals('It is an embedded event', $event2['description']);
         $this->assertEquals('By Command', $event2['user']);
         $this->assertEquals('', $event2['ip']);
@@ -169,6 +169,7 @@ class CommonTest extends BaseTestCase
         $html = $crawler->html();
         $parts = explode(DefaultController::RESPONSE_BOUNDARY, $html);
         $event = unserialize($parts[1]);
+
         return $event;
     }
 }

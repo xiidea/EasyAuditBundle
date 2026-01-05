@@ -25,7 +25,7 @@ class Logger implements LoggerInterface
     }
 
     #[\Override]
-    public function log(AuditLog $event = null)
+    public function log(?AuditLog $event = null)
     {
         if (empty($event)) {
             return;

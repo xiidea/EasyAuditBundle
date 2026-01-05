@@ -59,7 +59,7 @@ class TestKernel extends Kernel
         return sys_get_temp_dir().'/XiideaEasyAuditBundle/'.substr(sha1($this->config), 0, 6).'/logs';
     }
 
-    public function registerContainerConfiguration(LoaderInterface $loader)
+    public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load($this->config);
     }
