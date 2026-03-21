@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Xiidea\EasyAuditBundle\DependencyInjection\Compiler\SubscriberPass;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\EasySubscriberOne;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Common\EasySubscriberTwo;
+use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\WithEmbeddedResolver;
 
 class SubscriberPassTest extends TestCase
 {
@@ -48,10 +49,12 @@ class SubscriberPassTest extends TestCase
                 ['xiidea.easy_audit.doctrine_objects', false],
             ]);
 
-        $containerBuilder->expects($this->once())
+        $containerBuilder->expects($this->exactly(2))
             ->method('findTaggedServiceIds')
-            ->with($this->equalTo('easy_audit.event_subscriber'))
-            ->will($this->returnValue([]));
+            ->willReturnMap([
+                ['easy_audit.event_subscriber', false, []],
+                ['easy_audit.embedded_event', false, []],
+            ]);
 
         $this->processSubscriberPass($containerBuilder);
     }
@@ -117,8 +120,10 @@ class SubscriberPassTest extends TestCase
 
         $containerBuilder
             ->method('findTaggedServiceIds')
-            ->with($this->equalTo('easy_audit.event_subscriber'))
-            ->will($this->returnValue($subscribers));
+            ->willReturnMap([
+                ['easy_audit.event_subscriber', false, $subscribers],
+                ['easy_audit.embedded_event', false, []],
+            ]);
 
         $definitionMock = $this->getDefinitionMock();
 
@@ -214,8 +219,10 @@ class SubscriberPassTest extends TestCase
 
         $containerBuilder
             ->method('findTaggedServiceIds')
-            ->with($this->equalTo('easy_audit.event_subscriber'))
-            ->will($this->returnValue($subscribers));
+            ->willReturnMap([
+                ['easy_audit.event_subscriber', false, $subscribers],
+                ['easy_audit.embedded_event', false, []],
+            ]);
 
         $definitionMock = $this->getDefinitionMock();
 
@@ -293,6 +300,63 @@ class SubscriberPassTest extends TestCase
         $this->processSubscriberPass($containerBuilder);
     }
 
+    public function testEmbeddedEventClassesAreAutoRegistered()
+    {
+        $containerBuilder = $this->createMock('Symfony\Component\DependencyInjection\ContainerBuilder');
+
+        $containerBuilder->expects($this->any())
+            ->method('hasDefinition')
+            ->with($this->equalTo('xiidea.easy_audit.event_listener'))
+            ->will($this->returnValue(true));
+
+        $containerBuilder->expects($this->any())
+            ->method('getParameter')
+            ->willReturnMap([
+                ['xiidea.easy_audit.events', []],
+                ['xiidea.easy_audit.doctrine_objects', false],
+                ['xiidea.easy_audit.custom_resolvers', []],
+            ]);
+
+        $embeddedServiceId = WithEmbeddedResolver::class;
+
+        $containerBuilder
+            ->method('findTaggedServiceIds')
+            ->willReturnMap([
+                ['easy_audit.event_subscriber', false, []],
+                ['easy_audit.embedded_event', false, [$embeddedServiceId => []]],
+            ]);
+
+        $embeddedDefinition = $this->getMockBuilder('Symfony\Component\DependencyInjection\Definition')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $embeddedDefinition->method('getClass')->willReturn($embeddedServiceId);
+
+        $listenerDefinition = $this->getDefinitionMock();
+
+        $containerBuilder
+            ->method('getDefinition')
+            ->willReturnMap([
+                ['xiidea.easy_audit.event_listener', $listenerDefinition],
+                [$embeddedServiceId, $embeddedDefinition],
+            ]);
+
+        $expectedEvents = [
+            ['event' => $embeddedServiceId, 'method' => 'resolveEventHandler'],
+        ];
+
+        $listenerDefinition
+            ->expects($this->once())
+            ->method('setTags')
+            ->with($this->equalTo(['kernel.event_listener' => $expectedEvents]));
+
+        $containerBuilder
+            ->expects($this->once())
+            ->method('setParameter')
+            ->with($this->equalTo('xiidea.easy_audit.custom_resolvers'), []);
+
+        $this->processSubscriberPass($containerBuilder);
+    }
+
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
@@ -366,8 +430,10 @@ class SubscriberPassTest extends TestCase
 
         $containerBuilder
             ->method('findTaggedServiceIds')
-            ->with($this->equalTo('easy_audit.event_subscriber'))
-            ->will($this->returnValue($subscribedEvents));
+            ->willReturnMap([
+                ['easy_audit.event_subscriber', false, $subscribedEvents],
+                ['easy_audit.embedded_event', false, []],
+            ]);
 
         $containerBuilder
             ->method('getDefinition')
@@ -383,8 +449,10 @@ class SubscriberPassTest extends TestCase
     {
         $containerBuilder
             ->method('findTaggedServiceIds')
-            ->with($this->equalTo('easy_audit.event_subscriber'))
-            ->will($this->returnValue($subscribedEvents));
+            ->willReturnMap([
+                ['easy_audit.event_subscriber', false, $subscribedEvents],
+                ['easy_audit.embedded_event', false, []],
+            ]);
     }
 
     /**

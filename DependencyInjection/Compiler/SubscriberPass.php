@@ -33,6 +33,7 @@ class SubscriberPass implements CompilerPassInterface
 
         $this->appendDoctrineEventsToList($container, $eventsList);
         $this->appendSubscribedEventsToList($container, $eventsList);
+        $this->appendEmbeddedEventClasses($container, $eventsList);
 
         $this->registerEventsToListener($eventsList, $container);
     }
@@ -144,6 +145,26 @@ class SubscriberPass implements CompilerPassInterface
 
         foreach ($items as $item) {
             array_push($events, array($item => $key));
+        }
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param array            $events
+     */
+    private function appendEmbeddedEventClasses(ContainerBuilder $container, array &$events = []): void
+    {
+        $taggedServices = $container->findTaggedServiceIds('easy_audit.embedded_event');
+
+        if (empty($taggedServices)) {
+            return;
+        }
+
+        foreach ($taggedServices as $id => $_) {
+            $class = $container->getDefinition($id)->getClass();
+            if ($class !== null) {
+                $events[] = $class;
+            }
         }
     }
 
