@@ -16,7 +16,6 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Yaml\Parser;
 use Xiidea\EasyAuditBundle\DependencyInjection\XiideaEasyAuditExtension;
-use Xiidea\EasyAuditBundle\Resolver\EmbeddedEventResolverInterface;
 
 class XiideaEasyAuditExtensionTest extends TestCase
 {
@@ -61,16 +60,6 @@ class XiideaEasyAuditExtensionTest extends TestCase
         $loader->prepend($this->container);
         $loader->load($this->container->getExtensionConfig($loader->getAlias()), $this->container);
         $this->assertHasDefinition('xiidea.easy_audit.default_doctrine_event_resolver');
-    }
-
-    public function testEmbeddedEventResolverIsAutoconfigured()
-    {
-        $loader = new XiideaEasyAuditExtension();
-        $loader->load([$this->getRequiredConfig()], $this->container);
-
-        $autoconfigured = $this->container->getAutoconfiguredInstanceof();
-        $this->assertArrayHasKey(EmbeddedEventResolverInterface::class, $autoconfigured);
-        $this->assertTrue($autoconfigured[EmbeddedEventResolverInterface::class]->hasTag('easy_audit.embedded_event'));
     }
 
     public function testEasyAuditLoadThrowsExceptionUnlessEntityClassSet()

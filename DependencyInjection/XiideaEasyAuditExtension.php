@@ -17,7 +17,6 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader;
-use Xiidea\EasyAuditBundle\Resolver\EmbeddedEventResolverInterface;
 
 /**
  * This is the class that loads and manages your bundle configuration.
@@ -38,9 +37,6 @@ class XiideaEasyAuditExtension extends Extension implements PrependExtensionInte
         foreach ($config as $key => $value) {
             $container->setParameter('xiidea.easy_audit.' . $key, $value);
         }
-
-        $container->registerForAutoconfiguration(EmbeddedEventResolverInterface::class)
-            ->addTag('easy_audit.embedded_event');
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');

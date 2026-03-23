@@ -33,7 +33,6 @@ class SubscriberPass implements CompilerPassInterface
 
         $this->appendDoctrineEventsToList($container, $eventsList);
         $this->appendSubscribedEventsToList($container, $eventsList);
-        $this->appendEmbeddedEventClasses($container, $eventsList);
 
         $this->registerEventsToListener($eventsList, $container);
     }
@@ -149,26 +148,6 @@ class SubscriberPass implements CompilerPassInterface
     }
 
     /**
-     * @param ContainerBuilder $container
-     * @param array            $events
-     */
-    private function appendEmbeddedEventClasses(ContainerBuilder $container, array &$events = []): void
-    {
-        $taggedServices = $container->findTaggedServiceIds('easy_audit.embedded_event');
-
-        if (empty($taggedServices)) {
-            return;
-        }
-
-        foreach ($taggedServices as $id => $_) {
-            $class = $container->getDefinition($id)->getClass();
-            if ($class !== null) {
-                $events[] = $class;
-            }
-        }
-    }
-
-    /**
      * @param $events
      * @param ContainerBuilder $container
      */
@@ -181,10 +160,11 @@ class SubscriberPass implements CompilerPassInterface
         $definition = $container->getDefinition('xiidea.easy_audit.event_listener');
         $customResolvers = $container->getParameter('xiidea.easy_audit.custom_resolvers');
 
+        $existingTags = $definition->getTag('kernel.event_listener');
         $listenableEventsList = $this->getListenableEventList($events);
         $this->buildCustomResolverList($events, $customResolvers);
 
-        $definition->setTags(array('kernel.event_listener' => array_values($listenableEventsList)));
+        $definition->setTags(array('kernel.event_listener' => array_merge($existingTags, array_values($listenableEventsList))));
         $container->setParameter('xiidea.easy_audit.custom_resolvers', $customResolvers);
     }
 

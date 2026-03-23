@@ -13,6 +13,7 @@ namespace Xiidea\EasyAuditBundle\Tests\Functional;
 
 use Symfony\Component\DomCrawler\Crawler;
 use Xiidea\EasyAuditBundle\Model\BaseAuditLog;
+use Xiidea\EasyAuditBundle\Resolver\EmbeddedEventResolverInterface;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\Basic;
 use Xiidea\EasyAuditBundle\Tests\Fixtures\Event\WithEmbeddedResolver;
 use Xiidea\EasyAuditBundle\Tests\Functional\Bundle\TestBundle\Controller\DefaultController;
@@ -95,6 +96,32 @@ class CommonTest extends BaseTestCase
         $this->assertEquals('By Command', $event2['user']);
         $this->assertEquals('', $event2['ip']);
     }
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
+    public function testEmbeddedEventInterfaceDispatch()
+    {
+        $kernel = static::createKernel();
+        $kernel->boot();
+
+        $container = $kernel->getContainer();
+
+        $container->get('event_dispatcher')->dispatch(
+            new WithEmbeddedResolver(),
+            EmbeddedEventResolverInterface::class
+        );
+
+        $logFile = realpath($container->getParameter('kernel.cache_dir') . '2' . DIRECTORY_SEPARATOR . 'audit.log');
+        $event = unserialize(file_get_contents($logFile));
+
+        $this->assertEquals(WithEmbeddedResolver::class, $event['typeId']);
+        $this->assertEquals(WithEmbeddedResolver::class, $event['type']);
+        $this->assertEquals('It is an embedded event', $event['description']);
+        $this->assertEquals('By Command', $event['user']);
+        $this->assertEquals('', $event['ip']);
+    }
+
 
     /**
      * @runInSeparateProcess
