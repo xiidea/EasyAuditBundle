@@ -100,9 +100,11 @@ class UserAwareComponent
     public function getUsername()
     {
         $user = $this->getUser();
-
         if (empty($user)) {
             return $this->getAnonymousUserName();
+        }
+        if (method_exists($user, 'getUserIdentifier')) {
+            return $user->getUserIdentifier();
         }
 
         return $user->getUsername();
