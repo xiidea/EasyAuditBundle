@@ -2,7 +2,17 @@
     "name": "xiidea/easy-audit",
     "type": "symfony-bundle",
     "description": "A Symfony Bundle To Log Selective Events. It is easy to configure and easy to customize for your need",
-    "keywords": ["Event Log", "Audit Log", "Symfony2", "Symfony3", "Symfony4", "Symfony5", "Symfony6", "Audit trail", "PSR-3"],
+    "keywords": [
+        "Event Log",
+        "Audit Log",
+        "Symfony2",
+        "Symfony3",
+        "Symfony4",
+        "Symfony5",
+        "Symfony6",
+        "Audit trail",
+        "PSR-3"
+    ],
     "license": "MIT",
     "homepage": "http://xiidea.github.io/EasyAuditBundle/",
     "authors": [
@@ -23,25 +33,27 @@
     "require": {
         "php": ">=8.1",
         "psr/log": "^1|^2|^3",
-        "symfony/framework-bundle": ">=5.4 <8.0",
-        "symfony/security-bundle": ">=5.4 <8.0"
+        "symfony/framework-bundle": ">=5.4 <9.0",
+        "symfony/security-bundle": ">=5.4 <9.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
         "php-coveralls/php-coveralls": "^2.1",
         "doctrine/common": ">=2.2 <4.0",
         "symfony/test-pack": "^1.0",
-        "symfony/twig-bundle": ">=5.4 <8.0",
-        "symfony/form": ">=5.4 <8.0",
-        "symfony/validator": ">=5.4 <8.0"
+        "symfony/twig-bundle": ">=5.4 <9.0",
+        "symfony/form": ">=5.4 <9.0",
+        "symfony/validator": ">=5.4 <9.0"
     },
     "autoload": {
-      "psr-4": {
-        "Xiidea\\EasyAuditBundle\\": ""
-      }
+        "psr-4": {
+            "Xiidea\\EasyAuditBundle\\": ""
+        }
     },
     "autoload-dev": {
-      "psr-4": { "Xiidea\\EasyAuditBundle\\Tests\\": "Tests/" }
+        "psr-4": {
+            "Xiidea\\EasyAuditBundle\\Tests\\": "Tests/"
+        }
     },
     "extra": {
         "branch-alias": {
