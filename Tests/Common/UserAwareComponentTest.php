@@ -102,6 +102,32 @@ class UserAwareComponentTest extends TestCase
         $this->assertEquals(1, $user->getId());
     }
 
+    public function testGetUsernameWithLegacyUserHavingOnlyGetUsername()
+    {
+        $legacyUser = new class {
+            public function getUsername()
+            {
+                return 'legacy-user';
+            }
+        };
+
+        $component = new class($legacyUser) extends DummyUserAwareComponent {
+            private $mockUser;
+
+            public function __construct($mockUser)
+            {
+                $this->mockUser = $mockUser;
+            }
+
+            public function getUser()
+            {
+                return $this->mockUser;
+            }
+        };
+
+        $this->assertEquals('legacy-user', $component->getUsername());
+    }
+
     private function mockSecurityAuthChecker($isGranted = false)
     {
         $this->authChecker->expects($this->once())
