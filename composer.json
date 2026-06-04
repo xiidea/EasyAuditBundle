@@ -10,6 +10,8 @@
         "Symfony4",
         "Symfony5",
         "Symfony6",
+        "Symfony7",
+        "Symfony8",
         "Audit trail",
         "PSR-3"
     ],
