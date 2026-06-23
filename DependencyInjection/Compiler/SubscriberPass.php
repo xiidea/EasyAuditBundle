@@ -160,10 +160,11 @@ class SubscriberPass implements CompilerPassInterface
         $definition = $container->getDefinition('xiidea.easy_audit.event_listener');
         $customResolvers = $container->getParameter('xiidea.easy_audit.custom_resolvers');
 
+        $existingTags = $definition->getTag('kernel.event_listener');
         $listenableEventsList = $this->getListenableEventList($events);
         $this->buildCustomResolverList($events, $customResolvers);
 
-        $definition->setTags(array('kernel.event_listener' => array_values($listenableEventsList)));
+        $definition->setTags(array('kernel.event_listener' => array_merge($existingTags, array_values($listenableEventsList))));
         $container->setParameter('xiidea.easy_audit.custom_resolvers', $customResolvers);
     }
 

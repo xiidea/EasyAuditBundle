@@ -14,6 +14,7 @@ namespace Xiidea\EasyAuditBundle\Listener;
 use Symfony\Contracts\EventDispatcher\Event;
 use Xiidea\EasyAuditBundle\Logger\LoggerFactory;
 use Xiidea\EasyAuditBundle\Resolver\EventResolverFactory;
+use Xiidea\EasyAuditBundle\Resolver\EmbeddedEventResolverInterface;
 
 class LogEventsListener
 {
@@ -23,6 +24,9 @@ class LogEventsListener
 
     public function resolveEventHandler(Event $event, $eventName)
     {
+        if ($event instanceof EmbeddedEventResolverInterface && $eventName === EmbeddedEventResolverInterface::class) {
+            $eventName = get_class($event);
+        }
         $eventInfo = $this->resolverFactory->getEventLog($event, $eventName);
         $this->loggerFactory->executeLoggers($eventInfo);
     }

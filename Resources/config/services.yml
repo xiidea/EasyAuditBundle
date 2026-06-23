@@ -1,6 +1,7 @@
 
 services:
 
+
   xiidea.easy_audit.logger_factory:
           class: Xiidea\EasyAuditBundle\Logger\LoggerFactory
           public: false
@@ -21,6 +22,8 @@ services:
   xiidea.easy_audit.event_listener:
           class: Xiidea\EasyAuditBundle\Listener\LogEventsListener
           arguments: ['@xiidea.easy_audit.logger_factory', '@xiidea.easy_audit.event_resolver_factory']
+          tags:
+            - { name: kernel.event_listener, event: 'Xiidea\EasyAuditBundle\Resolver\EmbeddedEventResolverInterface', method: resolveEventHandler }
 
   xiidea.easy_audit.mono_logger.service:
           class: Xiidea\EasyAuditBundle\Logger\MonologLogger
